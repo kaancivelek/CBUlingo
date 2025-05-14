@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Navi from "./components/Navbar";
 
 import { useState, useEffect } from "react";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [user, setUser] = useState({
@@ -27,10 +28,12 @@ function App() {
 
       <div className="Content">
         <Routes>
-          <Route path="/" />
+          <Route path="/" element={<Dashboard/>}/>
         </Routes>
 
-        <div className="Footer"></div>
+        <div className="Footer">
+          <p>© 2023 Cbulingo. All rights reserved.</p>
+        </div>
       </div>
     </div>
   );

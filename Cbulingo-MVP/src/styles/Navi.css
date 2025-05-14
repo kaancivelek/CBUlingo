@@ -1,55 +1,82 @@
-﻿.navbar-custom {
+﻿.vertical-navbar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: transparent;
-  height: 80px;
-  padding: 0 32px;
-  z-index: 1000;
-  pointer-events: none; /* kritik */
-  position: fixed;
-  top: 0;
+  padding-top: 2rem;
+}
+
+.vertical-navbar-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
   width: 100%;
-  box-sizing: border-box;
+}
+
+.vertical-logo-img {
+
+  padding: 16px;
+  margin-bottom: 1rem;
   display: flex;
+  justify-content: center;
   align-items: center;
-}
-
-.navbar-custom * {
-  pointer-events: auto;
-}
-
-.navbar-content {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo-img {
-  width: 90px;
-  height: auto;
-  display: block;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-right: 0;
-}
-
-.navbar-login-text {
-  font-size: 14px;
+  width: 120px;
+  height: 120px;
   cursor: pointer;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+.vertical-logo-img:hover {
+  box-shadow: 0 4px 16px rgba(63, 55, 165, 0.18);
+}
+
+.vertical-navbar-text {
+  background: #FFF6E9;
+  color: #3F37A5;
+  border-radius: 16px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0.5rem;
+  box-shadow: 0 2px 8px rgba(63, 55, 165, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  text-align: center;
+  min-width: 120px;
+}
+.vertical-navbar-text:hover {
   background: #3F37A5;
   color: #FFF6E9;
-  transition: background 0.2s;
+  box-shadow: 0 4px 16px rgba(63, 55, 165, 0.18);
 }
 
-.navbar-login-text:hover {
-  background: #262626;
-  color: #FFF6E9;
+@media (max-width: 768px) {
+  .vertical-navbar {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    padding-top: 0;
+  }
+  .vertical-navbar-content {
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .vertical-logo-img {
+    width: 56px;
+    height: 56px;
+    padding: 8px;
+    margin-bottom: 0;
+  }
+  .vertical-navbar-text {
+    padding: 8px 16px;
+    font-size: 1rem;
+    min-width: 80px;
+  }
 }

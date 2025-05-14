@@ -1,65 +1,37 @@
-﻿import { Navbar, NavbarBrand, NavbarText } from "reactstrap";
-import logo from "../assets/amblem.svg";
-import { useNavigate, useLocation } from "react-router-dom";
+﻿import logo from "../assets/amblem.svg";
+import "../styles/Navi.css";
+import { useNavigate } from "react-router-dom";
 
-function Navi({ user }) {
+function VerticalNavbar({ user }) {
   const navigate = useNavigate();
-  const location = useLocation(); // Mevcut rotayı kontrol etmek için
 
-  const goBackToHomePage = () => {
-    navigate("/");
+  const goToDashboard = () => {
+    navigate("/dashboard");
   };
 
-  function logonAndProfile() {
-    if (!(user && Object.keys(user).length > 0)) {
-      return (
-        <div className="navbar-right">
-          <NavbarText
-            className="navbar-login-text"
-            onClick={() => navigate("/Logon")}
-          >
-            GİRİŞ YAP
-          </NavbarText>
-        </div>
-      );
+  const goToProfileOrLogon = () => {
+    if (user && Object.keys(user).length > 0) {
+      navigate("/profile");
     } else {
-      return (
-        <div className="navbar-right">
-          <NavbarText
-            style={{ textAlign: "center" }}
-            className="navbar-login-text"
-            onClick={() => navigate("/Profile")}
-          >
-            {user.userFullName}
-            <br></br>
-            {(() => {
-              switch (user.roleId) {
-                case 1:
-                  return "Müşteri";
-                case 2:
-                  return "Emlak Sahibi";
-                case 3:
-                  return "Admin";
-                default:
-                  return "Bilinmeyen Rol";
-              }
-            })()}
-          </NavbarText>
-        </div>
-      );
+      navigate("/Logon");
     }
-  }
+  };
 
   return (
-    <Navbar className="navbar-custom" fixed="top">
-      <div className="navbar-content">
-        <NavbarBrand onClick={goBackToHomePage} style={{ cursor: "pointer" }}>
-          <img src={logo} alt="logo" className="logo-img" />
-        </NavbarBrand>
-        {logonAndProfile()}
+    <div className="vertical-navbar">
+      <div className="vertical-navbar-content">
+        <div className="vertical-logo-img" onClick={() => navigate("/")}>  
+          <img src={logo} alt="logo" style={{ width: "100px" }} />
+        </div>
+        <div className="vertical-navbar-text" onClick={goToDashboard}>
+          Dashboard
+        </div>
+        <div className="vertical-navbar-text" onClick={goToProfileOrLogon}>
+          {user && Object.keys(user).length > 0 ? "Profil" : "Giriş Yap"}
+        </div>
       </div>
-    </Navbar>
+    </div>
   );
 }
 
-export default Navi;
+export default VerticalNavbar;

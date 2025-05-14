@@ -50,3 +50,6 @@ docker compose up --build
 - Frontend (`js-Cbulingo-MVP`): 5173 (host) → 4173 (container)
 - API (`json-server-api`): 3000 (host) → 3000 (container)
 
+### Mobil Debug
+- Android Studio indirip kurun.
+- ve cd Cbulingo-MVP seçildikten sonra npm run build, npx cap sync, android npx cap run android şeklinde projeyi mobil için güncelleyin.
