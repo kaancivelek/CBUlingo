@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Cbulingo</string>
+    <string name="title_activity_main">Cbulingo</string>
+    <string name="package_name">com.cbulingo.app</string>
+    <string name="custom_url_scheme">com.cbulingo.app</string>
+</resources>
