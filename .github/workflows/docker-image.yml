@@ -15,4 +15,4 @@ jobs:
           docker compose version
 
       - name: Docker Compose Build
-        run: docker compose -f compose.yml build
+        run: docker compose -f compose.yaml build
