@@ -1,0 +1,81 @@
+# Node.js dependencies
+Cbulingo-MVP/node_modules/
+
+# Build outputs
+Cbulingo-MVP/dist/
+Cbulingo-MVP/build/
+Cbulingo-MVP/out/
+
+# Test and debug artifacts
+Cbulingo-MVP/test/
+Cbulingo-MVP/tests/
+Cbulingo-MVP/debug/
+Cbulingo-MVP/*.log
+
+# IDE/editor files
+Cbulingo-MVP/.idea/
+Cbulingo-MVP/.vscode/
+Cbulingo-MVP/*.swp
+Cbulingo-MVP/*.swo
+
+# Version control
+Cbulingo-MVP/.git/
+Cbulingo-MVP/.gitignore
+
+# Environment and secrets
+Cbulingo-MVP/.env*
+Cbulingo-MVP/*.env
+Cbulingo-MVP/*.pem
+Cbulingo-MVP/*.key
+Cbulingo-MVP/*.crt
+Cbulingo-MVP/config.local.*
+Cbulingo-MVP/*.local.yml
+
+# Documentation
+Cbulingo-MVP/docs/
+Cbulingo-MVP/*.md
+Cbulingo-MVP/README*
+
+# Temporary and local files
+Cbulingo-MVP/tmp/
+Cbulingo-MVP/temp/
+Cbulingo-MVP/*.tmp
+Cbulingo-MVP/.local/
+Cbulingo-MVP/local/
+
+# Docker and Compose files (except Dockerfile in root)
+Cbulingo-MVP/Dockerfile*
+Cbulingo-MVP/docker-compose*
+
+# Backup files
+Cbulingo-MVP/*.bak
+
+# Project root ignores
+.git/
+.gitignore
+.idea/
+.vscode/
+*.swp
+*.swo
+*.log
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+docs/
+*.md
+README*
+tmp/
+temp/
+*.tmp
+.local/
+local/
+Dockerfile*
+docker-compose*
+*.bak
+
+# Ignore empty directories (optional, handled by Docker by default)
+# **/.empty

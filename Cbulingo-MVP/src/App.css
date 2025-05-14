@@ -1,0 +1,70 @@
+/* Renk Paleti:
+   Ana: #3F37A5
+   Arka Plan: #FFF6E9
+   Koyu: #262626
+*/
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #FFF6E9;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #3F37A5;
+  background: #FFF6E9;
+}
+
+.Header {
+  width: 100%;
+  background: #3F37A5;
+  color: #FFF6E9;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px rgba(63, 55, 165, 0.05);
+}
+
+.Content {
+  flex: 1;
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(63, 55, 165, 0.07);
+  padding: 2rem;
+}
+
+.Footer {
+  width: 100%;
+  padding: 1rem 0;
+  text-align: center;
+  color: #262626;
+  background: #f3f0ff;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 2rem;
+}
+
+/* Navbar için örnek stil */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+a {
+  color: #FFF6E9;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}

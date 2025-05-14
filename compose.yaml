@@ -1,0 +1,31 @@
+services:
+  js-Cbulingo-MVP:
+    build:
+      context: ./Cbulingo-MVP
+      dockerfile: ../Dockerfile
+    image: js-cbulingo-mvp:latest
+    container_name: js-cbulingo-mvp
+    init: true
+    restart: unless-stopped
+    ports:
+      - "5173:4173"  # Vite preview: host 5173 -> container 4173
+    networks:
+      - appnet
+    # env_file: ./Cbulingo-MVP/.env  # Uncomment if .env file exists
+
+  json-server-api:
+    image: clue/json-server:latest
+    container_name: json-server-api
+    restart: unless-stopped
+    command: ["--watch", "/data/db.json", "--host", "0.0.0.0"]
+    volumes:
+      - ./api/db.json:/data/db.json:ro
+    ports:
+      - "3000:3000"  # json-server API
+    networks:
+      - appnet
+    # env_file: ./api/.env  # Uncomment if .env file exists
+
+networks:
+  appnet:
+    driver: bridge

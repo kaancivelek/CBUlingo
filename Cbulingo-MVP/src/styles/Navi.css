@@ -1,0 +1,55 @@
+﻿.navbar-custom {
+  background: transparent;
+  height: 80px;
+  padding: 0 32px;
+  z-index: 1000;
+  pointer-events: none; /* kritik */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-custom * {
+  pointer-events: auto;
+}
+
+.navbar-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-img {
+  width: 90px;
+  height: auto;
+  display: block;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-right: 0;
+}
+
+.navbar-login-text {
+  font-size: 14px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #3F37A5;
+  color: #FFF6E9;
+  transition: background 0.2s;
+}
+
+.navbar-login-text:hover {
+  background: #262626;
+  color: #FFF6E9;
+}

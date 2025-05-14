@@ -1,0 +1,37 @@
+{
+  "tblUsers": [
+    {
+      "userId": 1,
+      "userFullName": "John Doe",
+      "userEmail": ""
+    }
+  ],
+
+"tblEnglish":[
+
+    {
+      "enId": 1,
+      "enWord": "apple"
+      
+    }
+  ],
+
+"tblTurkish":[
+
+    {
+      "trId": 1,
+      "trName": "Turkish"
+     
+    }
+  ],
+  "tblTranslation":[
+    {
+      "id": 1,
+      "enId": 1,
+      "trId": 1,
+      "translation": "elma",
+      "picUrl":""
+
+    }
+  ]
+}
