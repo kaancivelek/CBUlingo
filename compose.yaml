@@ -11,6 +11,8 @@ services:
       - "5173:4173"  # Vite preview: host 5173 -> container 4173
     networks:
       - appnet
+    environment:
+      - HOME=/tmp
     # env_file: ./Cbulingo-MVP/.env  # Uncomment if .env file exists
 
   json-server-api:
@@ -21,7 +23,7 @@ services:
     volumes:
       - ./api/db.json:/data/db.json:ro
     ports:
-      - "3000:3000"  # json-server API
+      - "3000:80"  # Corrected port mapping
     networks:
       - appnet
     # env_file: ./api/.env  # Uncomment if .env file exists
