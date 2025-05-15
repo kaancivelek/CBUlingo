@@ -3,7 +3,7 @@
 
 #Docker ile Çalıştırma
 
-- Proje, Node.js 22.13.1 sürümünü kullanır (Dockerfile'da belirtilmiştir).
+- Proje, Docker yüklemeyi unutmayın! Node.js 22.13.1 sürümünü kullanır (Dockerfile'da belirtilmiştir).
 - Uygulama ve API için iki ayrı servis vardır: `js-app` (frontend) ve `json-server` (API).
 - Ortam değişkeni gerekmemektedir (Dockerfile ve compose dosyasında özel bir değişken yoktur).
 
@@ -48,7 +48,7 @@ docker compose up --build
 
 ### Portlar
 - Frontend (`js-Cbulingo-MVP`): 5173 (host) → 4173 (container)
-- API (`json-server-api`): 3000 (host) → 3000 (container)
+- API (`json-server-api`): 3000 (host) → 80 (container)
 
 ### Mobil Debug
 - Android Studio indirip kurun.
