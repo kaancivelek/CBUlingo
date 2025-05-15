@@ -48,7 +48,7 @@ docker compose up --build
 
 ### Portlar
 - Frontend (`js-Cbulingo-MVP`): 5173 (host) → 4173 (container)
-- API (`json-server-api`): 3000 (host) → 3000 (container)
+- API (`json-server-api`): 3000 (host) → 80 (container)
 
 ### Mobil Debug
 - Android Studio indirip kurun.
