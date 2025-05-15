@@ -3,7 +3,7 @@
 
 #Docker ile Çalıştırma
 
-- Proje, Node.js 22.13.1 sürümünü kullanır (Dockerfile'da belirtilmiştir).
+- Proje, Docker yüklemeyi unutmayın! Node.js 22.13.1 sürümünü kullanır (Dockerfile'da belirtilmiştir).
 - Uygulama ve API için iki ayrı servis vardır: `js-app` (frontend) ve `json-server` (API).
 - Ortam değişkeni gerekmemektedir (Dockerfile ve compose dosyasında özel bir değişken yoktur).
 
