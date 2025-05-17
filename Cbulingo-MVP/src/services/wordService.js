@@ -1,5 +1,6 @@
 import request from "./api";
-
+export const getAllEnWords = async () => request('/tblEnglish', 'GET');
+export const getEnWordByName = async (name) => request(`/tblEnglish?enName=${name}`, 'GET');
 export const getEnWordById = async (id) => request(`/tblEnglish?enId=${id}`, 'GET');
 export const getTrWordById = async (id) => request(`/tblTurkish?trId=${id}`, 'GET');
 export const getLearningStages = async () => request('/tblLearningStages', 'GET');
@@ -13,6 +14,7 @@ export const deleteLearnedWord = async (enId) => request(`/tblLearnedWords?enId=
 
 export const updateEnWord = async (id, data) => request(`/tblEnglish?enId=${id}`, 'PUT', data);
 export const updateTrWord = async (id, data) => request(`/tblTurkish?trId=${id}`, 'PUT', data);
+export const updateTranslation = async (id, data) => request(`/tblTranslation?trId=${id}`, 'PUT', data);
 export const updateLearningStage = async (enId, data) => request(`/tblLearningStages?stageId=${enId}`, 'PUT', data);
 
 export const createEnWord = async (data) => request('/tblEnglish', 'POST', data);

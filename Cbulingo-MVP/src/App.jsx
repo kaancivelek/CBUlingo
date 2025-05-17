@@ -1,6 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Navi from "./components/Navbar";
+import { ToastContainer, Slide } from "react-toastify";
 
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
@@ -35,6 +36,7 @@ function App() {
           <p>© 2023 Cbulingo. All rights reserved.</p>
         </div>
       </div>
+       <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
     </div>
   );
 }
