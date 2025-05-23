@@ -67,6 +67,7 @@ export const createMixedWordPool = async (userId, count) => {
       const enWord = await getEnWordById(word.enId);
       const trWord = await getTrWordById(word.trId);
       const translation = await getTranslationByEnId(word.enId);
+
       wordPool.push({ enWord, trWord, translation });
     }
 
@@ -77,7 +78,7 @@ export const createMixedWordPool = async (userId, count) => {
   }
 };
 
-export const addNewWord = async (enName, trName, picUrl) => {
+export const addNewWord = async (enName, trName, picUrl,enExample) => {
   try {
     // Tüm İngilizce kelimeleri çek
     const allWords = await getAllWords();
@@ -102,6 +103,7 @@ export const addNewWord = async (enName, trName, picUrl) => {
       trId: newId,
       enId: newId,
       picUrl,
+      enExample,
     });
     if (newEnWord && newTrWord && newTranslation) {
       return { success: "Kelime başarıyla eklendi" };
@@ -114,14 +116,14 @@ export const addNewWord = async (enName, trName, picUrl) => {
   }
 };
 
-export const updateWord = async (enName, newEnName, newTrName, picUrl) => {
+export const updateWord = async (enName, newEnName, newTrName, picUrl, enExample) => {
   try {
     const response = await getEnWordByName(enName);
     if (response && response.length > 0) {
       const wordId = response[0].enId;
       const updatedEnWord = { ...response[0], enWord: newEnName };
       const updatedTrWord = { trId: wordId, trName: newTrName };
-      const updatedTranslation = { enId: wordId, trId: wordId, picUrl: picUrl };
+      const updatedTranslation = { enId: wordId, trId: wordId, picUrl: picUrl, enExample: enExample };
 
       await updateEnWord(wordId, updatedEnWord);
       await updateTrWord(wordId, updatedTrWord);

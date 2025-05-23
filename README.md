@@ -52,4 +52,8 @@ docker compose up --build
 
 ### Mobil Debug
 - Android Studio indirip kurun.
-- ve cd Cbulingo-MVP seçildikten sonra npm run build, npx cap sync, android npx cap run android şeklinde projeyi mobil için güncelleyin.
+- ve cd Cbulingo-MVP seçildikten sonra;
+ npm run build,
+ npx cap sync, 
+CBUlingo\Cbulingo-MVP\android yoluna local.properties dosyası eksikse ekleyip içeriğine sdk.dir=C:/Users/KULLANICIADI/AppData/Local/Android/Sdk eklemesi yapıp
+ npx cap run android şeklinde projeyi mobil için güncelleyin.
