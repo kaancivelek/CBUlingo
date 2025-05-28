@@ -3,7 +3,7 @@
 import logo from "../assets/amblem.svg";
 import "../styles/Navi.css";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 function VerticalNavbar({ user }) {
   const navigate = useNavigate();
@@ -23,9 +23,19 @@ function VerticalNavbar({ user }) {
   return (
     <div className="vertical-navbar">
       <div className="vertical-navbar-content">
-        <div className="vertical-logo-img" onClick={() => navigate("/")}>  
+        <button
+          className="vertical-logo-img"
+          onClick={() => navigate("/")}
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+          }}
+          aria-label="Anasayfa"
+        >
           <img src={logo} alt="logo" style={{ width: "100px" }} />
-        </div>
+        </button>
         <button className="vertical-navbar-text" onClick={goToDashboard}>
           Dashboard
         </button>
