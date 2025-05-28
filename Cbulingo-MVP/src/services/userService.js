@@ -1,10 +1,17 @@
-import request from "./api"
+//Kaan Civelek
 
-export const getUserByEmail = async (email) => request(`/tblUser?userEmail=${encodeURIComponent(email)}`, 'GET');
+import request from "./api";
 
-export const updateUserInfo = async (email, data) => request(`/tblUser?userEmail=${encodeURIComponent(email)}`, 'PATCH', data);
-export const updateUserPassword = async (email, data) => request(`/tblUser?userEmail=${encodeURIComponent(email)}`, 'PUT', data);
+export const getUserByEmail = async (email) =>
+  request(`/tblUsers?userEmail=${encodeURIComponent(email)}`, "GET");
 
-export const deleteUser = async (email) => request(`/tblUser?userEmail=${encodeURIComponent(email)}`, 'DELETE');
+export const updateUserInfo = async (email, data) =>
+  request(`/tblUsers?userEmail=${encodeURIComponent(email)}`, "PATCH", data);
 
-export const createUser = async (data) => request('/tblUser', 'POST', data);
+export const updateUserPasswordById = async (id, data) =>
+  request(`/tblUsers/${id}`, "PUT", data);
+
+export const deleteUser = async (email) =>
+  request(`/tblUsers?userEmail=${encodeURIComponent(email)}`, "DELETE");
+
+export const createUser = async (data) => request("/tblUsers", "POST", data);

@@ -1,4 +1,5 @@
-const API_URL = 'https://localhost:3000';
+//Kaan Civelek
+const API_URL = 'http://localhost:3000';
 
 const request = async (endpoint, method = 'GET', body = null) => {
     const options = {

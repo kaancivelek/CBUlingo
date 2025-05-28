@@ -4,346 +4,1760 @@
       "userId": 1,
       "userFullName": "Kaan Civelek",
       "userEmail": "kaancivelek17@gmail.com",
-      "userHashedPassword": "hashed_password"
+      "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76",
+      "id": "c59e"
     }
   ],
-
-"tblLearnedWords":[
-  {"userID":1,
-  "enId":1,
-  "learningStage":1,
-  "learningDate":"2025-05-16" 
-}
-],
-"tblLearningStages":[
-  {"stageId":1,
-  "stageName":"Next Day"}
-  ,
-  {"stageId":2,
-  "stageName":"Next Week"}
-  ,
-  {"stageId":3,
-  "stageName":"Next Month"}
-  ,
-  {"stageId":4,
-  "stageName":"Next Three Months"}
-  ,
-  {"stageId":5,
-  "stageName":"Next Six Months"}
-  ,
-  {"stageId":6,
-  "stageName":"Next Year"} 
-  ,
-  {"stageId":7,
-  "stageName":"Learned"}
-],
-
-
+  "tblLearnedWords": [
+    {
+      "userID": 1,
+      "enId": 1,
+      "learningStage": 1,
+      "learningDate": "2025-05-16",
+      "id": "0da7"
+    }
+  ],
+  "tblLearningStages": [
+    {
+      "stageId": 1,
+      "stageName": "Next Day",
+      "id": "572f"
+    },
+    {
+      "stageId": 2,
+      "stageName": "Next Week",
+      "id": "0104"
+    },
+    {
+      "stageId": 3,
+      "stageName": "Next Month",
+      "id": "c2b7"
+    },
+    {
+      "stageId": 4,
+      "stageName": "Next Three Months",
+      "id": "7435"
+    },
+    {
+      "stageId": 5,
+      "stageName": "Next Six Months",
+      "id": "17ac"
+    },
+    {
+      "stageId": 6,
+      "stageName": "Next Year",
+      "id": "c11e"
+    },
+    {
+      "stageId": 7,
+      "stageName": "Learned",
+      "id": "7124"
+    }
+  ],
   "tblEnglish": [
-    {"enId":1,"enWord":"apple"},
-    {"enId":2,"enWord":"book"},
-    {"enId":3,"enWord":"car"},
-    {"enId":4,"enWord":"house"},
-    {"enId":5,"enWord":"dog"},
-    {"enId":6,"enWord":"cat"},
-    {"enId":7,"enWord":"tree"},
-    {"enId":8,"enWord":"water"},
-    {"enId":9,"enWord":"sun"},
-    {"enId":10,"enWord":"moon"},
-    {"enId":11,"enWord":"flower"},
-    {"enId":12,"enWord":"bird"},
-    {"enId":13,"enWord":"fish"},
-    {"enId":14,"enWord":"bread"},
-    {"enId":15,"enWord":"milk"},
-    {"enId":16,"enWord":"phone"},
-    {"enId":17,"enWord":"computer"},
-    {"enId":18,"enWord":"table"},
-    {"enId":19,"enWord":"chair"},
-    {"enId":20,"enWord":"window"},
-    {"enId":21,"enWord":"door"},
-    {"enId":22,"enWord":"pen"},
-    {"enId":23,"enWord":"pencil"},
-    {"enId":24,"enWord":"bag"},
-    {"enId":25,"enWord":"shoe"},
-    {"enId":26,"enWord":"shirt"},
-    {"enId":27,"enWord":"pants"},
-    {"enId":28,"enWord":"hat"},
-    {"enId":29,"enWord":"clock"},
-    {"enId":30,"enWord":"watch"},
-    {"enId":31,"enWord":"key"},
-    {"enId":32,"enWord":"money"},
-    {"enId":33,"enWord":"school"},
-    {"enId":34,"enWord":"teacher"},
-    {"enId":35,"enWord":"student"},
-    {"enId":36,"enWord":"city"},
-    {"enId":37,"enWord":"village"},
-    {"enId":38,"enWord":"mountain"},
-    {"enId":39,"enWord":"river"},
-    {"enId":40,"enWord":"sea"},
-    {"enId":41,"enWord":"island"},
-    {"enId":42,"enWord":"road"},
-    {"enId":43,"enWord":"bridge"},
-    {"enId":44,"enWord":"market"},
-    {"enId":45,"enWord":"hospital"},
-    {"enId":46,"enWord":"doctor"},
-    {"enId":47,"enWord":"nurse"},
-    {"enId":48,"enWord":"police"},
-    {"enId":49,"enWord":"fire"},
-    {"enId":50,"enWord":"rain"},
-    {"enId":51,"enWord":"snow"},
-    {"enId":52,"enWord":"wind"},
-    {"enId":53,"enWord":"cloud"},
-    {"enId":54,"enWord":"star"},
-    {"enId":55,"enWord":"family"},
-    {"enId":56,"enWord":"mother"},
-    {"enId":57,"enWord":"father"},
-    {"enId":58,"enWord":"sister"},
-    {"enId":59,"enWord":"brother"},
-    {"enId":60,"enWord":"child"},
-    {"enId":61,"enWord":"baby"},
-    {"enId":62,"enWord":"friend"},
-    {"enId":63,"enWord":"food"},
-    {"enId":64,"enWord":"meat"},
-    {"enId":65,"enWord":"egg"},
-    {"enId":66,"enWord":"cheese"},
-    {"enId":67,"enWord":"soup"},
-    {"enId":68,"enWord":"rice"},
-    {"enId":69,"enWord":"potato"},
-    {"enId":70,"enWord":"tomato"},
-    {"enId":71,"enWord":"onion"},
-    {"enId":72,"enWord":"pepper"},
-    {"enId":73,"enWord":"salt"},
-    {"enId":74,"enWord":"sugar"},
-    {"enId":75,"enWord":"tea"},
-    {"enId":76,"enWord":"coffee"},
-    {"enId":77,"enWord":"juice"},
-    {"enId":78,"enWord":"cake"},
-    {"enId":79,"enWord":"honey"},
-    {"enId":80,"enWord":"butter"},
-    {"enId":81,"enWord":"market"},
-    {"enId":82,"enWord":"shop"},
-    {"enId":83,"enWord":"street"},
-    {"enId":84,"enWord":"park"},
-    {"enId":85,"enWord":"garden"},
-    {"enId":86,"enWord":"forest"},
-    {"enId":87,"enWord":"lake"},
-    {"enId":88,"enWord":"beach"},
-    {"enId":89,"enWord":"train"},
-    {"enId":90,"enWord":"bus"},
-    {"enId":91,"enWord":"plane"},
-    {"enId":92,"enWord":"bicycle"},
-    {"enId":93,"enWord":"motorcycle"},
-    {"enId":94,"enWord":"ship"},
-    {"enId":95,"enWord":"ticket"},
-    {"enId":96,"enWord":"map"},
-    {"enId":97,"enWord":"photo"},
-    {"enId":98,"enWord":"music"},
-    {"enId":99,"enWord":"movie"},
-    {"enId":100,"enWord":"game"}
+    {
+      "enId": 1,
+      "enWord": "apple",
+      "id": "dbb7"
+    },
+    {
+      "enId": 2,
+      "enWord": "book",
+      "id": "7e46"
+    },
+    {
+      "enId": 3,
+      "enWord": "car",
+      "id": "3b48"
+    },
+    {
+      "enId": 4,
+      "enWord": "house",
+      "id": "5450"
+    },
+    {
+      "enId": 5,
+      "enWord": "dog",
+      "id": "c124"
+    },
+    {
+      "enId": 6,
+      "enWord": "cat",
+      "id": "4aba"
+    },
+    {
+      "enId": 7,
+      "enWord": "tree",
+      "id": "8c9c"
+    },
+    {
+      "enId": 8,
+      "enWord": "water",
+      "id": "fd34"
+    },
+    {
+      "enId": 9,
+      "enWord": "sun",
+      "id": "36cd"
+    },
+    {
+      "enId": 10,
+      "enWord": "moon",
+      "id": "3db0"
+    },
+    {
+      "enId": 11,
+      "enWord": "flower",
+      "id": "38f4"
+    },
+    {
+      "enId": 12,
+      "enWord": "bird",
+      "id": "9459"
+    },
+    {
+      "enId": 13,
+      "enWord": "fish",
+      "id": "85f4"
+    },
+    {
+      "enId": 14,
+      "enWord": "bread",
+      "id": "6b01"
+    },
+    {
+      "enId": 15,
+      "enWord": "milk",
+      "id": "7eef"
+    },
+    {
+      "enId": 16,
+      "enWord": "phone",
+      "id": "4511"
+    },
+    {
+      "enId": 17,
+      "enWord": "computer",
+      "id": "7ab9"
+    },
+    {
+      "enId": 18,
+      "enWord": "table",
+      "id": "b3da"
+    },
+    {
+      "enId": 19,
+      "enWord": "chair",
+      "id": "71b6"
+    },
+    {
+      "enId": 20,
+      "enWord": "window",
+      "id": "afac"
+    },
+    {
+      "enId": 21,
+      "enWord": "door",
+      "id": "a79c"
+    },
+    {
+      "enId": 22,
+      "enWord": "pen",
+      "id": "9c08"
+    },
+    {
+      "enId": 23,
+      "enWord": "pencil",
+      "id": "ed7d"
+    },
+    {
+      "enId": 24,
+      "enWord": "bag",
+      "id": "b6dd"
+    },
+    {
+      "enId": 25,
+      "enWord": "shoe",
+      "id": "95bc"
+    },
+    {
+      "enId": 26,
+      "enWord": "shirt",
+      "id": "4102"
+    },
+    {
+      "enId": 27,
+      "enWord": "pants",
+      "id": "3063"
+    },
+    {
+      "enId": 28,
+      "enWord": "hat",
+      "id": "8bb8"
+    },
+    {
+      "enId": 29,
+      "enWord": "clock",
+      "id": "60ae"
+    },
+    {
+      "enId": 30,
+      "enWord": "watch",
+      "id": "c529"
+    },
+    {
+      "enId": 31,
+      "enWord": "key",
+      "id": "309b"
+    },
+    {
+      "enId": 32,
+      "enWord": "money",
+      "id": "55e9"
+    },
+    {
+      "enId": 33,
+      "enWord": "school",
+      "id": "26ee"
+    },
+    {
+      "enId": 34,
+      "enWord": "teacher",
+      "id": "43c7"
+    },
+    {
+      "enId": 35,
+      "enWord": "student",
+      "id": "23b4"
+    },
+    {
+      "enId": 36,
+      "enWord": "city",
+      "id": "689d"
+    },
+    {
+      "enId": 37,
+      "enWord": "village",
+      "id": "3935"
+    },
+    {
+      "enId": 38,
+      "enWord": "mountain",
+      "id": "745a"
+    },
+    {
+      "enId": 39,
+      "enWord": "river",
+      "id": "fffb"
+    },
+    {
+      "enId": 40,
+      "enWord": "sea",
+      "id": "2e5e"
+    },
+    {
+      "enId": 41,
+      "enWord": "island",
+      "id": "4fba"
+    },
+    {
+      "enId": 42,
+      "enWord": "road",
+      "id": "9d52"
+    },
+    {
+      "enId": 43,
+      "enWord": "bridge",
+      "id": "b282"
+    },
+    {
+      "enId": 44,
+      "enWord": "market",
+      "id": "a178"
+    },
+    {
+      "enId": 45,
+      "enWord": "hospital",
+      "id": "e01a"
+    },
+    {
+      "enId": 46,
+      "enWord": "doctor",
+      "id": "c13d"
+    },
+    {
+      "enId": 47,
+      "enWord": "nurse",
+      "id": "f2b6"
+    },
+    {
+      "enId": 48,
+      "enWord": "police",
+      "id": "6ee4"
+    },
+    {
+      "enId": 49,
+      "enWord": "fire",
+      "id": "c2bd"
+    },
+    {
+      "enId": 50,
+      "enWord": "rain",
+      "id": "734b"
+    },
+    {
+      "enId": 51,
+      "enWord": "snow",
+      "id": "a5b6"
+    },
+    {
+      "enId": 52,
+      "enWord": "wind",
+      "id": "9e00"
+    },
+    {
+      "enId": 53,
+      "enWord": "cloud",
+      "id": "8d7c"
+    },
+    {
+      "enId": 54,
+      "enWord": "star",
+      "id": "2e9d"
+    },
+    {
+      "enId": 55,
+      "enWord": "family",
+      "id": "69f3"
+    },
+    {
+      "enId": 56,
+      "enWord": "mother",
+      "id": "c6b5"
+    },
+    {
+      "enId": 57,
+      "enWord": "father",
+      "id": "3458"
+    },
+    {
+      "enId": 58,
+      "enWord": "sister",
+      "id": "f96b"
+    },
+    {
+      "enId": 59,
+      "enWord": "brother",
+      "id": "73d2"
+    },
+    {
+      "enId": 60,
+      "enWord": "child",
+      "id": "e001"
+    },
+    {
+      "enId": 61,
+      "enWord": "baby",
+      "id": "cbea"
+    },
+    {
+      "enId": 62,
+      "enWord": "friend",
+      "id": "bd65"
+    },
+    {
+      "enId": 63,
+      "enWord": "food",
+      "id": "c569"
+    },
+    {
+      "enId": 64,
+      "enWord": "meat",
+      "id": "52fd"
+    },
+    {
+      "enId": 65,
+      "enWord": "egg",
+      "id": "0b6f"
+    },
+    {
+      "enId": 66,
+      "enWord": "cheese",
+      "id": "427a"
+    },
+    {
+      "enId": 67,
+      "enWord": "soup",
+      "id": "4474"
+    },
+    {
+      "enId": 68,
+      "enWord": "rice",
+      "id": "10a7"
+    },
+    {
+      "enId": 69,
+      "enWord": "potato",
+      "id": "bc5d"
+    },
+    {
+      "enId": 70,
+      "enWord": "tomato",
+      "id": "416b"
+    },
+    {
+      "enId": 71,
+      "enWord": "onion",
+      "id": "7323"
+    },
+    {
+      "enId": 72,
+      "enWord": "pepper",
+      "id": "472c"
+    },
+    {
+      "enId": 73,
+      "enWord": "salt",
+      "id": "de6f"
+    },
+    {
+      "enId": 74,
+      "enWord": "sugar",
+      "id": "0c33"
+    },
+    {
+      "enId": 75,
+      "enWord": "tea",
+      "id": "1496"
+    },
+    {
+      "enId": 76,
+      "enWord": "coffee",
+      "id": "8fc0"
+    },
+    {
+      "enId": 77,
+      "enWord": "juice",
+      "id": "bec7"
+    },
+    {
+      "enId": 78,
+      "enWord": "cake",
+      "id": "e20a"
+    },
+    {
+      "enId": 79,
+      "enWord": "honey",
+      "id": "3ac4"
+    },
+    {
+      "enId": 80,
+      "enWord": "butter",
+      "id": "441d"
+    },
+    {
+      "enId": 81,
+      "enWord": "market",
+      "id": "0aa1"
+    },
+    {
+      "enId": 82,
+      "enWord": "shop",
+      "id": "99ec"
+    },
+    {
+      "enId": 83,
+      "enWord": "street",
+      "id": "6595"
+    },
+    {
+      "enId": 84,
+      "enWord": "park",
+      "id": "f234"
+    },
+    {
+      "enId": 85,
+      "enWord": "garden",
+      "id": "dbbc"
+    },
+    {
+      "enId": 86,
+      "enWord": "forest",
+      "id": "ab20"
+    },
+    {
+      "enId": 87,
+      "enWord": "lake",
+      "id": "2d00"
+    },
+    {
+      "enId": 88,
+      "enWord": "beach",
+      "id": "d336"
+    },
+    {
+      "enId": 89,
+      "enWord": "train",
+      "id": "255a"
+    },
+    {
+      "enId": 90,
+      "enWord": "bus",
+      "id": "33e1"
+    },
+    {
+      "enId": 91,
+      "enWord": "plane",
+      "id": "d0f8"
+    },
+    {
+      "enId": 92,
+      "enWord": "bicycle",
+      "id": "9f42"
+    },
+    {
+      "enId": 93,
+      "enWord": "motorcycle",
+      "id": "45a4"
+    },
+    {
+      "enId": 94,
+      "enWord": "ship",
+      "id": "c419"
+    },
+    {
+      "enId": 95,
+      "enWord": "ticket",
+      "id": "379a"
+    },
+    {
+      "enId": 96,
+      "enWord": "map",
+      "id": "4e14"
+    },
+    {
+      "enId": 97,
+      "enWord": "photo",
+      "id": "1e15"
+    },
+    {
+      "enId": 98,
+      "enWord": "music",
+      "id": "5ba9"
+    },
+    {
+      "enId": 99,
+      "enWord": "movie",
+      "id": "42b8"
+    },
+    {
+      "enId": 100,
+      "enWord": "game",
+      "id": "490b"
+    }
   ],
   "tblTurkish": [
-    {"trId":1,"trName":"elma"},
-    {"trId":2,"trName":"kitap"},
-    {"trId":3,"trName":"araba"},
-    {"trId":4,"trName":"ev"},
-    {"trId":5,"trName":"köpek"},
-    {"trId":6,"trName":"kedi"},
-    {"trId":7,"trName":"ağaç"},
-    {"trId":8,"trName":"su"},
-    {"trId":9,"trName":"güneş"},
-    {"trId":10,"trName":"ay"},
-    {"trId":11,"trName":"çiçek"},
-    {"trId":12,"trName":"kuş"},
-    {"trId":13,"trName":"balık"},
-    {"trId":14,"trName":"ekmek"},
-    {"trId":15,"trName":"süt"},
-    {"trId":16,"trName":"telefon"},
-    {"trId":17,"trName":"bilgisayar"},
-    {"trId":18,"trName":"masa"},
-    {"trId":19,"trName":"sandalye"},
-    {"trId":20,"trName":"pencere"},
-    {"trId":21,"trName":"kapı"},
-    {"trId":22,"trName":"kalem"},
-    {"trId":23,"trName":"kurşun kalem"},
-    {"trId":24,"trName":"çanta"},
-    {"trId":25,"trName":"ayakkabı"},
-    {"trId":26,"trName":"gömlek"},
-    {"trId":27,"trName":"pantolon"},
-    {"trId":28,"trName":"şapka"},
-    {"trId":29,"trName":"saat"},
-    {"trId":30,"trName":"kol saati"},
-    {"trId":31,"trName":"anahtar"},
-    {"trId":32,"trName":"para"},
-    {"trId":33,"trName":"okul"},
-    {"trId":34,"trName":"öğretmen"},
-    {"trId":35,"trName":"öğrenci"},
-    {"trId":36,"trName":"şehir"},
-    {"trId":37,"trName":"köy"},
-    {"trId":38,"trName":"dağ"},
-    {"trId":39,"trName":"nehir"},
-    {"trId":40,"trName":"deniz"},
-    {"trId":41,"trName":"ada"},
-    {"trId":42,"trName":"yol"},
-    {"trId":43,"trName":"köprü"},
-    {"trId":44,"trName":"pazar"},
-    {"trId":45,"trName":"hastane"},
-    {"trId":46,"trName":"doktor"},
-    {"trId":47,"trName":"hemşire"},
-    {"trId":48,"trName":"polis"},
-    {"trId":49,"trName":"yangın"},
-    {"trId":50,"trName":"yağmur"},
-    {"trId":51,"trName":"kar"},
-    {"trId":52,"trName":"rüzgar"},
-    {"trId":53,"trName":"bulut"},
-    {"trId":54,"trName":"yıldız"},
-    {"trId":55,"trName":"aile"},
-    {"trId":56,"trName":"anne"},
-    {"trId":57,"trName":"baba"},
-    {"trId":58,"trName":"kız kardeş"},
-    {"trId":59,"trName":"erkek kardeş"},
-    {"trId":60,"trName":"çocuk"},
-    {"trId":61,"trName":"bebek"},
-    {"trId":62,"trName":"arkadaş"},
-    {"trId":63,"trName":"yemek"},
-    {"trId":64,"trName":"et"},
-    {"trId":65,"trName":"yumurta"},
-    {"trId":66,"trName":"peynir"},
-    {"trId":67,"trName":"çorba"},
-    {"trId":68,"trName":"pirinç"},
-    {"trId":69,"trName":"patates"},
-    {"trId":70,"trName":"domates"},
-    {"trId":71,"trName":"soğan"},
-    {"trId":72,"trName":"biber"},
-    {"trId":73,"trName":"tuz"},
-    {"trId":74,"trName":"şeker"},
-    {"trId":75,"trName":"çay"},
-    {"trId":76,"trName":"kahve"},
-    {"trId":77,"trName":"meyve suyu"},
-    {"trId":78,"trName":"pasta"},
-    {"trId":79,"trName":"bal"},
-    {"trId":80,"trName":"tereyağı"},
-    {"trId":81,"trName":"pazar"},
-    {"trId":82,"trName":"dükkan"},
-    {"trId":83,"trName":"sokak"},
-    {"trId":84,"trName":"park"},
-    {"trId":85,"trName":"bahçe"},
-    {"trId":86,"trName":"orman"},
-    {"trId":87,"trName":"göl"},
-    {"trId":88,"trName":"plaj"},
-    {"trId":89,"trName":"tren"},
-    {"trId":90,"trName":"otobüs"},
-    {"trId":91,"trName":"uçak"},
-    {"trId":92,"trName":"bisiklet"},
-    {"trId":93,"trName":"motosiklet"},
-    {"trId":94,"trName":"gemi"},
-    {"trId":95,"trName":"bilet"},
-    {"trId":96,"trName":"harita"},
-    {"trId":97,"trName":"fotoğraf"},
-    {"trId":98,"trName":"müzik"},
-    {"trId":99,"trName":"film"},
-    {"trId":100,"trName":"oyun"}
+    {
+      "trId": 1,
+      "trName": "elma",
+      "id": "2a44"
+    },
+    {
+      "trId": 2,
+      "trName": "kitap",
+      "id": "6d87"
+    },
+    {
+      "trId": 3,
+      "trName": "araba",
+      "id": "3d3f"
+    },
+    {
+      "trId": 4,
+      "trName": "ev",
+      "id": "5109"
+    },
+    {
+      "trId": 5,
+      "trName": "köpek",
+      "id": "698b"
+    },
+    {
+      "trId": 6,
+      "trName": "kedi",
+      "id": "2b93"
+    },
+    {
+      "trId": 7,
+      "trName": "ağaç",
+      "id": "c9c3"
+    },
+    {
+      "trId": 8,
+      "trName": "su",
+      "id": "33a2"
+    },
+    {
+      "trId": 9,
+      "trName": "güneş",
+      "id": "65cf"
+    },
+    {
+      "trId": 10,
+      "trName": "ay",
+      "id": "3741"
+    },
+    {
+      "trId": 11,
+      "trName": "çiçek",
+      "id": "0c5d"
+    },
+    {
+      "trId": 12,
+      "trName": "kuş",
+      "id": "72c5"
+    },
+    {
+      "trId": 13,
+      "trName": "balık",
+      "id": "d6ac"
+    },
+    {
+      "trId": 14,
+      "trName": "ekmek",
+      "id": "eb33"
+    },
+    {
+      "trId": 15,
+      "trName": "süt",
+      "id": "e9be"
+    },
+    {
+      "trId": 16,
+      "trName": "telefon",
+      "id": "9584"
+    },
+    {
+      "trId": 17,
+      "trName": "bilgisayar",
+      "id": "46f1"
+    },
+    {
+      "trId": 18,
+      "trName": "masa",
+      "id": "dfcb"
+    },
+    {
+      "trId": 19,
+      "trName": "sandalye",
+      "id": "d42e"
+    },
+    {
+      "trId": 20,
+      "trName": "pencere",
+      "id": "be31"
+    },
+    {
+      "trId": 21,
+      "trName": "kapı",
+      "id": "02fe"
+    },
+    {
+      "trId": 22,
+      "trName": "kalem",
+      "id": "225f"
+    },
+    {
+      "trId": 23,
+      "trName": "kurşun kalem",
+      "id": "e28f"
+    },
+    {
+      "trId": 24,
+      "trName": "çanta",
+      "id": "9b1c"
+    },
+    {
+      "trId": 25,
+      "trName": "ayakkabı",
+      "id": "0386"
+    },
+    {
+      "trId": 26,
+      "trName": "gömlek",
+      "id": "eea5"
+    },
+    {
+      "trId": 27,
+      "trName": "pantolon",
+      "id": "4a55"
+    },
+    {
+      "trId": 28,
+      "trName": "şapka",
+      "id": "6f38"
+    },
+    {
+      "trId": 29,
+      "trName": "saat",
+      "id": "a89c"
+    },
+    {
+      "trId": 30,
+      "trName": "kol saati",
+      "id": "90e8"
+    },
+    {
+      "trId": 31,
+      "trName": "anahtar",
+      "id": "1708"
+    },
+    {
+      "trId": 32,
+      "trName": "para",
+      "id": "0068"
+    },
+    {
+      "trId": 33,
+      "trName": "okul",
+      "id": "2ab0"
+    },
+    {
+      "trId": 34,
+      "trName": "öğretmen",
+      "id": "65de"
+    },
+    {
+      "trId": 35,
+      "trName": "öğrenci",
+      "id": "5a49"
+    },
+    {
+      "trId": 36,
+      "trName": "şehir",
+      "id": "11ca"
+    },
+    {
+      "trId": 37,
+      "trName": "köy",
+      "id": "8d7f"
+    },
+    {
+      "trId": 38,
+      "trName": "dağ",
+      "id": "f610"
+    },
+    {
+      "trId": 39,
+      "trName": "nehir",
+      "id": "0d8d"
+    },
+    {
+      "trId": 40,
+      "trName": "deniz",
+      "id": "c8ed"
+    },
+    {
+      "trId": 41,
+      "trName": "ada",
+      "id": "77bb"
+    },
+    {
+      "trId": 42,
+      "trName": "yol",
+      "id": "a934"
+    },
+    {
+      "trId": 43,
+      "trName": "köprü",
+      "id": "a31b"
+    },
+    {
+      "trId": 44,
+      "trName": "pazar",
+      "id": "9517"
+    },
+    {
+      "trId": 45,
+      "trName": "hastane",
+      "id": "16c0"
+    },
+    {
+      "trId": 46,
+      "trName": "doktor",
+      "id": "8b7f"
+    },
+    {
+      "trId": 47,
+      "trName": "hemşire",
+      "id": "44bc"
+    },
+    {
+      "trId": 48,
+      "trName": "polis",
+      "id": "bbd7"
+    },
+    {
+      "trId": 49,
+      "trName": "yangın",
+      "id": "49d2"
+    },
+    {
+      "trId": 50,
+      "trName": "yağmur",
+      "id": "217d"
+    },
+    {
+      "trId": 51,
+      "trName": "kar",
+      "id": "79a4"
+    },
+    {
+      "trId": 52,
+      "trName": "rüzgar",
+      "id": "cb4f"
+    },
+    {
+      "trId": 53,
+      "trName": "bulut",
+      "id": "9a8e"
+    },
+    {
+      "trId": 54,
+      "trName": "yıldız",
+      "id": "2e5b"
+    },
+    {
+      "trId": 55,
+      "trName": "aile",
+      "id": "a022"
+    },
+    {
+      "trId": 56,
+      "trName": "anne",
+      "id": "ded5"
+    },
+    {
+      "trId": 57,
+      "trName": "baba",
+      "id": "92e8"
+    },
+    {
+      "trId": 58,
+      "trName": "kız kardeş",
+      "id": "b56b"
+    },
+    {
+      "trId": 59,
+      "trName": "erkek kardeş",
+      "id": "ffe6"
+    },
+    {
+      "trId": 60,
+      "trName": "çocuk",
+      "id": "7d5e"
+    },
+    {
+      "trId": 61,
+      "trName": "bebek",
+      "id": "9ab2"
+    },
+    {
+      "trId": 62,
+      "trName": "arkadaş",
+      "id": "c8f0"
+    },
+    {
+      "trId": 63,
+      "trName": "yemek",
+      "id": "fe00"
+    },
+    {
+      "trId": 64,
+      "trName": "et",
+      "id": "b29b"
+    },
+    {
+      "trId": 65,
+      "trName": "yumurta",
+      "id": "bd0a"
+    },
+    {
+      "trId": 66,
+      "trName": "peynir",
+      "id": "94a6"
+    },
+    {
+      "trId": 67,
+      "trName": "çorba",
+      "id": "4380"
+    },
+    {
+      "trId": 68,
+      "trName": "pirinç",
+      "id": "77d6"
+    },
+    {
+      "trId": 69,
+      "trName": "patates",
+      "id": "9ff4"
+    },
+    {
+      "trId": 70,
+      "trName": "domates",
+      "id": "813d"
+    },
+    {
+      "trId": 71,
+      "trName": "soğan",
+      "id": "67bd"
+    },
+    {
+      "trId": 72,
+      "trName": "biber",
+      "id": "e4bb"
+    },
+    {
+      "trId": 73,
+      "trName": "tuz",
+      "id": "3ee4"
+    },
+    {
+      "trId": 74,
+      "trName": "şeker",
+      "id": "43c9"
+    },
+    {
+      "trId": 75,
+      "trName": "çay",
+      "id": "3716"
+    },
+    {
+      "trId": 76,
+      "trName": "kahve",
+      "id": "8485"
+    },
+    {
+      "trId": 77,
+      "trName": "meyve suyu",
+      "id": "3d18"
+    },
+    {
+      "trId": 78,
+      "trName": "pasta",
+      "id": "0aa7"
+    },
+    {
+      "trId": 79,
+      "trName": "bal",
+      "id": "ab76"
+    },
+    {
+      "trId": 80,
+      "trName": "tereyağı",
+      "id": "72a3"
+    },
+    {
+      "trId": 81,
+      "trName": "pazar",
+      "id": "2be0"
+    },
+    {
+      "trId": 82,
+      "trName": "dükkan",
+      "id": "5d2b"
+    },
+    {
+      "trId": 83,
+      "trName": "sokak",
+      "id": "71d4"
+    },
+    {
+      "trId": 84,
+      "trName": "park",
+      "id": "41ff"
+    },
+    {
+      "trId": 85,
+      "trName": "bahçe",
+      "id": "f920"
+    },
+    {
+      "trId": 86,
+      "trName": "orman",
+      "id": "b922"
+    },
+    {
+      "trId": 87,
+      "trName": "göl",
+      "id": "6acb"
+    },
+    {
+      "trId": 88,
+      "trName": "plaj",
+      "id": "0430"
+    },
+    {
+      "trId": 89,
+      "trName": "tren",
+      "id": "8d27"
+    },
+    {
+      "trId": 90,
+      "trName": "otobüs",
+      "id": "e28f"
+    },
+    {
+      "trId": 91,
+      "trName": "uçak",
+      "id": "c5b1"
+    },
+    {
+      "trId": 92,
+      "trName": "bisiklet",
+      "id": "b268"
+    },
+    {
+      "trId": 93,
+      "trName": "motosiklet",
+      "id": "7379"
+    },
+    {
+      "trId": 94,
+      "trName": "gemi",
+      "id": "5381"
+    },
+    {
+      "trId": 95,
+      "trName": "bilet",
+      "id": "6720"
+    },
+    {
+      "trId": 96,
+      "trName": "harita",
+      "id": "27ad"
+    },
+    {
+      "trId": 97,
+      "trName": "fotoğraf",
+      "id": "9384"
+    },
+    {
+      "trId": 98,
+      "trName": "müzik",
+      "id": "5faa"
+    },
+    {
+      "trId": 99,
+      "trName": "film",
+      "id": "874d"
+    },
+    {
+      "trId": 100,
+      "trName": "oyun",
+      "id": "ecaf"
+    }
   ],
   "tblTranslation": [
-    {"id":1,"enId":1,"trId":1,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg","enExample":"I eat an apple every morning."},
-    {"id":2,"enId":2,"trId":2,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/8/89/Book_icon_2.png","enExample":"She is reading a book."},
-    {"id":3,"enId":3,"trId":3,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/3/3e/2018_Toyota_Camry_SE_front_5.26.18.jpg","enExample":"My car is very fast."},
-    {"id":4,"enId":4,"trId":4,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/6/6d/House_in_the_night.jpg","enExample":"They live in a big house."},
-    {"id":5,"enId":5,"trId":5,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg","enExample":"The dog is barking loudly."},
-    {"id":6,"enId":6,"trId":6,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg","enExample":"The cat is sleeping on the sofa."},
-    {"id":7,"enId":7,"trId":7,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/f/f6/Tree_in_spring.jpg","enExample":"There is a tall tree in the garden."},
-    {"id":8,"enId":8,"trId":8,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/0/0d/Water_drop_001.jpg","enExample":"I drink water when I am thirsty."},
-    {"id":9,"enId":9,"trId":9,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/4/4c/Sun_and_clouds.jpg","enExample":"The sun is shining today."},
-    {"id":10,"enId":10,"trId":10,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg","enExample":"The moon is bright tonight."},
-    {"id":11,"enId":11,"trId":11,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/4/4d/Flower_poster_2.jpg","enExample":"This flower smells nice."},
-    {"id":12,"enId":12,"trId":12,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_bird.jpg","enExample":"A bird is singing in the tree."},
-    {"id":13,"enId":13,"trId":13,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/1/19/Goldfish3.jpg","enExample":"I have a goldfish in my aquarium."},
-    {"id":14,"enId":14,"trId":14,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/6/6f/Bread_%28white_background%29.jpg","enExample":"Would you like some bread?"},
-    {"id":15,"enId":15,"trId":15,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/4/4c/Milk_glass.jpg","enExample":"Milk is good for your health."},
-    {"id":16,"enId":16,"trId":16,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/3/3b/Smartphone_icon.png","enExample":"My phone is new."},
-    {"id":17,"enId":17,"trId":17,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/5/51/Computer-aj_aj_ashton_01.svg","enExample":"I use a computer at work."},
-    {"id":18,"enId":18,"trId":18,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/6/6b/Table_icon.png","enExample":"The table is made of wood."},
-    {"id":19,"enId":19,"trId":19,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Chair_icon.png","enExample":"Please sit on the chair."},
-    {"id":20,"enId":20,"trId":20,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/7/7c/Window_icon.png","enExample":"Open the window, please."},
-    {"id":21,"enId":21,"trId":21,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Door_icon.png","enExample":"Close the door."},
-    {"id":22,"enId":22,"trId":22,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/8/8e/Pen_icon.png","enExample":"I need a pen to write."},
-    {"id":23,"enId":23,"trId":23,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Pencil_icon.png","enExample":"Sharpen your pencil."},
-    {"id":24,"enId":24,"trId":24,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Bag_icon.png","enExample":"My bag is heavy."},
-    {"id":25,"enId":25,"trId":25,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Shoe_icon.png","enExample":"These shoes are new."},
-    {"id":26,"enId":26,"trId":26,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Shirt_icon.png","enExample":"He is wearing a blue shirt."},
-    {"id":27,"enId":27,"trId":27,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Pants_icon.png","enExample":"My pants are black."},
-    {"id":28,"enId":28,"trId":28,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Hat_icon.png","enExample":"She has a red hat."},
-    {"id":29,"enId":29,"trId":29,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Clock_icon.png","enExample":"The clock is on the wall."},
-    {"id":30,"enId":30,"trId":30,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Watch_icon.png","enExample":"I wear a watch every day."},
-    {"id":31,"enId":31,"trId":31,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Key_icon.png","enExample":"Where is my key?"},
-    {"id":32,"enId":32,"trId":32,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/4/4e/Euro_banknotes_2002.jpg","enExample":"I have some money in my wallet."},
-    {"id":33,"enId":33,"trId":33,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/School_icon.png","enExample":"The school is near my house."},
-    {"id":34,"enId":34,"trId":34,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Teacher_icon.png","enExample":"My teacher is very kind."},
-    {"id":35,"enId":35,"trId":35,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Student_icon.png","enExample":"The student is studying hard."},
-    {"id":36,"enId":36,"trId":36,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/City_icon.png","enExample":"I live in a big city."},
-    {"id":37,"enId":37,"trId":37,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Village_icon.png","enExample":"My grandparents live in a village."},
-    {"id":38,"enId":38,"trId":38,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Mountain_icon.png","enExample":"We climbed the mountain."},
-    {"id":39,"enId":39,"trId":39,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/River_icon.png","enExample":"The river is very long."},
-    {"id":40,"enId":40,"trId":40,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Sea_icon.png","enExample":"I like swimming in the sea."},
-    {"id":41,"enId":41,"trId":41,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Island_icon.png","enExample":"We visited an island last summer."},
-    {"id":42,"enId":42,"trId":42,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Road_icon.png","enExample":"The road is very busy."},
-    {"id":43,"enId":43,"trId":43,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Bridge_icon.png","enExample":"The bridge crosses the river."},
-    {"id":44,"enId":44,"trId":44,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Market_icon.png","enExample":"I bought fruit at the market."},
-    {"id":45,"enId":45,"trId":45,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Hospital_icon.png","enExample":"He works at the hospital."},
-    {"id":46,"enId":46,"trId":46,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Doctor_icon.png","enExample":"The doctor is very helpful."},
-    {"id":47,"enId":47,"trId":47,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Nurse_icon.png","enExample":"The nurse gave me medicine."},
-    {"id":48,"enId":48,"trId":48,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Police_icon.png","enExample":"The police officer is friendly."},
-    {"id":49,"enId":49,"trId":49,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Fire_icon.png","enExample":"There is a fire in the building."},
-    {"id":50,"enId":50,"trId":50,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Rain_icon.png","enExample":"It is going to rain today."},
-    {"id":51,"enId":51,"trId":51,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Snow_icon.png","enExample":"Snow is falling outside."},
-    {"id":52,"enId":52,"trId":52,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Wind_icon.png","enExample":"The wind is very strong."},
-    {"id":53,"enId":53,"trId":53,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Cloud_icon.png","enExample":"There is a cloud in the sky."},
-    {"id":54,"enId":54,"trId":54,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Star_icon.png","enExample":"I see a star at night."},
-    {"id":55,"enId":55,"trId":55,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Family_icon.png","enExample":"My family is very important to me."},
-    {"id":56,"enId":56,"trId":56,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Mother_icon.png","enExample":"My mother is a teacher."},
-    {"id":57,"enId":57,"trId":57,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Father_icon.png","enExample":"My father likes football."},
-    {"id":58,"enId":58,"trId":58,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Sister_icon.png","enExample":"I have one sister."},
-    {"id":59,"enId":59,"trId":59,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Brother_icon.png","enExample":"My brother is younger than me."},
-    {"id":60,"enId":60,"trId":60,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Child_icon.png","enExample":"The child is playing outside."},
-    {"id":61,"enId":61,"trId":61,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Baby_icon.png","enExample":"The baby is sleeping."},
-    {"id":62,"enId":62,"trId":62,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Friend_icon.png","enExample":"My friend is coming over."},
-    {"id":63,"enId":63,"trId":63,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Food_icon.png","enExample":"The food is delicious."},
-    {"id":64,"enId":64,"trId":64,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Meat_icon.png","enExample":"I don't eat meat."},
-    {"id":65,"enId":65,"trId":65,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Egg_icon.png","enExample":"I had an egg for breakfast."},
-    {"id":66,"enId":66,"trId":66,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Cheese_icon.png","enExample":"Cheese is made from milk."},
-    {"id":67,"enId":67,"trId":67,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Soup_icon.png","enExample":"The soup is hot."},
-    {"id":68,"enId":68,"trId":68,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Rice_icon.png","enExample":"Rice is a common food."},
-    {"id":69,"enId":69,"trId":69,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Potato_icon.png","enExample":"Potatoes grow underground."},
-    {"id":70,"enId":70,"trId":70,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Tomato_icon.png","enExample":"I like tomato salad."},
-    {"id":71,"enId":71,"trId":71,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Onion_icon.png","enExample":"Onions make me cry."},
-    {"id":72,"enId":72,"trId":72,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Pepper_icon.png","enExample":"Pepper is spicy."},
-    {"id":73,"enId":73,"trId":73,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Salt_icon.png","enExample":"Add some salt to the soup."},
-    {"id":74,"enId":74,"trId":74,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Sugar_icon.png","enExample":"Sugar is sweet."},
-    {"id":75,"enId":75,"trId":75,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Tea_icon.png","enExample":"Would you like some tea?"},
-    {"id":76,"enId":76,"trId":76,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Coffee_icon.png","enExample":"I drink coffee every morning."},
-    {"id":77,"enId":77,"trId":77,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Juice_icon.png","enExample":"Orange juice is my favorite."},
-    {"id":78,"enId":78,"trId":78,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Cake_icon.png","enExample":"The cake is delicious."},
-    {"id":79,"enId":79,"trId":79,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Honey_icon.png","enExample":"Bees make honey."},
-    {"id":80,"enId":80,"trId":80,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Butter_icon.png","enExample":"Butter is used in cooking."},
-    {"id":81,"enId":81,"trId":81,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Market_icon.png","enExample":"There is a market on Sundays."},
-    {"id":82,"enId":82,"trId":82,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Shop_icon.png","enExample":"I went to the shop."},
-    {"id":83,"enId":83,"trId":83,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Street_icon.png","enExample":"The street is crowded."},
-    {"id":84,"enId":84,"trId":84,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Park_icon.png","enExample":"Children play in the park."},
-    {"id":85,"enId":85,"trId":85,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Garden_icon.png","enExample":"There are flowers in the garden."},
-    {"id":86,"enId":86,"trId":86,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Forest_icon.png","enExample":"The forest is very green."},
-    {"id":87,"enId":87,"trId":87,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_icon.png","enExample":"We swam in the lake."},
-    {"id":88,"enId":88,"trId":88,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Beach_icon.png","enExample":"The beach is sandy."},
-    {"id":89,"enId":89,"trId":89,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Train_icon.png","enExample":"The train is late."},
-    {"id":90,"enId":90,"trId":90,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Bus_icon.png","enExample":"I take the bus to school."},
-    {"id":91,"enId":91,"trId":91,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Plane_icon.png","enExample":"The plane is flying high."},
-    {"id":92,"enId":92,"trId":92,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Bicycle_icon.png","enExample":"I ride my bicycle every day."},
-    {"id":93,"enId":93,"trId":93,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Motorcycle_icon.png","enExample":"He has a fast motorcycle."},
-    {"id":94,"enId":94,"trId":94,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Ship_icon.png","enExample":"The ship is in the harbor."},
-    {"id":95,"enId":95,"trId":95,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Ticket_icon.png","enExample":"I bought a ticket for the concert."},
-    {"id":96,"enId":96,"trId":96,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Map_icon.png","enExample":"I need a map to find the way."},
-    {"id":97,"enId":97,"trId":97,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Photo_icon.png","enExample":"Let me take a photo."},
-    {"id":98,"enId":98,"trId":98,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Music_icon.png","enExample":"I listen to music every day."},
-    {"id":99,"enId":99,"trId":99,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Movie_icon.png","enExample":"We watched a movie last night."},
-    {"id":100,"enId":100,"trId":100,"picUrl":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Game_icon.png","enExample":"Let's play a game."}
+    {
+      "id": "1",
+      "enId": 1,
+      "trId": 1,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg",
+      "enExample": "I eat an apple every morning."
+    },
+    {
+      "id": "2",
+      "enId": 2,
+      "trId": 2,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/8/89/Book_icon_2.png",
+      "enExample": "She is reading a book."
+    },
+    {
+      "id": "3",
+      "enId": 3,
+      "trId": 3,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3e/2018_Toyota_Camry_SE_front_5.26.18.jpg",
+      "enExample": "My car is very fast."
+    },
+    {
+      "id": "4",
+      "enId": 4,
+      "trId": 4,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6d/House_in_the_night.jpg",
+      "enExample": "They live in a big house."
+    },
+    {
+      "id": "5",
+      "enId": 5,
+      "trId": 5,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde33443.jpg",
+      "enExample": "The dog is barking loudly."
+    },
+    {
+      "id": "6",
+      "enId": 6,
+      "trId": 6,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg",
+      "enExample": "The cat is sleeping on the sofa."
+    },
+    {
+      "id": "7",
+      "enId": 7,
+      "trId": 7,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Tree_in_spring.jpg",
+      "enExample": "There is a tall tree in the garden."
+    },
+    {
+      "id": "8",
+      "enId": 8,
+      "trId": 8,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Water_drop_001.jpg",
+      "enExample": "I drink water when I am thirsty."
+    },
+    {
+      "id": "9",
+      "enId": 9,
+      "trId": 9,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Sun_and_clouds.jpg",
+      "enExample": "The sun is shining today."
+    },
+    {
+      "id": "10",
+      "enId": 10,
+      "trId": 10,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg",
+      "enExample": "The moon is bright tonight."
+    },
+    {
+      "id": "11",
+      "enId": 11,
+      "trId": 11,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Flower_poster_2.jpg",
+      "enExample": "This flower smells nice."
+    },
+    {
+      "id": "12",
+      "enId": 12,
+      "trId": 12,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_bird.jpg",
+      "enExample": "A bird is singing in the tree."
+    },
+    {
+      "id": "13",
+      "enId": 13,
+      "trId": 13,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Goldfish3.jpg",
+      "enExample": "I have a goldfish in my aquarium."
+    },
+    {
+      "id": "14",
+      "enId": 14,
+      "trId": 14,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Bread_%28white_background%29.jpg",
+      "enExample": "Would you like some bread?"
+    },
+    {
+      "id": "15",
+      "enId": 15,
+      "trId": 15,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Milk_glass.jpg",
+      "enExample": "Milk is good for your health."
+    },
+    {
+      "id": "16",
+      "enId": 16,
+      "trId": 16,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Smartphone_icon.png",
+      "enExample": "My phone is new."
+    },
+    {
+      "id": "17",
+      "enId": 17,
+      "trId": 17,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/5/51/Computer-aj_aj_ashton_01.svg",
+      "enExample": "I use a computer at work."
+    },
+    {
+      "id": "18",
+      "enId": 18,
+      "trId": 18,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Table_icon.png",
+      "enExample": "The table is made of wood."
+    },
+    {
+      "id": "19",
+      "enId": 19,
+      "trId": 19,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Chair_icon.png",
+      "enExample": "Please sit on the chair."
+    },
+    {
+      "id": "20",
+      "enId": 20,
+      "trId": 20,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Window_icon.png",
+      "enExample": "Open the window, please."
+    },
+    {
+      "id": "21",
+      "enId": 21,
+      "trId": 21,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Door_icon.png",
+      "enExample": "Close the door."
+    },
+    {
+      "id": "22",
+      "enId": 22,
+      "trId": 22,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Pen_icon.png",
+      "enExample": "I need a pen to write."
+    },
+    {
+      "id": "23",
+      "enId": 23,
+      "trId": 23,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Pencil_icon.png",
+      "enExample": "Sharpen your pencil."
+    },
+    {
+      "id": "24",
+      "enId": 24,
+      "trId": 24,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Bag_icon.png",
+      "enExample": "My bag is heavy."
+    },
+    {
+      "id": "25",
+      "enId": 25,
+      "trId": 25,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Shoe_icon.png",
+      "enExample": "These shoes are new."
+    },
+    {
+      "id": "26",
+      "enId": 26,
+      "trId": 26,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Shirt_icon.png",
+      "enExample": "He is wearing a blue shirt."
+    },
+    {
+      "id": "27",
+      "enId": 27,
+      "trId": 27,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Pants_icon.png",
+      "enExample": "My pants are black."
+    },
+    {
+      "id": "28",
+      "enId": 28,
+      "trId": 28,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Hat_icon.png",
+      "enExample": "She has a red hat."
+    },
+    {
+      "id": "29",
+      "enId": 29,
+      "trId": 29,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Clock_icon.png",
+      "enExample": "The clock is on the wall."
+    },
+    {
+      "id": "30",
+      "enId": 30,
+      "trId": 30,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Watch_icon.png",
+      "enExample": "I wear a watch every day."
+    },
+    {
+      "id": "31",
+      "enId": 31,
+      "trId": 31,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Key_icon.png",
+      "enExample": "Where is my key?"
+    },
+    {
+      "id": "32",
+      "enId": 32,
+      "trId": 32,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Euro_banknotes_2002.jpg",
+      "enExample": "I have some money in my wallet."
+    },
+    {
+      "id": "33",
+      "enId": 33,
+      "trId": 33,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/School_icon.png",
+      "enExample": "The school is near my house."
+    },
+    {
+      "id": "34",
+      "enId": 34,
+      "trId": 34,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Teacher_icon.png",
+      "enExample": "My teacher is very kind."
+    },
+    {
+      "id": "35",
+      "enId": 35,
+      "trId": 35,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Student_icon.png",
+      "enExample": "The student is studying hard."
+    },
+    {
+      "id": "36",
+      "enId": 36,
+      "trId": 36,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/City_icon.png",
+      "enExample": "I live in a big city."
+    },
+    {
+      "id": "37",
+      "enId": 37,
+      "trId": 37,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Village_icon.png",
+      "enExample": "My grandparents live in a village."
+    },
+    {
+      "id": "38",
+      "enId": 38,
+      "trId": 38,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Mountain_icon.png",
+      "enExample": "We climbed the mountain."
+    },
+    {
+      "id": "39",
+      "enId": 39,
+      "trId": 39,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/River_icon.png",
+      "enExample": "The river is very long."
+    },
+    {
+      "id": "40",
+      "enId": 40,
+      "trId": 40,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Sea_icon.png",
+      "enExample": "I like swimming in the sea."
+    },
+    {
+      "id": "41",
+      "enId": 41,
+      "trId": 41,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Island_icon.png",
+      "enExample": "We visited an island last summer."
+    },
+    {
+      "id": "42",
+      "enId": 42,
+      "trId": 42,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Road_icon.png",
+      "enExample": "The road is very busy."
+    },
+    {
+      "id": "43",
+      "enId": 43,
+      "trId": 43,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Bridge_icon.png",
+      "enExample": "The bridge crosses the river."
+    },
+    {
+      "id": "44",
+      "enId": 44,
+      "trId": 44,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Market_icon.png",
+      "enExample": "I bought fruit at the market."
+    },
+    {
+      "id": "45",
+      "enId": 45,
+      "trId": 45,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Hospital_icon.png",
+      "enExample": "He works at the hospital."
+    },
+    {
+      "id": "46",
+      "enId": 46,
+      "trId": 46,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Doctor_icon.png",
+      "enExample": "The doctor is very helpful."
+    },
+    {
+      "id": "47",
+      "enId": 47,
+      "trId": 47,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Nurse_icon.png",
+      "enExample": "The nurse gave me medicine."
+    },
+    {
+      "id": "48",
+      "enId": 48,
+      "trId": 48,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Police_icon.png",
+      "enExample": "The police officer is friendly."
+    },
+    {
+      "id": "49",
+      "enId": 49,
+      "trId": 49,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Fire_icon.png",
+      "enExample": "There is a fire in the building."
+    },
+    {
+      "id": "50",
+      "enId": 50,
+      "trId": 50,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Rain_icon.png",
+      "enExample": "It is going to rain today."
+    },
+    {
+      "id": "51",
+      "enId": 51,
+      "trId": 51,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Snow_icon.png",
+      "enExample": "Snow is falling outside."
+    },
+    {
+      "id": "52",
+      "enId": 52,
+      "trId": 52,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Wind_icon.png",
+      "enExample": "The wind is very strong."
+    },
+    {
+      "id": "53",
+      "enId": 53,
+      "trId": 53,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Cloud_icon.png",
+      "enExample": "There is a cloud in the sky."
+    },
+    {
+      "id": "54",
+      "enId": 54,
+      "trId": 54,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Star_icon.png",
+      "enExample": "I see a star at night."
+    },
+    {
+      "id": "55",
+      "enId": 55,
+      "trId": 55,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Family_icon.png",
+      "enExample": "My family is very important to me."
+    },
+    {
+      "id": "56",
+      "enId": 56,
+      "trId": 56,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Mother_icon.png",
+      "enExample": "My mother is a teacher."
+    },
+    {
+      "id": "57",
+      "enId": 57,
+      "trId": 57,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Father_icon.png",
+      "enExample": "My father likes football."
+    },
+    {
+      "id": "58",
+      "enId": 58,
+      "trId": 58,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Sister_icon.png",
+      "enExample": "I have one sister."
+    },
+    {
+      "id": "59",
+      "enId": 59,
+      "trId": 59,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Brother_icon.png",
+      "enExample": "My brother is younger than me."
+    },
+    {
+      "id": "60",
+      "enId": 60,
+      "trId": 60,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Child_icon.png",
+      "enExample": "The child is playing outside."
+    },
+    {
+      "id": "61",
+      "enId": 61,
+      "trId": 61,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Baby_icon.png",
+      "enExample": "The baby is sleeping."
+    },
+    {
+      "id": "62",
+      "enId": 62,
+      "trId": 62,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Friend_icon.png",
+      "enExample": "My friend is coming over."
+    },
+    {
+      "id": "63",
+      "enId": 63,
+      "trId": 63,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Food_icon.png",
+      "enExample": "The food is delicious."
+    },
+    {
+      "id": "64",
+      "enId": 64,
+      "trId": 64,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Meat_icon.png",
+      "enExample": "I don't eat meat."
+    },
+    {
+      "id": "65",
+      "enId": 65,
+      "trId": 65,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Egg_icon.png",
+      "enExample": "I had an egg for breakfast."
+    },
+    {
+      "id": "66",
+      "enId": 66,
+      "trId": 66,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Cheese_icon.png",
+      "enExample": "Cheese is made from milk."
+    },
+    {
+      "id": "67",
+      "enId": 67,
+      "trId": 67,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Soup_icon.png",
+      "enExample": "The soup is hot."
+    },
+    {
+      "id": "68",
+      "enId": 68,
+      "trId": 68,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Rice_icon.png",
+      "enExample": "Rice is a common food."
+    },
+    {
+      "id": "69",
+      "enId": 69,
+      "trId": 69,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Potato_icon.png",
+      "enExample": "Potatoes grow underground."
+    },
+    {
+      "id": "70",
+      "enId": 70,
+      "trId": 70,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Tomato_icon.png",
+      "enExample": "I like tomato salad."
+    },
+    {
+      "id": "71",
+      "enId": 71,
+      "trId": 71,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Onion_icon.png",
+      "enExample": "Onions make me cry."
+    },
+    {
+      "id": "72",
+      "enId": 72,
+      "trId": 72,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Pepper_icon.png",
+      "enExample": "Pepper is spicy."
+    },
+    {
+      "id": "73",
+      "enId": 73,
+      "trId": 73,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Salt_icon.png",
+      "enExample": "Add some salt to the soup."
+    },
+    {
+      "id": "74",
+      "enId": 74,
+      "trId": 74,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Sugar_icon.png",
+      "enExample": "Sugar is sweet."
+    },
+    {
+      "id": "75",
+      "enId": 75,
+      "trId": 75,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Tea_icon.png",
+      "enExample": "Would you like some tea?"
+    },
+    {
+      "id": "76",
+      "enId": 76,
+      "trId": 76,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Coffee_icon.png",
+      "enExample": "I drink coffee every morning."
+    },
+    {
+      "id": "77",
+      "enId": 77,
+      "trId": 77,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Juice_icon.png",
+      "enExample": "Orange juice is my favorite."
+    },
+    {
+      "id": "78",
+      "enId": 78,
+      "trId": 78,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Cake_icon.png",
+      "enExample": "The cake is delicious."
+    },
+    {
+      "id": "79",
+      "enId": 79,
+      "trId": 79,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Honey_icon.png",
+      "enExample": "Bees make honey."
+    },
+    {
+      "id": "80",
+      "enId": 80,
+      "trId": 80,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Butter_icon.png",
+      "enExample": "Butter is used in cooking."
+    },
+    {
+      "id": "81",
+      "enId": 81,
+      "trId": 81,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Market_icon.png",
+      "enExample": "There is a market on Sundays."
+    },
+    {
+      "id": "82",
+      "enId": 82,
+      "trId": 82,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Shop_icon.png",
+      "enExample": "I went to the shop."
+    },
+    {
+      "id": "83",
+      "enId": 83,
+      "trId": 83,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Street_icon.png",
+      "enExample": "The street is crowded."
+    },
+    {
+      "id": "84",
+      "enId": 84,
+      "trId": 84,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Park_icon.png",
+      "enExample": "Children play in the park."
+    },
+    {
+      "id": "85",
+      "enId": 85,
+      "trId": 85,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Garden_icon.png",
+      "enExample": "There are flowers in the garden."
+    },
+    {
+      "id": "86",
+      "enId": 86,
+      "trId": 86,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Forest_icon.png",
+      "enExample": "The forest is very green."
+    },
+    {
+      "id": "87",
+      "enId": 87,
+      "trId": 87,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Lake_icon.png",
+      "enExample": "We swam in the lake."
+    },
+    {
+      "id": "88",
+      "enId": 88,
+      "trId": 88,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Beach_icon.png",
+      "enExample": "The beach is sandy."
+    },
+    {
+      "id": "89",
+      "enId": 89,
+      "trId": 89,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Train_icon.png",
+      "enExample": "The train is late."
+    },
+    {
+      "id": "90",
+      "enId": 90,
+      "trId": 90,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Bus_icon.png",
+      "enExample": "I take the bus to school."
+    },
+    {
+      "id": "91",
+      "enId": 91,
+      "trId": 91,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Plane_icon.png",
+      "enExample": "The plane is flying high."
+    },
+    {
+      "id": "92",
+      "enId": 92,
+      "trId": 92,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Bicycle_icon.png",
+      "enExample": "I ride my bicycle every day."
+    },
+    {
+      "id": "93",
+      "enId": 93,
+      "trId": 93,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Motorcycle_icon.png",
+      "enExample": "He has a fast motorcycle."
+    },
+    {
+      "id": "94",
+      "enId": 94,
+      "trId": 94,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Ship_icon.png",
+      "enExample": "The ship is in the harbor."
+    },
+    {
+      "id": "95",
+      "enId": 95,
+      "trId": 95,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Ticket_icon.png",
+      "enExample": "I bought a ticket for the concert."
+    },
+    {
+      "id": "96",
+      "enId": 96,
+      "trId": 96,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Map_icon.png",
+      "enExample": "I need a map to find the way."
+    },
+    {
+      "id": "97",
+      "enId": 97,
+      "trId": 97,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Photo_icon.png",
+      "enExample": "Let me take a photo."
+    },
+    {
+      "id": "98",
+      "enId": 98,
+      "trId": 98,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Music_icon.png",
+      "enExample": "I listen to music every day."
+    },
+    {
+      "id": "99",
+      "enId": 99,
+      "trId": 99,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Movie_icon.png",
+      "enExample": "We watched a movie last night."
+    },
+    {
+      "id": "100",
+      "enId": 100,
+      "trId": 100,
+      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Game_icon.png",
+      "enExample": "Let's play a game."
+    }
   ]
 }
-

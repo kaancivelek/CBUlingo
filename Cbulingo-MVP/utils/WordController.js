@@ -3,7 +3,7 @@ import {
   getTrWordById,
   getLearnedWordsByUserId,
   getTranslationByEnId,
-  getAllWords,
+  getAllEnWords,
   createEnWord,
   createTrWord,
   getEnWordByName,
@@ -38,7 +38,7 @@ export const createMixedWordPool = async (userId, count) => {
   try {
     const now = new Date();
     const learnedWords = await getLearnedWordsByUserId(userId);
-    const allWords = await getAllWords();
+    const allWords = await getAllEnWords();
 
     // Pratik zamanı gelmiş kelimeler
     const practiceWords = learnedWords.filter((word) =>
@@ -78,10 +78,10 @@ export const createMixedWordPool = async (userId, count) => {
   }
 };
 
-export const addNewWord = async (enName, trName, picUrl,enExample) => {
+export const addNewWord = async (enName, trName, picUrl, enExample) => {
   try {
     // Tüm İngilizce kelimeleri çek
-    const allWords = await getAllWords();
+    const allWords = await getAllEnWords();
     // En yüksek id'yi bul
     const maxEnId =
       allWords.length > 0
@@ -90,10 +90,10 @@ export const addNewWord = async (enName, trName, picUrl,enExample) => {
     const newId = maxEnId + 1;
 
     // Aynı kelime var mı kontrolü
-    const enWord = await getEnWordByName(enName);
-    const trWord = await getTrWordById(trName);
-    if (enWord || trWord) {
-      return { error: "Bu kelime zaten mevcut" };
+    const existingWords = await getAllEnWords();
+    const isWordExists = existingWords.some(word => word.enWord.toLowerCase() === enName.toLowerCase());
+    if (isWordExists) {
+      return { error: "Bu İngilizce kelime zaten mevcut" };
     }
 
     // Yeni kelimeyi ekle
@@ -118,22 +118,29 @@ export const addNewWord = async (enName, trName, picUrl,enExample) => {
 
 export const updateWord = async (enName, newEnName, newTrName, picUrl, enExample) => {
   try {
-    const response = await getEnWordByName(enName);
-    if (response && response.length > 0) {
-      const wordId = response[0].enId;
-      const updatedEnWord = { ...response[0], enWord: newEnName };
+    // Kelimeyi bul
+    const allWords = await getAllEnWords();
+    const word = allWords.find(w => w.enWord.toLowerCase() === enName.toLowerCase());
+    
+    if (word) {
+      const wordId = word.enId;
+      
+      // Güncelleme işlemleri
+      const updatedEnWord = { ...word, enWord: newEnName };
       const updatedTrWord = { trId: wordId, trName: newTrName };
-      const updatedTranslation = { enId: wordId, trId: wordId, picUrl: picUrl, enExample: enExample };
+      const updatedTranslation = { enId: wordId, trId: wordId, picUrl, enExample };
 
+      // Güncellemeleri yap
       await updateEnWord(wordId, updatedEnWord);
       await updateTrWord(wordId, updatedTrWord);
       await updateTranslation(wordId, updatedTranslation);
-      return { success: "Kelime güncellendi" };
+      
+      return { success: "Kelime başarıyla güncellendi" };
     } else {
-      return { error: "Kelime bulunamadı" };
+      return { error: "Güncellenecek kelime bulunamadı" };
     }
   } catch (error) {
     console.error("Kelime güncellenemedi:", error);
-    return { error: "Kelime güncellenemedi" };
+    return { error: "Kelime güncellenirken bir hata oluştu" };
   }
 };

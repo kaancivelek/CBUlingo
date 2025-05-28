@@ -1,4 +1,6 @@
-﻿import logo from "../assets/amblem.svg";
+﻿//Kaan Civelek
+
+import logo from "../assets/amblem.svg";
 import "../styles/Navi.css";
 import { useNavigate } from "react-router-dom";
 
@@ -11,9 +13,9 @@ function VerticalNavbar({ user }) {
 
   const goToProfileOrLogon = () => {
     if (user && Object.keys(user).length > 0) {
-      navigate("/profile");
+      navigate("/ServiceTest");
     } else {
-      navigate("/Logon");
+      navigate("/");
     }
   };
 

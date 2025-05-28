@@ -1,3 +1,5 @@
+//Kaan Civelek
+
 import request from "./api";
 export const getAllEnWords = async () => request('/tblEnglish', 'GET');
 export const getEnWordByName = async (name) => request(`/tblEnglish?enName=${name}`, 'GET');
@@ -19,6 +21,7 @@ export const updateLearningStage = async (enId, data) => request(`/tblLearningSt
 
 export const createEnWord = async (data) => request('/tblEnglish', 'POST', data);
 export const createTrWord = async (data) => request('/tblTurkish', 'POST', data);
+export const createTranslation = async (data) => request('/tblTranslation', 'POST', data);
 
 
 // [

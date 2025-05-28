@@ -1,182 +1,85 @@
-import { getUserByEmail, createUser, updateUserPassword } from "../src/services/userService";
+import { getUserByEmail, createUser, updateUserPasswordById } from "../src/services/userService";
 import { hashPassword } from "./hashUtil";
-import { toast, slide } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { toast, Slide } from "react-toastify";
 
-export const handleLogin = async (email, password) => {
-  const navigate = useNavigate();
+// Giriş (Login)
+export const loginUser = async (email, password, navigate) => {
   try {
-    const response = await getUserByEmail(email);
-    if (response) {
-      const hashedInput = await hashPassword(password);
-      if (hashedInput === response.userHashedPassword) {
-        toast.success("Giriş Başarılı", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: slide,
-        });
-        localStorage.setItem("user", JSON.stringify(response));
-        setTimeout(navigate("/"), 2000);
-      } else {
-        toast.error("Giriş Başarısız", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: slide,
-        });
-      }
-    }
-  } catch (error) {
-    toast.error("Giriş Başarısız", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: slide,
-    });
-    console.error("Error during login:", error);
-  }
-};
-
-// Kullanıcı kaydı sırasında:
-export const handleRegister = async (email, data) => {
-  const navigate = useNavigate();
-  try {
-    const response = await getUserByEmail(email);
-    if (response) {
-      toast.error("Bu e-posta adresi zaten kayıtlı", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: slide,
-      });
+    const user = (await getUserByEmail(email))?.[0];
+    if (!user) {
+      toast.error("Bu e-posta adresi kayıtlı değil", { transition: Slide, theme: "dark" });
       return;
     }
-    const hashed = await hashPassword(data.userPassword);
-    const userData = { ...data, userHashedPassword: hashed };
-    // userPassword alanını göndermeyin!
-    const createResponse = await createUser(userData);
-    if (createResponse) {
-      toast.success("Kayıt Başarılı", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: slide,
-      });
-
-      localStorage.setItem("user", JSON.stringify(createResponse));
-      setTimeout((navigate("/")), 2000);
+    console.log("Şifre (gelen):", password);
+    const hashedInput = await hashPassword(password);
+    console.log("Hash:", hashedInput);
+    console.log("Kullanıcıdan gelen hash:", user.userHashedPassword);
+    console.log("Girişte üretilen hash:", hashedInput);
+    console.log("Karşılaştırma sonucu:", hashedInput === user.userHashedPassword);
+    if (hashedInput === user.userHashedPassword) {
+      toast.success("Giriş Başarılı", { transition: Slide, theme: "dark" });
+      localStorage.setItem("user", JSON.stringify(user));
+      setTimeout(() => navigate("/"), 2000);
+    } else {
+      toast.error("Şifre hatalı", { transition: Slide, theme: "dark" });
     }
-  } catch (error) {
-    toast.error("Kayıt Başarısız", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: slide,
-    });
-    console.error("Error during registration:", error);
+  } catch (err) {
+    toast.error("Giriş sırasında bir hata oluştu", { transition: Slide, theme: "dark" });
+    console.error(err);
   }
 };
 
-export const handleFogotPassword = async (email, fullName, newPassword) => {
+// Kayıt (Register)
+export const registerUser = async (email, data, navigate) => {
   try {
-    const response = await getUserByEmail(email);
-    if (response) {
-      if (response.userFullName === fullName) {
-        const res = await updateUserPassword(email, { userPassword: newPassword });
-        if (res) {
-          toast.success("Şifre Güncellendi", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: slide,
-          });
-        } else {
-          toast.error("Şifre güncellenemedi", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: slide,
-          });
-        }
-      } else {
-        toast.error("İsim uyuşmuyor", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: slide,
-        });
-      }
-    } else {
-      toast.error("Bu e-posta adresi kayıtlı değil", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: slide,
-      });
+    const existingArr = await getUserByEmail(email);
+    const existing = Array.isArray(existingArr) ? existingArr[0] : existingArr;
+    if (existing && existing.userEmail === email) {
+      toast.error("Bu e-posta adresi zaten kayıtlı", { transition: Slide, theme: "dark" });
+      return;
     }
-  } catch (error) {
-    console.error("Error during password reset:", error);
-    toast.error("Şifre sıfırlama sırasında hata oluştu", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: slide,
-    });
+    console.log("Kayıt şifresi:", data.userPassword);
+    const hashed = await hashPassword(data.userPassword);
+    console.log("Kayıt hash:", hashed);
+    const userData = { ...data, userHashedPassword: hashed };
+    delete userData.userPassword;
+    const created = await createUser(userData);
+    if (created) {
+      toast.success("Kayıt Başarılı", { transition: Slide, theme: "dark" });
+      localStorage.setItem("user", JSON.stringify(created));
+      setTimeout(() => navigate("/"), 2000);
+    }
+  } catch (err) {
+    toast.error("Kayıt sırasında bir hata oluştu", { transition: Slide, theme: "dark" });
+    console.error(err);
+  }
+};
+
+// Şifremi Unuttum (Forgot Password)
+export const forgotPassword = async (email, data) => {
+  try {
+    const existingArr = await getUserByEmail(email);
+    const existing = Array.isArray(existingArr) ? existingArr[0] : existingArr;
+
+    if (!existing) {
+      toast.error("Bu e-posta adresi kayıtlı değil", { transition: Slide, theme: "dark" });
+      return;
+    }
+
+    const newHashedPassword = await hashPassword(data.userPassword);
+
+    const updateData = {
+      ...existing,
+      userHashedPassword: newHashedPassword,
+    };
+
+    // ŞİFRE GÜNCELLEME (ID ile)
+    await updateUserPasswordById(existing.id, updateData);
+
+    toast.success("Şifre başarıyla güncellendi", { transition: Slide, theme: "dark" });
+
+  } catch (err) {
+    toast.error("Şifre yenileme sırasında bir hata oluştu", { transition: Slide, theme: "dark" });
+    console.error("Hata:", err);
   }
 };
