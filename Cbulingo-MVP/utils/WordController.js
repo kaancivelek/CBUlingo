@@ -6,7 +6,6 @@ import {
   getAllEnWords,
   createEnWord,
   createTrWord,
-  getEnWordByName,
   createTranslation,
   updateEnWord,
   updateTrWord,
@@ -52,9 +51,9 @@ export const createMixedWordPool = async (userId, count) => {
     // İki havuzu birleştir
     const combined = [...practiceWords, ...newWords];
 
-    // Rastgele shuffle
+    // Rastgele shuffle using a cryptographically secure random number generator
     for (let i = combined.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(window.crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * (i + 1));
       [combined[i], combined[j]] = [combined[j], combined[i]];
     }
 

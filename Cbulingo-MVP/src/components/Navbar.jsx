@@ -3,6 +3,7 @@
 import logo from "../assets/amblem.svg";
 import "../styles/Navi.css";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 function VerticalNavbar({ user }) {
   const navigate = useNavigate();
@@ -25,15 +26,19 @@ function VerticalNavbar({ user }) {
         <div className="vertical-logo-img" onClick={() => navigate("/")}>  
           <img src={logo} alt="logo" style={{ width: "100px" }} />
         </div>
-        <div className="vertical-navbar-text" onClick={goToDashboard}>
+        <button className="vertical-navbar-text" onClick={goToDashboard}>
           Dashboard
-        </div>
-        <div className="vertical-navbar-text" onClick={goToProfileOrLogon}>
+        </button>
+        <button className="vertical-navbar-text" onClick={goToProfileOrLogon}>
           {user && Object.keys(user).length > 0 ? "Profil" : "Giriş Yap"}
-        </div>
+        </button>
       </div>
     </div>
   );
 }
+
+VerticalNavbar.propTypes = {
+  user: PropTypes.object.isRequired, // If 'user' is optional, remove '.isRequired'
+};
 
 export default VerticalNavbar;
