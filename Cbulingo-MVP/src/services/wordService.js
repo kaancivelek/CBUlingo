@@ -3,21 +3,23 @@
 import request from "./api";
 export const getAllEnWords = async () => request('/tblEnglish', 'GET');
 export const getEnWordByName = async (name) => request(`/tblEnglish?enName=${name}`, 'GET');
-export const getEnWordById = async (id) => request(`/tblEnglish?enId=${id}`, 'GET');
-export const getTrWordById = async (id) => request(`/tblTurkish?trId=${id}`, 'GET');
+export const getEnWordById = async (id) => request(`/tblEnglish/${id}`, 'GET');
+export const getEnWordByEnId = async (enId) => request(`/tblEnglish?enId=${enId}`, 'GET');
+export const getTrWordById = async (id) => request(`/tblTurkish/${id}`, 'GET');
+export const getTrWordByTrId = async (trId) => request(`/tblTurkish?trId=${trId}`, 'GET');
 export const getLearningStages = async () => request('/tblLearningStages', 'GET');
 export const getTranslationByEnId = async (id) => request(`/tblTranslation?enId=${id}`, 'GET');
 export const getLearnedWordsByUserId = async (userId) => request(`/tblLearnedWords?userId=${userId}`, 'GET');
 
-export const deleteEnWord = async (id) => request(`/tblEnglish?enId=${id}`, 'DELETE');
-export const deleteTrWord = async (id) => request(`/tblTurkish?trId=${id}`, 'DELETE');
-export const deleteTranslation = async (id) => request(`/tblTranslation?trId=${id}`, 'DELETE');
-export const deleteLearnedWord = async (enId) => request(`/tblLearnedWords?enId=${enId}`, 'DELETE');
+export const deleteEnWord = async (id) => request(`/tblEnglish/${id}`, 'DELETE');
+export const deleteTrWord = async (id) => request(`/tblTurkish/${id}`, 'DELETE');
+export const deleteTranslation = async (id) => request(`/tblTranslation/${id}`, 'DELETE');
+export const deleteLearnedWord = async (id) => request(`/tblLearnedWords/${id}`, 'DELETE');
 
-export const updateEnWord = async (id, data) => request(`/tblEnglish?enId=${id}`, 'PUT', data);
-export const updateTrWord = async (id, data) => request(`/tblTurkish?trId=${id}`, 'PUT', data);
-export const updateTranslation = async (id, data) => request(`/tblTranslation?trId=${id}`, 'PUT', data);
-export const updateLearningStage = async (enId, data) => request(`/tblLearningStages?stageId=${enId}`, 'PUT', data);
+export const updateEnWord = async (id, data) => request(`/tblEnglish/${id}`, 'PUT', data);
+export const updateTrWord = async (id, data) => request(`/tblTurkish/${id}`, 'PUT', data);
+export const updateTranslation = async (id, data) => request(`/tblTranslation/${id}`, 'PUT', data);
+export const updateLearningStage = async (id, data) => request(`/tblLearningStages/${id}`, 'PUT', data);
 
 export const createEnWord = async (data) => request('/tblEnglish', 'POST', data);
 export const createTrWord = async (data) => request('/tblTurkish', 'POST', data);

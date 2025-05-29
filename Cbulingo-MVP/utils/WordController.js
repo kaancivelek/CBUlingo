@@ -1,6 +1,6 @@
 import {
-  getEnWordById,
-  getTrWordById,
+  getEnWordByEnId,
+  getTrWordByTrId,
   getLearnedWordsByUserId,
   getTranslationByEnId,
   getAllEnWords,
@@ -10,6 +10,7 @@ import {
   updateEnWord,
   updateTrWord,
   updateTranslation,
+
 } from "../src/services/wordService";
 
 // Pratik zamanı gelmiş mi kontrolü
@@ -39,38 +40,83 @@ export const createMixedWordPool = async (userId, count) => {
     const learnedWords = await getLearnedWordsByUserId(userId);
     const allWords = await getAllEnWords();
 
-    // Pratik zamanı gelmiş kelimeler
+    // Pratik zamanı gelmiş kelimeler - bu tblLearnedWords'den geliyor
     const practiceWords = learnedWords.filter((word) =>
       isPracticeTime(word, now)
     );
 
-    // Hiç öğrenilmemiş kelimeler (learnedWords'de olmayanlar)
+    // Hiç öğrenilmemiş kelimeler (learnedWords'de olmayanlar) - bu tblEnglish'den geliyor
     const learnedEnIds = new Set(learnedWords.map((w) => w.enId));
     const newWords = allWords.filter((word) => !learnedEnIds.has(word.enId));
 
-    // İki havuzu birleştir
-    const combined = [...practiceWords, ...newWords];
+    // Kelime havuzunu oluştur - hem pratik hem yeni kelimeler
+    const wordPool = [];
 
-    // Rastgele shuffle using a cryptographically secure random number generator
-    for (let i = combined.length - 1; i > 0; i--) {
+    // Pratik kelimelerden detayları getir
+    for (const learnedWord of practiceWords) {
+      try {
+        const enWordArray = await getEnWordByEnId(learnedWord.enId);
+        const enWord = enWordArray && enWordArray[0] ? enWordArray[0] : null;
+        
+        const translation = await getTranslationByEnId(learnedWord.enId);
+        let trWord = null;
+        
+        if (translation && translation[0]) {
+          const trWordArray = await getTrWordByTrId(translation[0].trId);
+          trWord = trWordArray && trWordArray[0] ? trWordArray[0] : null;
+        }
+
+        if (enWord && trWord && translation) {
+          wordPool.push({ 
+            enWord, 
+            trWord, 
+            translation,
+            source: 'practice', // hangi kaynaklardan geldiğini belirt
+            stageId: learnedWord.stageId 
+          });
+        }
+      } catch (error) {
+        console.warn(`Practice word with enId ${learnedWord.enId} could not be loaded:`, error.message);
+        // Hatalı kaydı atla, devam et
+      }
+    }
+
+    // Yeni kelimelerden detayları getir
+    for (const newWord of newWords) {
+      try {
+        const translation = await getTranslationByEnId(newWord.enId);
+        let trWord = null;
+        
+        if (translation && translation[0]) {
+          const trWordArray = await getTrWordByTrId(translation[0].trId);
+          trWord = trWordArray && trWordArray[0] ? trWordArray[0] : null;
+        }
+
+        if (trWord && translation) {
+          wordPool.push({ 
+            enWord: newWord, 
+            trWord, 
+            translation,
+            source: 'new', // hangi kaynaklardan geldiğini belirt
+            stageId: null 
+          });
+        }
+      } catch (error) {
+        console.warn(`New word with enId ${newWord.enId} could not be loaded:`, error.message);
+        // Hatalı kaydı atla, devam et
+      }
+    }
+
+    // Rastgele shuffle
+    for (let i = wordPool.length - 1; i > 0; i--) {
       const j = Math.floor(window.crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * (i + 1));
-      [combined[i], combined[j]] = [combined[j], combined[i]];
+      [wordPool[i], wordPool[j]] = [wordPool[j], wordPool[i]];
     }
 
     // İstenilen sayıda kelime seç
-    const selected = combined.slice(0, count);
+    const selected = wordPool.slice(0, count);
 
-    // Detayları getir
-    const wordPool = [];
-    for (const word of selected) {
-      const enWord = await getEnWordById(word.enId);
-      const trWord = await getTrWordById(word.trId);
-      const translation = await getTranslationByEnId(word.enId);
-
-      wordPool.push({ enWord, trWord, translation });
-    }
-
-    return wordPool;
+    return selected;
   } catch (error) {
     console.error("Error creating mixed word pool:", error);
     return { error: "Error creating mixed word pool" };
@@ -115,31 +161,76 @@ export const addNewWord = async (enName, trName, picUrl, enExample) => {
   }
 };
 
-export const updateWord = async (enName, newEnName, newTrName, picUrl, enExample) => {
+export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnExampleUsage) => {
   try {
-    // Kelimeyi bul
-    const allWords = await getAllEnWords();
-    const word = allWords.find(w => w.enWord.toLowerCase() === enName.toLowerCase());
+    // Mevcut kelimeyi bul
+    const existingWords = await getAllEnWords();
+    const existingWord = existingWords.find(word => word.enWord.toLowerCase() === enName.toLowerCase());
     
-    if (word) {
-      const wordId = word.enId;
-      
-      // Güncelleme işlemleri
-      const updatedEnWord = { ...word, enWord: newEnName };
-      const updatedTrWord = { trId: wordId, trName: newTrName };
-      const updatedTranslation = { enId: wordId, trId: wordId, picUrl, enExample };
-
-      // Güncellemeleri yap
-      await updateEnWord(wordId, updatedEnWord);
-      await updateTrWord(wordId, updatedTrWord);
-      await updateTranslation(wordId, updatedTranslation);
-      
-      return { success: "Kelime başarıyla güncellendi" };
-    } else {
+    if (!existingWord) {
       return { error: "Güncellenecek kelime bulunamadı" };
     }
+
+    const enId = existingWord.enId || existingWord.id;
+
+    // Eğer yeni İngilizce kelime farklıysa ve zaten mevcutsa hata ver
+    if (newEnWord && newEnWord.toLowerCase() !== enName.toLowerCase()) {
+      const duplicateCheck = existingWords.find(word => word.enWord.toLowerCase() === newEnWord.toLowerCase());
+      if (duplicateCheck) {
+        return { error: "Bu İngilizce kelime zaten mevcut" };
+      }
+    }
+
+    // İngilizce kelimeyi güncelle (json-server id'sini kullan)
+    if (newEnWord) {
+      const updateEnResult = await updateEnWord(existingWord.id, { 
+        enId: existingWord.enId, 
+        enWord: newEnWord 
+      });
+      if (!updateEnResult) {
+        return { error: "İngilizce kelime güncellenirken hata oluştu" };
+      }
+    }
+
+    // Türkçe kelimeyi güncelle - önce translation'dan trId'yi bul
+    if (newTrWord) {
+      const translation = await getTranslationByEnId(enId);
+      if (translation && translation[0]) {
+        const trWordArray = await getTrWordByTrId(translation[0].trId);
+        const trWord = trWordArray && trWordArray[0] ? trWordArray[0] : null;
+        if (trWord) {
+          const updateTrResult = await updateTrWord(trWord.id, { 
+            trId: trWord.trId, 
+            trName: newTrWord 
+          });
+          if (!updateTrResult) {
+            return { error: "Türkçe kelime güncellenirken hata oluştu" };
+          }
+        }
+      }
+    }
+
+    // Translation tablosunu güncelle (resim URL'si ve örnek cümle)
+    if (newPicUrl || newEnExampleUsage) {
+      const translation = await getTranslationByEnId(enId);
+      if (translation && translation[0]) {
+        const updateData = {
+          enId: translation[0].enId,
+          trId: translation[0].trId
+        };
+        if (newPicUrl) updateData.picUrl = newPicUrl;
+        if (newEnExampleUsage) updateData.enExample = newEnExampleUsage;
+        
+        const updateTranslationResult = await updateTranslation(translation[0].id, updateData);
+        if (!updateTranslationResult) {
+          return { error: "Çeviri bilgileri güncellenirken hata oluştu" };
+        }
+      }
+    }
+
+    return { success: "Kelime başarıyla güncellendi" };
   } catch (error) {
-    console.error("Kelime güncellenemedi:", error);
-    return { error: "Kelime güncellenirken bir hata oluştu" };
+    console.error("Error updating word:", error);
+    return { error: "Kelime güncellenirken hata oluştu" };
   }
 };

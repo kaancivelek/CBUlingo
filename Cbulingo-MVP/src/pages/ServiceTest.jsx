@@ -15,15 +15,25 @@ export default function ServiceTest() {
   const testCreateMixedWordPool = async () => {
     const userId = prompt('Kullanıcı ID:');
     const count = prompt('Kelime sayısı:');
-    if (!userId || !count) return;
+    if (!userId || !count) {
+      toast.error('Kullanıcı ID ve kelime sayısı gerekli');
+      return;
+    }
 
     try {
       setLoading(true);
       const result = await createMixedWordPool(parseInt(userId), parseInt(count));
       setResults(result);
-      toast.success('Kelime havuzu oluşturuldu');
+      
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success('Kelime havuzu oluşturuldu');
+      }
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message || 'Kelime havuzu oluşturulurken hata oluştu';
+      toast.error(errorMessage);
+      setResults({ error: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -35,15 +45,25 @@ export default function ServiceTest() {
     const picUrl = prompt('Resim URL:');
     const enExample = prompt('İngilizce örnek cümle:');
     
-    if (!enName || !trName) return;
+    if (!enName || !trName) {
+      toast.error('İngilizce ve Türkçe kelime zorunlu');
+      return;
+    }
 
     try {
       setLoading(true);
       const result = await addNewWord(enName, trName, picUrl, enExample);
       setResults(result);
-      toast.success('Kelime eklendi');
+      
+      if (result.success) {
+        toast.success(result.success);
+      } else if (result.error) {
+        toast.error(result.error);
+      }
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message || 'Kelime eklenirken hata oluştu';
+      toast.error(errorMessage);
+      setResults({ error: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -51,20 +71,42 @@ export default function ServiceTest() {
 
   const testUpdateWord = async () => {
     const enName = prompt('Güncellenecek İngilizce kelime:');
-    const newEnName = prompt('Yeni İngilizce kelime:');
-    const newTrName = prompt('Yeni Türkçe kelime:');
-    const picUrl = prompt('Yeni resim URL:');
-    const enExample = prompt('Yeni İngilizce örnek cümle:');
+    if (!enName) {
+      toast.error('Güncellenecek kelime adı gerekli');
+      return;
+    }
+
+    const newEnName = prompt('Yeni İngilizce kelime (boş bırakabilirsiniz):');
+    const newTrName = prompt('Yeni Türkçe kelime (boş bırakabilirsiniz):');
+    const picUrl = prompt('Yeni resim URL (boş bırakabilirsiniz):');
+    const enExample = prompt('Yeni İngilizce örnek cümle (boş bırakabilirsiniz):');
     
-    if (!enName || !newEnName || !newTrName) return;
+    // En az bir alan doldurulmuş olmalı
+    if (!newEnName && !newTrName && !picUrl && !enExample) {
+      toast.error('En az bir alan doldurulmalı');
+      return;
+    }
 
     try {
       setLoading(true);
-      const result = await updateWord(enName, newEnName, newTrName, picUrl, enExample);
+      const result = await updateWord(
+        enName, 
+        newEnName || null, 
+        newTrName || null, 
+        picUrl || null, 
+        enExample || null
+      );
       setResults(result);
-      toast.success('Kelime güncellendi');
+      
+      if (result.success) {
+        toast.success(result.success);
+      } else if (result.error) {
+        toast.error(result.error);
+      }
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message || 'Kelime güncellenirken hata oluştu';
+      toast.error(errorMessage);
+      setResults({ error: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -74,14 +116,19 @@ export default function ServiceTest() {
   const testLogin = async () => {
     const email = prompt('Email:');
     const password = prompt('Şifre:');
-    if (!email || !password) return;
+    if (!email || !password) {
+      toast.error('Email ve şifre gerekli');
+      return;
+    }
 
     try {
       setLoading(true);
       await loginUser(email, password, navigate);
-      toast.success('Giriş başarılı');
+      setResults({ success: 'Giriş işlemi başlatıldı' });
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message || 'Giriş yapılırken hata oluştu';
+      toast.error(errorMessage);
+      setResults({ error: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -91,7 +138,10 @@ export default function ServiceTest() {
     const email = prompt('Email:');
     const fullName = prompt('Ad Soyad:');
     const password = prompt('Şifre:');
-    if (!email || !fullName || !password) return;
+    if (!email || !fullName || !password) {
+      toast.error('Tüm alanlar gerekli');
+      return;
+    }
 
     try {
       setLoading(true);
@@ -100,9 +150,11 @@ export default function ServiceTest() {
         userFullName: fullName,
         userPassword: password
       }, navigate);
-      toast.success('Kayıt başarılı');
+      setResults({ success: 'Kayıt işlemi başlatıldı' });
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message || 'Kayıt olurken hata oluştu';
+      toast.error(errorMessage);
+      setResults({ error: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -110,16 +162,20 @@ export default function ServiceTest() {
 
   const testForgotPassword = async () => {
     const email = prompt('Email:');
-    const fullName = prompt('Ad Soyad:');
     const newPassword = prompt('Yeni şifre:');
-    if (!email || !fullName || !newPassword) return;
+    if (!email || !newPassword) {
+      toast.error('Email ve yeni şifre gerekli');
+      return;
+    }
 
     try {
       setLoading(true);
-      await forgotPassword(email, fullName, newPassword);
-      toast.success('Şifre güncellendi');
+      await forgotPassword(email, { userPassword: newPassword });
+      setResults({ success: 'Şifre güncelleme işlemi tamamlandı' });
     } catch (error) {
-      toast.error(error.message);
+      const errorMessage = error.message || 'Şifre güncellenirken hata oluştu';
+      toast.error(errorMessage);
+      setResults({ error: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -218,9 +274,12 @@ export default function ServiceTest() {
 
         {/* Loading Overlay */}
         {loading && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-4 rounded-lg">
-              Yükleniyor...
+              <div className="flex items-center space-x-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                <span>Yükleniyor...</span>
+              </div>
             </div>
           </div>
         )}
