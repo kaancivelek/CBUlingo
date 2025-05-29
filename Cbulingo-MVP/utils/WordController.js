@@ -11,8 +11,9 @@ import {
   updateEnWord,
   updateTrWord,
   updateTranslation,
-
 } from "../src/services/wordService";
+
+import { updateLearnedWord } from "../src/services/embeddedService";
 
 // Pratik zamanı gelmiş mi kontrolü
 function isPracticeTime(word, now) {
@@ -339,14 +340,10 @@ export const updateWordProgress = async (userId, enId, isCorrect) => {
           learningDate: new Date().toISOString().split('T')[0]
         };
         
-        // Update existing word
-        const response = await fetch(`http://localhost:3000/tblLearnedWords/${existingWord.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(updatedWord)
-        });
+        // Use embedded service instead of fetch
+        const updateResult = await updateLearnedWord(existingWord.id, updatedWord);
         
-        if (response.ok) {
+        if (updateResult) {
           return { 
             success: `Word progressed to stage ${newStage}`, 
             newStage: newStage,
