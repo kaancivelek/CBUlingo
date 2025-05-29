@@ -6,12 +6,11 @@ FROM node:${NODE_VERSION}-slim AS builder
 WORKDIR /app
 
 # Install dependencies (npm ci for deterministic builds)
-COPY --link package.json package-lock.json ./
-RUN --mount=type=cache,target=/root/.npm,id=npm-cache \
-npm ci
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Copy the rest of the application source
-COPY --link . .
+COPY . .
 
 # Build the production-ready static files
 RUN npm run build
