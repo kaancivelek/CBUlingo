@@ -7,6 +7,7 @@ import {
   createEnWord,
   createTrWord,
   createTranslation,
+  createLearnedWord,
   updateEnWord,
   updateTrWord,
   updateTranslation,
@@ -313,17 +314,15 @@ export const updateWordProgress = async (userId, enId, isCorrect) => {
           learningDate: new Date().toISOString().split('T')[0] // YYYY-MM-DD format
         };
         
-        // We need a createLearnedWord method in wordService
-        // For now, we'll use a generic request
-        const response = await fetch('http://localhost:3000/tblLearnedWords', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newLearnedWord)
-        });
-        
-        if (response.ok) {
-          return { success: "Word added to learned words", newStage: 1 };
-        } else {
+        try {
+          const created = await createLearnedWord(newLearnedWord);
+          if (created) {
+            return { success: "Word added to learned words", newStage: 1 };
+          } else {
+            return { error: "Failed to add word to learned words" };
+          }
+        } catch (error) {
+          console.error("Error creating learned word:", error);
           return { error: "Failed to add word to learned words" };
         }
       } else {
@@ -335,6 +334,7 @@ export const updateWordProgress = async (userId, enId, isCorrect) => {
         const newStage = existingWord.stageId + 1;
         const updatedWord = {
           ...existingWord,
+          userId: userId, // Ensure userId is always present
           stageId: newStage,
           learningDate: new Date().toISOString().split('T')[0]
         };

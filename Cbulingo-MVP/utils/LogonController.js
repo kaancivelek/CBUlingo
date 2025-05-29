@@ -3,7 +3,7 @@ import { hashPassword } from "./hashUtil";
 import { toast, Slide } from "react-toastify";
 
 // Giriş (Login)
-export const loginUser = async (email, password, navigate) => {
+export const loginUser = async (email, password, navigate, updateUser = null) => {
   try {
     const user = (await getUserByEmail(email))?.[0];
     if (!user) {
@@ -18,7 +18,15 @@ export const loginUser = async (email, password, navigate) => {
     console.log("Karşılaştırma sonucu:", hashedInput === user.userHashedPassword);
     if (hashedInput === user.userHashedPassword) {
       toast.success("Giriş Başarılı", { transition: Slide, theme: "dark" });
-      localStorage.setItem("user", JSON.stringify(user));
+      
+      // App.jsx'den gelen updateUser fonksiyonunu kullan
+      if (updateUser) {
+        updateUser(user);
+      } else {
+        // Fallback - doğrudan localStorage'a yaz
+        localStorage.setItem("user", JSON.stringify(user));
+      }
+      
       setTimeout(() => navigate("/"), 2000);
     } else {
       toast.error("Şifre hatalı", { transition: Slide, theme: "dark" });
@@ -30,7 +38,7 @@ export const loginUser = async (email, password, navigate) => {
 };
 
 // Kayıt (Register)
-export const registerUser = async (email, data, navigate) => {
+export const registerUser = async (email, data, navigate, updateUser = null) => {
   try {
     const existingArr = await getUserByEmail(email);
     const existing = Array.isArray(existingArr) ? existingArr[0] : existingArr;
@@ -46,7 +54,15 @@ export const registerUser = async (email, data, navigate) => {
     const created = await createUser(userData);
     if (created) {
       toast.success("Kayıt Başarılı", { transition: Slide, theme: "dark" });
-      localStorage.setItem("user", JSON.stringify(created));
+      
+      // App.jsx'den gelen updateUser fonksiyonunu kullan
+      if (updateUser) {
+        updateUser(created);
+      } else {
+        // Fallback - doğrudan localStorage'a yaz
+        localStorage.setItem("user", JSON.stringify(created));
+      }
+      
       setTimeout(() => navigate("/"), 2000);
     }
   } catch (err) {

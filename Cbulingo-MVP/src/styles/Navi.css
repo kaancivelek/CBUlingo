@@ -45,11 +45,23 @@
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
   text-align: center;
   min-width: 120px;
+  border: none;
 }
 .vertical-navbar-text:hover {
   background: #3F37A5;
   color: #FFF6E9;
   box-shadow: 0 4px 16px rgba(63, 55, 165, 0.18);
+}
+
+.logout-button {
+  background: #ff4757 !important;
+  color: white !important;
+}
+
+.logout-button:hover {
+  background: #ff3838 !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3) !important;
 }
 
 @media (max-width: 768px) {
