@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install dependencies (npm ci for deterministic builds)
 COPY --link package.json package-lock.json ./
-RUN --mount=type=cache,target=/root/.npm \
+RUN 
     npm ci
 
 # Copy the rest of the application source
