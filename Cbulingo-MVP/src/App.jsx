@@ -6,6 +6,7 @@ import { ToastContainer, Slide } from "react-toastify";
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import ServiceTest from "./pages/ServiceTest";
+import Quiz from "./pages/Quiz";
 
 function App() {
   const [user, setUser] = useState({
@@ -32,6 +33,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard/>}/>
           <Route path="/ServiceTest" element={<ServiceTest/>}/>
+          <Route path="/quiz" element={<Quiz user={user}/>}/>
         </Routes>
 
         <div className="Footer">

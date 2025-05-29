@@ -234,3 +234,136 @@ export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnE
     return { error: "Kelime güncellenirken hata oluştu" };
   }
 };
+
+export const getQuizWord = async (userId) => {
+  try {
+    const learnedWords = await getLearnedWordsByUserId(userId);
+    const allWords = await getAllEnWords();
+    
+    // Prioritize practice words (words that need review)
+    const now = new Date();
+    const practiceWords = learnedWords.filter((word) => 
+      word.stageId < 7 && isPracticeTime(word, now)
+    );
+    
+    let selectedWord = null;
+    
+    if (practiceWords.length > 0) {
+      // Select a random practice word
+      selectedWord = practiceWords[Math.floor(Math.random() * practiceWords.length)];
+    } else {
+      // Select a random new word (not learned yet)
+      const learnedEnIds = new Set(learnedWords.map((w) => w.enId));
+      const newWords = allWords.filter((word) => !learnedEnIds.has(word.enId));
+      
+      if (newWords.length > 0) {
+        const randomNewWord = newWords[Math.floor(Math.random() * newWords.length)];
+        selectedWord = { enId: randomNewWord.enId, isNew: true };
+      } else {
+        return { error: "No words available for quiz" };
+      }
+    }
+    
+    if (!selectedWord) {
+      return { error: "No words available for quiz" };
+    }
+    
+    // Get word details
+    const enWordArray = await getEnWordByEnId(selectedWord.enId);
+    const enWord = enWordArray && enWordArray[0] ? enWordArray[0] : null;
+    
+    const translation = await getTranslationByEnId(selectedWord.enId);
+    let trWord = null;
+    
+    if (translation && translation[0]) {
+      const trWordArray = await getTrWordByTrId(translation[0].trId);
+      trWord = trWordArray && trWordArray[0] ? trWordArray[0] : null;
+    }
+    
+    if (!enWord || !trWord || !translation) {
+      return { error: "Word details could not be loaded" };
+    }
+    
+    return {
+      enWord,
+      trWord,
+      translation: translation[0],
+      currentStage: selectedWord.stageId || 0,
+      isNew: selectedWord.isNew || false
+    };
+    
+  } catch (error) {
+    console.error("Error getting quiz word:", error);
+    return { error: "Error getting quiz word" };
+  }
+};
+
+export const updateWordProgress = async (userId, enId, isCorrect) => {
+  try {
+    const learnedWords = await getLearnedWordsByUserId(userId);
+    const existingWord = learnedWords.find(word => word.enId === enId);
+    
+    if (!existingWord) {
+      // New word - add to learned words with stage 1
+      if (isCorrect) {
+        const newLearnedWord = {
+          userId: userId,
+          enId: enId,
+          stageId: 1,
+          learningDate: new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+        };
+        
+        // We need a createLearnedWord method in wordService
+        // For now, we'll use a generic request
+        const response = await fetch('http://localhost:3000/tblLearnedWords', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newLearnedWord)
+        });
+        
+        if (response.ok) {
+          return { success: "Word added to learned words", newStage: 1 };
+        } else {
+          return { error: "Failed to add word to learned words" };
+        }
+      } else {
+        return { message: "Incorrect answer - try again later", newStage: 0 };
+      }
+    } else {
+      // Existing word - update stage if correct
+      if (isCorrect && existingWord.stageId < 7) {
+        const newStage = existingWord.stageId + 1;
+        const updatedWord = {
+          ...existingWord,
+          stageId: newStage,
+          learningDate: new Date().toISOString().split('T')[0]
+        };
+        
+        // Update existing word
+        const response = await fetch(`http://localhost:3000/tblLearnedWords/${existingWord.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedWord)
+        });
+        
+        if (response.ok) {
+          return { 
+            success: `Word progressed to stage ${newStage}`, 
+            newStage: newStage,
+            isCompleted: newStage === 7
+          };
+        } else {
+          return { error: "Failed to update word progress" };
+        }
+      } else if (!isCorrect) {
+        return { message: "Incorrect answer - no progress made", newStage: existingWord.stageId };
+      } else {
+        return { message: "Word already completed!", newStage: existingWord.stageId };
+      }
+    }
+    
+  } catch (error) {
+    console.error("Error updating word progress:", error);
+    return { error: "Error updating word progress" };
+  }
+};

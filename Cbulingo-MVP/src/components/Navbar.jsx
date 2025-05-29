@@ -12,6 +12,10 @@ function VerticalNavbar({ user }) {
     navigate("/dashboard");
   };
 
+  const goToQuiz = () => {
+    navigate("/quiz");
+  };
+
   const goToProfileOrLogon = () => {
     if (user && Object.keys(user).length > 0) {
       navigate("/ServiceTest");
@@ -38,6 +42,9 @@ function VerticalNavbar({ user }) {
         </button>
         <button className="vertical-navbar-text" onClick={goToDashboard}>
           Dashboard
+        </button>
+        <button className="vertical-navbar-text" onClick={goToQuiz}>
+          Quiz
         </button>
         <button className="vertical-navbar-text" onClick={goToProfileOrLogon}>
           {user && Object.keys(user).length > 0 ? "Profil" : "Giriş Yap"}
