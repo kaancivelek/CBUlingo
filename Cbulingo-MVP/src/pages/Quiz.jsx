@@ -1,298 +1,306 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { getQuizWord, updateWordProgress } from '../../utils/WordController';
+import {
+  QUIZ_PHASES,
+  QUESTION_LIMITS,
+  createInitialGameState,
+  updateGameStats,
+  validateAnswer,
+  isGameFinished,
+  getStageClass,
+  handleQuizError,
+  createSpeechUtterance
+} from '../utils/quizHelpers';
 import '../styles/Quiz.css';
 
 export default function Quiz({ user }) {
-  const [currentWord, setCurrentWord] = useState(null);
-  const [userAnswer, setUserAnswer] = useState('');
-  const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [gameState, setGameState] = useState(createInitialGameState());
   const [loading, setLoading] = useState(false);
-  const [streak, setStreak] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [animationClass, setAnimationClass] = useState('');
+  const [speaking, setSpeaking] = useState(false);
+
+  // TTS Functions
+  const speak = (text) => {
+    if (!('speechSynthesis' in window)) {
+      toast.error('Tarayıcınız ses özelliğini desteklemiyor');
+      return;
+    }
+
+    speechSynthesis.cancel();
+    const utterance = createSpeechUtterance(text);
+    
+    utterance.onstart = () => setSpeaking(true);
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => {
+      setSpeaking(false);
+      toast.error('Ses hatası');
+    };
+
+    speechSynthesis.speak(utterance);
+  };
+
+  // Game Actions
+  const startGame = () => {
+    setGameState(prev => ({
+      ...prev,
+      phase: QUIZ_PHASES.PLAYING
+    }));
+    loadNewWord();
+  };
 
   const loadNewWord = async () => {
     setLoading(true);
-    setAnimationClass('fade-out');
-    
-    setTimeout(async () => {
-      try {
-        const result = await getQuizWord(user.userId);
-        if (result.error) {
-          toast.error(result.error);
-          return;
-        }
-        
-        setCurrentWord(result);
-        setUserAnswer('');
-        setShowResult(false);
-        setAnimationClass('fade-in');
-      } catch (error) {
-        toast.error('Kelime yüklenirken hata oluştu');
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
+    try {
+      const result = await getQuizWord(user.userId);
+      if (result.error) throw new Error(result.error);
+      
+      setGameState(prev => ({
+        ...prev,
+        currentWord: result,
+        userAnswer: '',
+        showResult: false
+      }));
+    } catch (error) {
+      toast.error(handleQuizError(error, 'Kelime yüklenemedi'));
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!userAnswer.trim()) {
+  const submitAnswer = async () => {
+    if (!gameState.userAnswer.trim()) {
       toast.warning('Lütfen bir cevap girin');
       return;
     }
 
     setLoading(true);
-    const correct = userAnswer.toLowerCase().trim() === currentWord.trWord.trName.toLowerCase().trim();
-    setIsCorrect(correct);
-    setShowResult(true);
-    setTotalQuestions(prev => prev + 1);
-
-    // Update progress in database
-    const result = await updateWordProgress(user.userId, currentWord.enWord.enId, correct);
+    const isCorrect = validateAnswer(gameState.userAnswer, gameState.currentWord.trWord.trName);
     
-    if (correct) {
-      setCorrectAnswers(prev => prev + 1);
-      setStreak(prev => prev + 1);
-      setAnimationClass('correct-bounce');
+    try {
+      await updateWordProgress(user.userId, gameState.currentWord.enWord.enId, isCorrect);
       
-      if (result.success) {
-        toast.success(result.success);
+      const updatedState = updateGameStats(gameState, isCorrect);
+      setGameState(updatedState);
+
+      if (isGameFinished(updatedState.currentQuestion, updatedState.maxQuestions)) {
+        setTimeout(() => {
+          setGameState(prev => ({ ...prev, phase: QUIZ_PHASES.FINISHED }));
+        }, 2000);
       }
-    } else {
-      setStreak(0);
-      setAnimationClass('wrong-shake');
-      toast.error('Yanlış cevap!');
+
+      toast.success(isCorrect ? 'Doğru!' : 'Yanlış');
+    } catch (error) {
+      toast.error(handleQuizError(error, 'Cevap kaydedilemedi'));
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  const handleNextWord = () => {
-    setAnimationClass('slide-out');
-    setTimeout(() => {
-      loadNewWord();
-    }, 300);
-  };
-
-  const startGame = () => {
-    setGameStarted(true);
-    setStreak(0);
-    setTotalQuestions(0);
-    setCorrectAnswers(0);
+  const nextQuestion = () => {
     loadNewWord();
   };
 
-  const resetGame = () => {
-    setGameStarted(false);
-    setCurrentWord(null);
-    setUserAnswer('');
-    setShowResult(false);
-    setStreak(0);
-    setTotalQuestions(0);
-    setCorrectAnswers(0);
-    setAnimationClass('');
+  const resetQuiz = () => {
+    setGameState(createInitialGameState(gameState.maxQuestions));
+    speechSynthesis.cancel();
+    setSpeaking(false);
   };
 
-  const getStageInfo = (stage) => {
-    const stages = [
-      { name: "Yeni", color: "#e0e0e0", next: "1 gün" },
-      { name: "1 Gün", color: "#ffeb3b", next: "1 hafta" },
-      { name: "1 Hafta", color: "#ff9800", next: "1 ay" },
-      { name: "1 Ay", color: "#f44336", next: "3 ay" },
-      { name: "3 Ay", color: "#9c27b0", next: "6 ay" },
-      { name: "6 Ay", color: "#3f51b5", next: "1 yıl" },
-      { name: "1 Yıl", color: "#4caf50", next: "tamamlandı" },
-      { name: "Öğrenildi", color: "#2e7d32", next: "bitmiş" }
-    ];
-    return stages[stage] || stages[0];
-  };
+  // Render Functions
+  const renderSetup = () => (
+    <div className="quiz-welcome">
+      <div className="welcome-content">
+        <h1 className="welcome-title">🎯 Kelime Quizi</h1>
+        <p className="welcome-subtitle">
+          Soru sayısını seç ve quiz'e başla!
+        </p>
 
-  if (!gameStarted) {
-    return (
-      <div className="quiz-container">
-        <div className="quiz-welcome">
-          <div className="welcome-content">
-            <h1 className="welcome-title">🎯 Kelime Quizi</h1>
-            <p className="welcome-subtitle">
-              İngilizce kelimelerin Türkçe karşılıklarını bularak öğrenmeye devam et!
-            </p>
-            <div className="welcome-features">
-              <div className="feature">
-                <span className="feature-icon">📚</span>
-                <span>Spaced Repetition ile öğren</span>
-              </div>
-              <div className="feature">
-                <span className="feature-icon">🔥</span>
-                <span>Streak'ini koruyarak devam et</span>
-              </div>
-              <div className="feature">
-                <span className="feature-icon">🏆</span>
-                <span>7 seviyeyi tamamla</span>
-              </div>
-            </div>
-            <button className="start-button" onClick={startGame}>
-              Quiz'i Başlat
-            </button>
+        <div className="question-range">
+          <label>
+            Soru Sayısı: <span className="range-value">{gameState.maxQuestions}</span>
+          </label>
+          <input
+            type="range"
+            min={QUESTION_LIMITS.MIN}
+            max={QUESTION_LIMITS.MAX}
+            value={gameState.maxQuestions}
+            onChange={(e) => setGameState(prev => ({
+              ...prev,
+              maxQuestions: Number(e.target.value)
+            }))}
+          />
+          <div className="range-labels">
+            <span>{QUESTION_LIMITS.MIN}</span>
+            <span>{QUESTION_LIMITS.MAX}</span>
           </div>
         </div>
-      </div>
-    );
-  }
 
-  if (loading && !currentWord) {
-    return (
-      <div className="quiz-container">
+        <button className="start-button" onClick={startGame}>
+          Quiz'i Başlat
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderGame = () => {
+    if (loading && !gameState.currentWord) {
+      return (
         <div className="loading-spinner">
           <div className="spinner"></div>
           <p>Kelime yükleniyor...</p>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  if (!currentWord) {
-    return (
-      <div className="quiz-container">
+    if (!gameState.currentWord) {
+      return (
         <div className="error-message">
           <h2>Kelime bulunamadı</h2>
           <button className="retry-button" onClick={loadNewWord}>
             Tekrar Dene
           </button>
         </div>
-      </div>
+      );
+    }
+
+    return (
+      <>
+        {/* Header */}
+        <div className="quiz-header">
+          <div className="stats">
+            <div className="stat">
+              <span className="stat-value">{gameState.currentQuestion}/{gameState.maxQuestions}</span>
+              <span className="stat-label">📊 Soru</span>
+            </div>
+            <div className="stat">
+              <span className="stat-value">{gameState.stats.accuracy}%</span>
+              <span className="stat-label">🎯 Başarı</span>
+            </div>
+            <div className="stat">
+              <span className="stat-value">{gameState.stats.streak}</span>
+              <span className="stat-label">🔥 Streak</span>
+            </div>
+          </div>
+          <button className="reset-button" onClick={resetQuiz}>
+            Sıfırla
+          </button>
+        </div>
+
+        {/* Main Quiz */}
+        <div className="quiz-card">
+          <div className="stage-indicator">
+            <div className={`stage-badge ${getStageClass(gameState.currentWord.currentStage)}`}>
+              Seviye {gameState.currentWord.currentStage}
+            </div>
+          </div>
+
+          <div className="question-section">
+            <h2 className="question-title">Bu kelimenin Türkçe karşılığı nedir?</h2>
+            
+            <div className="word-display">
+              <div className="english-word-container">
+                <span className="english-word">{gameState.currentWord.enWord.enWord}</span>
+                <button 
+                  className={`speak-button ${speaking ? 'speaking' : ''}`}
+                  onClick={() => speak(gameState.currentWord.enWord.enWord)}
+                  disabled={speaking}
+                  title="Kelimeyi sesli okut"
+                >
+                  {speaking ? '🔊' : '🔈'}
+                </button>
+              </div>
+
+              {gameState.currentWord.translation.enExample && (
+                <div className="example-sentence">
+                  <span className="example-label">Örnek kullanım:</span>
+                  <div className="example-content">
+                    <p className="example-text">"{gameState.currentWord.translation.enExample}"</p>
+                    <button 
+                      className={`speak-button speak-button-small ${speaking ? 'speaking' : ''}`}
+                      onClick={() => speak(gameState.currentWord.translation.enExample)}
+                      disabled={speaking}
+                      title="Örnek cümleyi sesli okut"
+                    >
+                      {speaking ? '🔊' : '🔈'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Answer/Result Section */}
+          {!gameState.showResult ? (
+            <div className="answer-form">
+              <input
+                type="text"
+                value={gameState.userAnswer}
+                onChange={(e) => setGameState(prev => ({
+                  ...prev,
+                  userAnswer: e.target.value
+                }))}
+                placeholder="Türkçe karşılığını yazın..."
+                className="answer-input"
+                autoFocus
+                disabled={loading}
+                onKeyPress={(e) => e.key === 'Enter' && submitAnswer()}
+              />
+              <button 
+                onClick={submitAnswer}
+                className="submit-button"
+                disabled={loading || !gameState.userAnswer.trim()}
+              >
+                {loading ? 'Kontrol Ediliyor...' : 'Cevapla'}
+              </button>
+            </div>
+          ) : (
+            <div className={`result-section ${validateAnswer(gameState.userAnswer, gameState.currentWord.trWord.trName) ? 'correct' : 'incorrect'}`}>
+              <div className="result-content">
+                <div className="result-icon">
+                  {validateAnswer(gameState.userAnswer, gameState.currentWord.trWord.trName) ? '🎉' : '❌'}
+                </div>
+                <div className="result-text">
+                  <h3>{validateAnswer(gameState.userAnswer, gameState.currentWord.trWord.trName) ? 'Tebrikler!' : 'Yanlış'}</h3>
+                  <p>Doğru cevap: "{gameState.currentWord.trWord.trName}"</p>
+                </div>
+              </div>
+              <button className="next-button" onClick={nextQuestion}>
+                Sonraki Soru →
+              </button>
+            </div>
+          )}
+        </div>
+      </>
     );
-  }
+  };
 
-  const stageInfo = getStageInfo(currentWord.currentStage);
-  const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-
-  return (
-    <div className="quiz-container">
-      {/* Header Stats */}
-      <div className="quiz-header">
-        <div className="stats">
-          <div className="stat">
-            <span className="stat-value">{streak}</span>
-            <span className="stat-label">🔥 Streak</span>
+  const renderFinished = () => (
+    <div className="quiz-welcome">
+      <div className="welcome-content">
+        <h1 className="welcome-title">🎉 Quiz Tamamlandı!</h1>
+        <div className="final-stats">
+          <div className="final-stat">
+            <span className="final-stat-value">{gameState.stats.correct}/{gameState.stats.total}</span>
+            <span className="final-stat-label">Doğru Cevap</span>
           </div>
-          <div className="stat">
-            <span className="stat-value">{accuracy}%</span>
-            <span className="stat-label">📊 Başarı</span>
-          </div>
-          <div className="stat">
-            <span className="stat-value">{correctAnswers}/{totalQuestions}</span>
-            <span className="stat-label">✅ Doğru</span>
+          <div className="final-stat">
+            <span className="final-stat-value">{gameState.stats.accuracy}%</span>
+            <span className="final-stat-label">Başarı Oranı</span>
           </div>
         </div>
-        <button className="reset-button" onClick={resetGame}>
-          Sıfırla
+        <button className="start-button" onClick={resetQuiz}>
+          Yeni Quiz Başlat
         </button>
       </div>
+    </div>
+  );
 
-      {/* Main Quiz Area */}
-      <div className={`quiz-card ${animationClass}`}>
-        {/* Word Stage Indicator */}
-        <div className="stage-indicator">
-          <div 
-            className="stage-badge" 
-            style={{ backgroundColor: stageInfo.color }}
-          >
-            {stageInfo.name}
-          </div>
-          {currentWord.currentStage < 7 && (
-            <span className="next-review">
-              Sonraki tekrar: {stageInfo.next}
-            </span>
-          )}
-        </div>
-
-        {/* Question */}
-        <div className="question-section">
-          <h2 className="question-title">Bu kelimenin Türkçe karşılığı nedir?</h2>
-          
-          <div className="word-display">
-            <span className="english-word">{currentWord.enWord.enWord}</span>
-            {currentWord.translation.enExample && (
-              <div className="example-sentence">
-                <span className="example-label">Örnek kullanım:</span>
-                <p className="example-text">"{currentWord.translation.enExample}"</p>
-              </div>
-            )}
-          </div>
-
-          {currentWord.translation.picUrl && (
-            <div className="word-image">
-              <img 
-                src={currentWord.translation.picUrl} 
-                alt={currentWord.enWord.enWord}
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Answer Section */}
-        {!showResult ? (
-          <form onSubmit={handleSubmit} className="answer-form">
-            <input
-              type="text"
-              value={userAnswer}
-              onChange={(e) => setUserAnswer(e.target.value)}
-              placeholder="Türkçe karşılığını yazın..."
-              className="answer-input"
-              autoFocus
-              disabled={loading}
-            />
-            <button 
-              type="submit" 
-              className="submit-button"
-              disabled={loading || !userAnswer.trim()}
-            >
-              {loading ? 'Kontrol Ediliyor...' : 'Cevapla'}
-            </button>
-          </form>
-        ) : (
-          <div className={`result-section ${isCorrect ? 'correct' : 'incorrect'}`}>
-            <div className="result-content">
-              <div className="result-icon">
-                {isCorrect ? '🎉' : '❌'}
-              </div>
-              <div className="result-text">
-                <h3>{isCorrect ? 'Tebrikler!' : 'Yanlış'}</h3>
-                <p>
-                  {isCorrect 
-                    ? `"${currentWord.trWord.trName}" doğru cevap!` 
-                    : `Doğru cevap: "${currentWord.trWord.trName}"`
-                  }
-                </p>
-                {isCorrect && currentWord.isNew && (
-                  <p className="new-word-message">✨ Yeni kelime öğrendin!</p>
-                )}
-              </div>
-            </div>
-            <button 
-              className="next-button"
-              onClick={handleNextWord}
-            >
-              Sonraki Kelime →
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Progress Footer */}
-      <div className="quiz-footer">
-        <div className="progress-info">
-          <span>Bu quiz ile kelime dağarcığını geliştiriyorsun! 🚀</span>
-        </div>
-      </div>
+  // Main Render
+  return (
+    <div className="quiz-container">
+      {gameState.phase === QUIZ_PHASES.SETUP && renderSetup()}
+      {gameState.phase === QUIZ_PHASES.PLAYING && renderGame()}
+      {gameState.phase === QUIZ_PHASES.FINISHED && renderFinished()}
     </div>
   );
 }

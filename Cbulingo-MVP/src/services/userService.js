@@ -15,3 +15,5 @@ export const deleteUser = async (email) =>
   request(`/tblUsers?userEmail=${encodeURIComponent(email)}`, "DELETE");
 
 export const createUser = async (data) => request("/tblUsers", "POST", data);
+
+export const getAllUsers = async () => request("/tblUsers", "GET");

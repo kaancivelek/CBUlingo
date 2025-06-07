@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../utils/LogonController';
 import '../styles/Auth.css';
 
+// Constants
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
+
 export default function Login({ updateUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -32,7 +35,7 @@ export default function Login({ updateUser }) {
 
     if (!formData.userEmail) {
       newErrors.userEmail = 'E-posta adresi gerekli';
-    } else if (!/\S+@\S+\.\S+/.test(formData.userEmail)) {
+    } else if (!EMAIL_REGEX.test(formData.userEmail)) {
       newErrors.userEmail = 'Geçerli bir e-posta adresi girin';
     }
 
