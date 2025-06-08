@@ -1,5 +1,5 @@
-#npm run dev dendikten sonra o+enter ile websitesi açılabilir
-#api klasörünü yol gösterdikten sonra json-server --watch db.json ile json dosyası işlenebilir hale gelir.
+#(bir kerelerik npm install -D vite) npm run dev dendikten sonra o+enter ile websitesi açılabilir
+#api klasörünü yol gösterdikten sonra npx json-server --watch db.json ile json dosyası işlenebilir hale gelir.
 
 #Docker ile Çalıştırma
 

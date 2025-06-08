@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLearnedWordsByUserId, getAllEnWords } from '../services/wordService';
+
 import { 
   calculateCompleteStats, 
   calculateStagePercentages 
@@ -55,7 +56,7 @@ export default function Profile() {
       setUser(parsedUser);
 
       const [learnedWordsData, allWordsData] = await Promise.all([
-        getLearnedWordsByUserId(parsedUser.id),
+        getLearnedWordsByUserId(parsedUser.userId),
         getAllEnWords()
       ]);
 
@@ -448,4 +449,4 @@ export default function Profile() {
       )}
     </div>
   );
-} 
+}

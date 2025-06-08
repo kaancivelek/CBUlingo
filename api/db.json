@@ -11,14 +11,15 @@
       "id": "b9ad",
       "userEmail": "mahmuttuncer@gmail.com",
       "userFullName": "Mahmut Tuncer",
-      "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76"
+      "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76",
+      "userId": 2
     }
   ],
   "tblLearnedWords": [
     {
-      "userID": 1,
+      "userId": 2,
       "enId": 1,
-      "learningStage": 1,
+      "stageId": 1,
       "learningDate": "2025-05-16",
       "id": "0da7"
     },
@@ -34,14 +35,14 @@
       "enId": 39,
       "stageId": 2,
       "learningDate": "2025-06-06",
-      "userId": 1
+      "userId": 2
     },
     {
       "id": "e836",
       "enId": 32,
       "stageId": 2,
       "learningDate": "2025-06-05",
-      "userId": 1
+      "userId": 2
     },
     {
       "id": "ca4e",
@@ -131,15 +132,50 @@
       "id": "8e9e",
       "userId": 1,
       "enId": 10,
-      "stageId": 1,
-      "learningDate": "2025-06-06"
+      "stageId": 2,
+      "learningDate": "2025-06-07"
     },
     {
       "id": "d051",
       "userId": 1,
       "enId": 14,
+      "stageId": 2,
+      "learningDate": "2025-06-07"
+    },
+    {
+      "id": "27f8",
+      "userId": 1,
+      "enId": 42,
+      "stageId": 2,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "89f1",
+      "userId": 1,
+      "enId": 52,
       "stageId": 1,
-      "learningDate": "2025-06-06"
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "2125",
+      "userId": 1,
+      "enId": 6,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "bc73",
+      "userId": 1,
+      "enId": 45,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "3728",
+      "userId": 1,
+      "enId": 100,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
     }
   ],
   "tblLearningStages": [

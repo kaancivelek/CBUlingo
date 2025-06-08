@@ -5,7 +5,7 @@ import "../styles/Navi.css";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-function VerticalNavbar({ user, logoutUser }) {
+export default function VerticalNavbar({ user, logoutUser }) {
   const navigate = useNavigate();
 
   const goToLeaderboard = () => {
@@ -51,7 +51,7 @@ function VerticalNavbar({ user, logoutUser }) {
         </button>
         
        <button className="vertical-navbar-text" onClick={goToLeaderboard}>
-          Sıralama
+          Leaderboard
         </button> 
         
         <button className="vertical-navbar-text" onClick={goToQuiz}>
@@ -80,5 +80,4 @@ VerticalNavbar.propTypes = {
   user: PropTypes.object,
   logoutUser: PropTypes.func.isRequired,
 };
-
-export default VerticalNavbar;
+ VerticalNavbar;

@@ -46,7 +46,7 @@ function App() {
     };
 
     window.addEventListener("storage", handleStorageChange);
-    
+
     // Component cleanup
     return () => {
       window.removeEventListener("storage", handleStorageChange);
@@ -88,10 +88,8 @@ function App() {
             <Route path="/wordle" element={<WordleGame/>}/>
           </Routes>
         </div>
-
-  
       </div>
-       <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
+      <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
     </div>
   );
 }
