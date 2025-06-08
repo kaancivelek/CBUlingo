@@ -169,6 +169,13 @@
       "enId": 45,
       "stageId": 1,
       "learningDate": "2025-06-08"
+    },
+    {
+      "id": "3728",
+      "userId": 1,
+      "enId": 100,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
     }
   ],
   "tblLearningStages": [
