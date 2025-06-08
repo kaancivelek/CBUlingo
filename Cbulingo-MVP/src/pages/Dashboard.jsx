@@ -213,7 +213,7 @@ export default function Dashboard() {
 
         {/* PDF Export Button */}
         <div className="export-section">
-          <button
+          <button style={{borderStyle:"none", backgroundColor:"transparent"}}
             className={`export-pdf-btn ${exportingPDF ? "loading" : ""}`}
             onClick={handleExportPDF}
             disabled={exportingPDF}
@@ -226,7 +226,7 @@ export default function Dashboard() {
             ) : (
               <>
                 <span className="export-icon">📄</span>
-                <span>İlerlemeni PDF Olarak Kaydet</span>
+                <span >İlerlemeni PDF Olarak Kaydet</span>
               </>
             )}
           </button>
