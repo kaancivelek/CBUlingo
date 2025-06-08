@@ -9,6 +9,11 @@ const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const MIN_NAME_LENGTH = 2;
 const MIN_PASSWORD_LENGTH = 6;
 
+// Constants
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
+const MIN_NAME_LENGTH = 2;
+const MIN_PASSWORD_LENGTH = 6;
+
 export default function Register({ updateUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

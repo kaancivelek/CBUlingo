@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import Leaderboard from "./pages/Leaderboard";
 
+import Leaderboard from "./pages/Leaderboard";
+
 import Quiz from "./pages/Quiz";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";

@@ -10,6 +10,8 @@ function VerticalNavbar({ user, logoutUser }) {
 
   const goToLeaderboard = () => {
     navigate("/leaderboard");
+  const goToLeaderboard = () => {
+    navigate("/leaderboard");
   };
 
   const goToQuiz = () => {
