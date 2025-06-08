@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../utils/LogonController';
 import '../styles/Auth.css';
 import { getAllUsers } from '../services/userService';
-
+ 
 // Constants
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const MIN_NAME_LENGTH = 2;
 const MIN_PASSWORD_LENGTH = 6;
-
+ 
 export default function Register({ updateUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -19,14 +19,14 @@ export default function Register({ updateUser }) {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    
+   
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -35,52 +35,57 @@ export default function Register({ updateUser }) {
       }));
     }
   };
-
+ 
   const validateForm = () => {
     const newErrors = {};
-
+ 
     if (!formData.userEmail) {
       newErrors.userEmail = 'E-posta adresi gerekli';
     } else if (!EMAIL_REGEX.test(formData.userEmail)) {
       newErrors.userEmail = 'Geçerli bir e-posta adresi girin';
     }
-
+ 
     if (!formData.userFullName) {
       newErrors.userFullName = 'Ad soyad gerekli';
     } else if (formData.userFullName.length < MIN_NAME_LENGTH) {
       newErrors.userFullName = `Ad soyad en az ${MIN_NAME_LENGTH} karakter olmalı`;
     }
-
+ 
     if (!formData.userPassword) {
       newErrors.userPassword = 'Şifre gerekli';
     } else if (formData.userPassword.length < MIN_PASSWORD_LENGTH) {
       newErrors.userPassword = `Şifre en az ${MIN_PASSWORD_LENGTH} karakter olmalı`;
     }
-
+ 
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Şifre tekrarı gerekli';
     } else if (formData.userPassword !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Şifreler eşleşmiyor';
     }
-
+ 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+   
     if (!validateForm()) {
       return;
     }
-
+ 
     setLoading(true);
     try {
+      // Benzersiz userId ata
+      const users = await getAllUsers();
+      const maxUserId = users.reduce((max, user) => (user.userId > max ? user.userId : max), 0);
+      const newUserId = maxUserId + 1;
+ 
       await registerUser(formData.userEmail, {
         userEmail: formData.userEmail,
         userFullName: formData.userFullName,
         userPassword: formData.userPassword,
-        userId: getAllUsers
+        userId: newUserId
       }, navigate, updateUser);
     } catch (error) {
       console.error('Registration error:', error);
@@ -88,11 +93,11 @@ export default function Register({ updateUser }) {
       setLoading(false);
     }
   };
-
+ 
   const goBack = () => {
     navigate('/logon');
   };
-
+ 
   return (
     <div className="auth-container">
       <div className="auth-content">
@@ -105,7 +110,7 @@ export default function Register({ updateUser }) {
             CBUlingo'ya katıl ve İngilizce öğrenmeye başla!
           </p>
         </div>
-
+ 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="userEmail" className="form-label">
@@ -125,7 +130,7 @@ export default function Register({ updateUser }) {
               <span className="error-message">{errors.userEmail}</span>
             )}
           </div>
-
+ 
           <div className="form-group">
             <label htmlFor="userFullName" className="form-label">
               Ad Soyad
@@ -144,7 +149,7 @@ export default function Register({ updateUser }) {
               <span className="error-message">{errors.userFullName}</span>
             )}
           </div>
-
+ 
           <div className="form-group">
             <label htmlFor="userPassword" className="form-label">
               Şifre
@@ -163,7 +168,7 @@ export default function Register({ updateUser }) {
               <span className="error-message">{errors.userPassword}</span>
             )}
           </div>
-
+ 
           <div className="form-group">
             <label htmlFor="confirmPassword" className="form-label">
               Şifre Tekrar
@@ -182,9 +187,9 @@ export default function Register({ updateUser }) {
               <span className="error-message">{errors.confirmPassword}</span>
             )}
           </div>
-
-          <button 
-            type="submit" 
+ 
+          <button
+            type="submit"
             className="auth-submit-button register-submit"
             disabled={loading}
           >
@@ -198,12 +203,12 @@ export default function Register({ updateUser }) {
             )}
           </button>
         </form>
-
+ 
         <div className="auth-footer">
           <p>
             Zaten hesabın var mı?{' '}
-            <button 
-              className="link-button" 
+            <button
+              className="link-button"
               onClick={() => navigate('/login')}
               disabled={loading}
             >
