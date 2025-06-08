@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../utils/LogonController';
 import '../styles/Auth.css';
+import { getAllUsers } from '../services/userService';
 
 // Constants
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
@@ -78,7 +79,8 @@ export default function Register({ updateUser }) {
       await registerUser(formData.userEmail, {
         userEmail: formData.userEmail,
         userFullName: formData.userFullName,
-        userPassword: formData.userPassword
+        userPassword: formData.userPassword,
+        userId: getAllUsers
       }, navigate, updateUser);
     } catch (error) {
       console.error('Registration error:', error);

@@ -1,40 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getLearnedWordsByUserId, getAllEnWords } from '../services/wordService';
-import { 
-  calculateCompleteStats, 
-  calculateStagePercentages 
-} from '../utils/statsCalculation';
-import { getTopUsers } from '../utils/leaderboardUtils';
-import '../styles/Dashboard.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getLearnedWordsByUserId,
+  getAllEnWords,
+} from "../services/wordService";
+import { getAllUsers } from "../services/userService"; // Bu import'u ekledik
+import {
+  calculateCompleteStats,
+  calculateStagePercentages,
+} from "../utils/statsCalculation";
+import { exportProgressToPDF } from "../utils/pdfGenerator";
+
+import "../styles/Dashboard.css";
 
 // Constants
 const SVG_CONFIG = {
   CENTER: 100,
   RADIUS: 80,
-  CIRCUMFERENCE: 502.4 // 2 * π * radius
+  CIRCUMFERENCE: 502.4, // 2 * π * radius
 };
 
 export default function Dashboard() {
+  const [learnedWords, setLearnedWords] = useState([]);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
     totalWords: 0,
     learnedCount: 0,
     progressPercentage: 0,
-    stageStats: {}
+    stageStats: {},
   });
   const [topUsers, setTopUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [exportingPDF, setExportingPDF] = useState(false);
 
   useEffect(() => {
     initializeDashboard();
   }, [navigate]);
 
   const initializeDashboard = async () => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (!storedUser) {
-      navigate('/logon');
+      navigate("/logon");
       return;
     }
 
@@ -42,35 +49,129 @@ export default function Dashboard() {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
 
-      const [learnedWordsData, allWordsData, topUsersData] = await Promise.all([
-        getLearnedWordsByUserId(parsedUser.id),
+      // Paralel olarak tüm verileri al
+      const [learnedWordsData, allWordsData, allUsersData] = await Promise.all([
+        getLearnedWordsByUserId(parsedUser.userId),
         getAllEnWords(),
-        getTopUsers(5) // Top 5 users için leaderboard preview
+        getAllUsers()
       ]);
 
+      // learnedWordsData'daki her kelimeye enWord ve trWord ekle
+      const enrichedLearnedWords = (learnedWordsData || []).map(lw => {
+        const enWordObj = (allWordsData || []).find(w => w.enId === lw.enId);
+        return {
+          ...lw,
+          enWord: enWordObj?.enWord || '', // İngilizce kelime
+          trWord: enWordObj?.trWord || '', // Türkçesi varsa
+        };
+      });
+
+      setLearnedWords(enrichedLearnedWords);
+
+      // Kullanıcının istatistiklerini hesapla
       const calculatedStats = calculateCompleteStats(
-        learnedWordsData || [], 
+        learnedWordsData || [],
         allWordsData || []
       );
-      
+
+      // Top users verilerini hesapla
+      const topUsersData = await calculateTopUsers(allUsersData.data || allUsersData || []);
+
       setStats(calculatedStats);
       setTopUsers(topUsersData);
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      console.error("Error loading dashboard data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Top users hesaplama fonksiyonu (Leaderboard'dan esinlenerek)
+  const calculateTopUsers = async (users) => {
+    try {
+      const userRankings = await Promise.all(
+        users.map(async (userData) => {
+          try {
+            const learnedWordsResponse = await getLearnedWordsByUserId(
+              userData.userId
+            );
+            const learnedWords =
+              learnedWordsResponse.data || learnedWordsResponse || [];
+
+            // Toplam puanı hesapla (her stage için 0.5 puan)
+            const totalScore = learnedWords.reduce((total, word) => {
+              return total + word.stageId * 0.5;
+            }, 0);
+
+            // Kelime sayısı
+            const wordCount = learnedWords.length;
+
+            return {
+              userId: userData.userId,
+              userFullName: userData.userFullName,
+              userEmail: userData.userEmail,
+              totalScore: totalScore,
+              wordCount: wordCount,
+              learnedWords: learnedWords,
+            };
+          } catch (error) {
+            console.error(
+              `Error fetching words for user ${userData.userFullName}:`,
+              error
+            );
+            return {
+              userId: userData.userId,
+              userFullName: userData.userFullName,
+              userEmail: userData.userEmail,
+              totalScore: 0,
+              wordCount: 0,
+              learnedWords: [],
+            };
+          }
+        })
+      );
+
+      // Puana göre sırala (yüksekten düşüğe)
+      const sortedRankings = userRankings.sort(
+        (a, b) => b.totalScore - a.totalScore
+      );
+
+      return sortedRankings;
+    } catch (error) {
+      console.error("Error calculating top users:", error);
+      return [];
+    }
+  };
+
+  // PDF Export fonksiyonu
+  const handleExportPDF = async () => {
+    if (!user || !stats) {
+      alert("Veri yüklenirken PDF oluşturulamaz. Lütfen bekleyin.");
+      return;
+    }
+
+    setExportingPDF(true);
+
+    try {
+      // Kullanıcının sıralama bilgisini bul (topUsers'dan)
+      const userRank = topUsers.findIndex((u) => u.userId === user.userId) + 1;
+      const finalRank = userRank > 0 ? userRank : null;
+
+      await exportProgressToPDF(user, stats, finalRank, learnedWords);
+
+      // Başarılı mesajı (opsiyonel)
+      // alert("PDF başarıyla oluşturuldu ve indirildi!");
+    } catch (error) {
+      console.error("PDF export error:", error);
+      alert("PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.");
+    } finally {
+      setExportingPDF(false);
     }
   };
 
   const getProgressDashArray = (percentage) => {
     const progressLength = (percentage / 100) * SVG_CONFIG.CIRCUMFERENCE;
     return `${progressLength} ${SVG_CONFIG.CIRCUMFERENCE}`;
-  };
-
-  const getUserRank = () => {
-    if (!user || !topUsers.length) return null;
-    const userIndex = topUsers.findIndex(u => u.id === user.id);
-    return userIndex !== -1 ? userIndex + 1 : null;
   };
 
   if (loading) {
@@ -89,7 +190,7 @@ export default function Dashboard() {
       <div className="dashboard-container">
         <div className="error-dashboard">
           <h2>Kullanıcı bulunamadı</h2>
-          <button className="btn-primary" onClick={() => navigate('/logon')}>
+          <button className="btn-primary" onClick={() => navigate("/logon")}>
             Giriş Yap
           </button>
         </div>
@@ -104,19 +205,32 @@ export default function Dashboard() {
       {/* Header */}
       <div className="dashboard-header">
         <div className="welcome-section">
-          <h1 className="welcome-title">
-            Hoş geldin, {user.userFullName}! 👋
-          </h1>
+          <h1 className="welcome-title">Hoş geldin, {user.userFullName}! 👋</h1>
           <p className="welcome-subtitle">
             Bugün yeni kelimeler öğrenmeye hazır mısın?
           </p>
         </div>
-        {getUserRank() && (
-          <div className="rank-badge">
-            <span className="rank-text">Sıralama</span>
-            <span className="rank-number">#{getUserRank()}</span>
-          </div>
-        )}
+
+        {/* PDF Export Button */}
+        <div className="export-section">
+          <button style={{borderStyle:"none", backgroundColor:"transparent"}}
+            className={`export-pdf-btn ${exportingPDF ? "loading" : ""}`}
+            onClick={handleExportPDF}
+            disabled={exportingPDF}
+          >
+            {exportingPDF ? (
+              <>
+                <span className="export-spinner"></span>
+                <span>PDF Hazırlanıyor...</span>
+              </>
+            ) : (
+              <>
+                <span className="export-icon">📄</span>
+                <span >İlerlemeni PDF Olarak Kaydet</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Quick Stats */}
@@ -148,7 +262,9 @@ export default function Dashboard() {
         <div className="stat-card warning">
           <div className="stat-icon">🎯</div>
           <div className="stat-content">
-            <h3 className="stat-number">{stats.totalWords - stats.learnedCount}</h3>
+            <h3 className="stat-number">
+              {stats.totalWords - stats.learnedCount}
+            </h3>
             <p className="stat-label">Kalan Kelime</p>
           </div>
         </div>
@@ -173,11 +289,15 @@ export default function Dashboard() {
                   cy={SVG_CONFIG.CENTER}
                   r={SVG_CONFIG.RADIUS}
                   className="progress-fill"
-                  strokeDasharray={getProgressDashArray(stats.progressPercentage)}
+                  strokeDasharray={getProgressDashArray(
+                    stats.progressPercentage
+                  )}
                 />
               </svg>
               <div className="progress-text">
-                <span className="progress-percentage">{stats.progressPercentage}%</span>
+                <span className="progress-percentage">
+                  {stats.progressPercentage}%
+                </span>
                 <span className="progress-label">Tamamlandı</span>
               </div>
             </div>
@@ -192,7 +312,9 @@ export default function Dashboard() {
               </div>
               <div className="progress-item">
                 <span className="label">Kalan:</span>
-                <span className="value">{stats.totalWords - stats.learnedCount}</span>
+                <span className="value">
+                  {stats.totalWords - stats.learnedCount}
+                </span>
               </div>
             </div>
           </div>
@@ -202,51 +324,28 @@ export default function Dashboard() {
         <div className="dashboard-card stages-section">
           <h2 className="card-title">🎓 Seviye Dağılımı</h2>
           <div className="stages-content">
-            {Object.entries(stageStatsWithPercentages).map(([stageId, stage]) => (
-              <div key={stageId} className="stage-row">
-                <div className="stage-info">
-                  <div className={`stage-indicator ${stage.cssClass}`}></div>
-                  <span className="stage-name">{stage.name}</span>
-                </div>
-                <div className="stage-stats">
-                  <span className="stage-count">{stage.count}</span>
-                  <div className="stage-bar">
-                    <div 
-                      className={`stage-fill ${stage.cssClass}`}
-                      style={{ width: `${stage.percentage}%` }}
-                    ></div>
+            {Object.entries(stageStatsWithPercentages).map(
+              ([stageId, stage]) => (
+                <div key={stageId} className="stage-row">
+                  <div className="stage-info">
+                    <div className={`stage-indicator ${stage.cssClass}`}></div>
+                    <span className="stage-name">{stage.name}</span>
                   </div>
-                  <span className="stage-percentage">{stage.percentage}%</span>
+                  <div className="stage-stats">
+                    <span className="stage-count">{stage.count}</span>
+                    <div className="stage-bar">
+                      <div
+                        className={`stage-fill ${stage.cssClass}`}
+                        style={{ width: `${stage.percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="stage-percentage">
+                      {stage.percentage}%
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Leaderboard Preview */}
-        <div className="dashboard-card leaderboard-preview">
-          <h2 className="card-title">🏆 Liderlik Önizleme</h2>
-          <div className="leaderboard-content">
-            {topUsers.slice(0, 3).map((topUser, index) => (
-              <div key={topUser.id} className={`leader-item ${user.id === topUser.id ? 'current' : ''}`}>
-                <div className="leader-rank">
-                  <span className="rank-emoji">
-                    {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
-                  </span>
-                  <span className="rank-number">#{index + 1}</span>
-                </div>
-                <div className="leader-info">
-                  <span className="leader-name">{topUser.userFullName}</span>
-                  <span className="leader-score">{topUser.completedWords} kelime</span>
-                </div>
-              </div>
-            ))}
-            <button 
-              className="view-full-leaderboard"
-              onClick={() => navigate('/')}
-            >
-              Tam Listeyi Gör →
-            </button>
+              )
+            )}
           </div>
         </div>
 
@@ -254,25 +353,25 @@ export default function Dashboard() {
         <div className="dashboard-card actions-section">
           <h2 className="card-title">🚀 Hızlı İşlemler</h2>
           <div className="action-grid">
-            <button 
+            <button
               className="action-btn quiz"
-              onClick={() => navigate('/quiz')}
+              onClick={() => navigate("/quiz")}
             >
               <span className="action-icon">🎯</span>
               <span className="action-text">Quiz Çöz</span>
             </button>
-            
-            <button 
+
+            <button
               className="action-btn profile"
-              onClick={() => navigate('/profile')}
+              onClick={() => navigate("/profile")}
             >
               <span className="action-icon">👤</span>
               <span className="action-text">Profil</span>
             </button>
-            
-            <button 
+
+            <button
               className="action-btn leaderboard"
-              onClick={() => navigate('/')}
+              onClick={() => navigate("/")}
             >
               <span className="action-icon">🏆</span>
               <span className="action-text">Sıralama</span>

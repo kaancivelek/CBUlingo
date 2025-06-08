@@ -1,29 +1,79 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getAllUsers } from '../services/userService';
 import { getLearnedWordsByUserId } from '../services/wordService';
-import { calculateUserRankings } from '../utils/leaderboardUtils';
 import '../styles/Leaderboard.css';
 
-export default function Leaderboard() {
+export default function Leaderboard({ user }) {
   const [rankings, setRankings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     initializeLeaderboard();
+    
   }, []);
 
   const initializeLeaderboard = async () => {
+    
     try {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setCurrentUser(JSON.parse(storedUser));
+      setLoading(true);
+      
+      // Tüm kullanıcıları al
+      const usersResponse = await getAllUsers();
+      const users = usersResponse.data || usersResponse;
+
+      // Her kullanıcı için öğrenilen kelimeleri al ve puanları hesapla
+      const userRankings = await Promise.all(
+        users.map(async (userData) => {
+          try {
+            const learnedWordsResponse = await getLearnedWordsByUserId(userData.userId);
+            const learnedWords = learnedWordsResponse.data || learnedWordsResponse || [];
+            
+            // Toplam puanı hesapla (her stage için 0.5 puan)
+            const totalScore = learnedWords.reduce((total, word) => {
+              return total + (word.stageId * 0.5);
+            }, 0);
+
+            // Kelime sayısı
+            const wordCount = learnedWords.length;
+
+            return {
+              id: userData.userId,
+              userFullName: userData.userFullName,
+              userEmail: userData.userEmail,
+              totalScore: totalScore,
+              wordCount: wordCount,
+              learnedWords: learnedWords
+            };
+          } catch (error) {
+            console.error(`Error fetching words for user ${userData.userFullName}:`, error);
+            return {
+              id: userData.userId || userData.id,
+              userFullName: userData.userFullName,
+              userEmail: userData.userEmail,
+              totalScore: 0,
+              wordCount: 0,
+              learnedWords: []
+            };
+          }
+        })
+      );
+
+      // Puana göre sırala (yüksekten düşüğe)
+      const sortedRankings = userRankings.sort((a, b) => b.totalScore - a.totalScore);
+      
+      setRankings(sortedRankings);
+      
+      // Mevcut kullanıcıyı bul
+      if (user) {
+        const currentUserData = sortedRankings.find(u => 
+          u.id === user.userId || u.id === user.id || u.userEmail === user.userEmail
+        );
+        setCurrentUser(currentUserData);
       }
 
-      const userRankings = await calculateUserRankings();
-      setRankings(userRankings);
     } catch (error) {
-      console.error('Error loading leaderboard:', error);
+      console.error('Error initializing leaderboard:', error);
     } finally {
       setLoading(false);
     }
@@ -40,7 +90,7 @@ export default function Leaderboard() {
 
   const getUserPosition = () => {
     if (!currentUser) return null;
-    const userRank = rankings.findIndex(user => user.id === currentUser.id);
+    const userRank = rankings.findIndex(u => u.id === currentUser.id);
     return userRank !== -1 ? userRank + 1 : null;
   };
 
@@ -56,7 +106,9 @@ export default function Leaderboard() {
   }
 
   return (
+    
     <div className="leaderboard-container">
+    
       {/* Header */}
       <div className="leaderboard-header">
         <div className="header-content">
@@ -64,7 +116,7 @@ export default function Leaderboard() {
             🏆 Liderlik Tablosu
           </h1>
           <p className="leaderboard-subtitle">
-            Tamamen öğrenilen kelimelere göre sıralama
+            Öğrenme seviyelerine göre puan sıralaması (Her seviye = 0.5 puan)
           </p>
         </div>
       </div>
@@ -82,8 +134,11 @@ export default function Leaderboard() {
             </div>
           </div>
           <div className="user-stats">
-            <span className="completed-words">
-              {rankings.find(u => u.id === currentUser.id)?.completedWords || 0} kelime
+            <span className="score-display">
+              {currentUser.totalScore.toFixed(1)} puan
+            </span>
+            <span className="word-count">
+              {currentUser.wordCount} kelime
             </span>
           </div>
         </div>
@@ -92,10 +147,10 @@ export default function Leaderboard() {
       {/* Rankings List */}
       <div className="rankings-section">
         <div className="rankings-list">
-          {rankings.map((user, index) => (
+          {rankings.map((userData, index) => (
             <div 
-              key={user.id} 
-              className={`ranking-item ${currentUser?.id === user.id ? 'current-user' : ''}`}
+              key={userData.id} 
+              className={`ranking-item ${currentUser?.id === userData.id ? 'current-user' : ''}`}
             >
               <div className="rank-info">
                 <div className="rank-number">
@@ -103,23 +158,23 @@ export default function Leaderboard() {
                   <span className="rank">#{index + 1}</span>
                 </div>
                 <div className="user-avatar">
-                  {user.userFullName?.charAt(0)?.toUpperCase() || 'U'}
+                  {userData.userFullName?.charAt(0)?.toUpperCase() || 'U'}
                 </div>
               </div>
               
               <div className="user-info">
-                <h3 className="user-name">{user.userFullName}</h3>
-                <p className="user-email">{user.userEmail}</p>
+                <h3 className="user-name">{userData.userFullName}</h3>
+                <p className="user-email">{userData.userEmail}</p>
               </div>
               
               <div className="user-stats">
-                <div className="completed-count">
-                  <span className="number">{user.completedWords}</span>
-                  <span className="label">Kelime</span>
+                <div className="score-display">
+                  <span className="number">{userData.totalScore.toFixed(1)}</span>
+                  <span className="label">Puan</span>
                 </div>
-                <div className="completion-rate">
-                  <span className="percentage">{user.completionRate}%</span>
-                  <span className="label">Tamamlama</span>
+                <div className="word-count">
+                  <span className="number">{userData.wordCount}</span>
+                  <span className="label">Kelime</span>
                 </div>
               </div>
             </div>
@@ -136,4 +191,4 @@ export default function Leaderboard() {
       </div>
     </div>
   );
-} 
+}

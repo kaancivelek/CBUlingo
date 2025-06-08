@@ -629,7 +629,7 @@
   }
   
   .dashboard-card {
-    padding: 20px;
+    padding: 20px;  
   }
   
   .progress-content {
@@ -673,4 +673,9 @@
   .action-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+
+  
+
 } 
+
