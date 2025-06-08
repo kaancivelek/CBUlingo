@@ -169,41 +169,6 @@
       "enId": 45,
       "stageId": 1,
       "learningDate": "2025-06-08"
-    },
-    {
-      "id": "5230",
-      "userId": 1,
-      "enId": 95,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
-    },
-    {
-      "id": "3106",
-      "userId": 1,
-      "enId": 17,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
-    },
-    {
-      "id": "104b",
-      "userId": 1,
-      "enId": 84,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
-    },
-    {
-      "id": "9594",
-      "userId": 1,
-      "enId": 19,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
-    },
-    {
-      "id": "14f4",
-      "userId": 1,
-      "enId": 64,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
     }
   ],
   "tblLearningStages": [

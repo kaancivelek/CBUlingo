@@ -7,8 +7,6 @@ import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import Leaderboard from "./pages/Leaderboard";
 
-import Leaderboard from "./pages/Leaderboard";
-
 import Quiz from "./pages/Quiz";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
@@ -47,7 +45,7 @@ function App() {
     };
 
     window.addEventListener("storage", handleStorageChange);
-    
+
     // Component cleanup
     return () => {
       window.removeEventListener("storage", handleStorageChange);
@@ -79,20 +77,20 @@ function App() {
       <div className="Content">
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<Dashboard user={user}/>}/>
-            <Route path="/leaderboard" element={<Leaderboard user={user}/>}/>
-         
-            <Route path="/quiz" element={<Quiz user={user}/>}/>
-            <Route path="/profile" element={<Profile user={user}/>}/>
-            <Route path="/logon" element={<Logon updateUser={updateUser}/>}/>
-            <Route path="/login" element={<Login updateUser={updateUser}/>}/>
-            <Route path="/register" element={<Register updateUser={updateUser}/>}/>
+            <Route path="/" element={<Dashboard user={user} />} />
+            <Route path="/leaderboard" element={<Leaderboard user={user} />} />
+            <Route path="/quiz" element={<Quiz user={user} />} />
+            <Route path="/profile" element={<Profile user={user} />} />
+            <Route path="/logon" element={<Logon updateUser={updateUser} />} />
+            <Route path="/login" element={<Login updateUser={updateUser} />} />
+            <Route
+              path="/register"
+              element={<Register updateUser={updateUser} />}
+            />
           </Routes>
         </div>
-
-  
       </div>
-       <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
+      <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
     </div>
   );
 }

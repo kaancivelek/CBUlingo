@@ -9,11 +9,6 @@ const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const MIN_NAME_LENGTH = 2;
 const MIN_PASSWORD_LENGTH = 6;
 
-// Constants
-const EMAIL_REGEX = /\S+@\S+\.\S+/;
-const MIN_NAME_LENGTH = 2;
-const MIN_PASSWORD_LENGTH = 6;
-
 export default function Register({ updateUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -85,7 +80,7 @@ export default function Register({ updateUser }) {
         userEmail: formData.userEmail,
         userFullName: formData.userFullName,
         userPassword: formData.userPassword,
-        userId: getAllUsers().then(users => users.length + 1) // Basit bir ID oluşturma
+        userId: getAllUsers
       }, navigate, updateUser);
     } catch (error) {
       console.error('Registration error:', error);
