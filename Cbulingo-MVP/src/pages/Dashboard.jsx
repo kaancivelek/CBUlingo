@@ -4,10 +4,12 @@ import {
   getLearnedWordsByUserId,
   getAllEnWords,
 } from "../services/wordService";
+import { getAllUsers } from "../services/userService"; // Bu import'u ekledik
 import {
   calculateCompleteStats,
   calculateStagePercentages,
 } from "../utils/statsCalculation";
+import { exportProgressToPDF } from "../utils/pdfGenerator";
 
 import "../styles/Dashboard.css";
 
@@ -19,6 +21,7 @@ const SVG_CONFIG = {
 };
 
 export default function Dashboard() {
+  const [learnedWords, setLearnedWords] = useState([]);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
@@ -29,6 +32,7 @@ export default function Dashboard() {
   });
   const [topUsers, setTopUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [exportingPDF, setExportingPDF] = useState(false);
 
   useEffect(() => {
     initializeDashboard();
@@ -45,15 +49,33 @@ export default function Dashboard() {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
 
-      const [learnedWordsData, allWordsData, topUsersData] = await Promise.all([
+      // Paralel olarak tüm verileri al
+      const [learnedWordsData, allWordsData, allUsersData] = await Promise.all([
         getLearnedWordsByUserId(parsedUser.userId),
         getAllEnWords(),
+        getAllUsers()
       ]);
 
+      // learnedWordsData'daki her kelimeye enWord ve trWord ekle
+      const enrichedLearnedWords = (learnedWordsData || []).map(lw => {
+        const enWordObj = (allWordsData || []).find(w => w.enId === lw.enId);
+        return {
+          ...lw,
+          enWord: enWordObj?.enWord || '', // İngilizce kelime
+          trWord: enWordObj?.trWord || '', // Türkçesi varsa
+        };
+      });
+
+      setLearnedWords(enrichedLearnedWords);
+
+      // Kullanıcının istatistiklerini hesapla
       const calculatedStats = calculateCompleteStats(
         learnedWordsData || [],
         allWordsData || []
       );
+
+      // Top users verilerini hesapla
+      const topUsersData = await calculateTopUsers(allUsersData.data || allUsersData || []);
 
       setStats(calculatedStats);
       setTopUsers(topUsersData);
@@ -61,6 +83,89 @@ export default function Dashboard() {
       console.error("Error loading dashboard data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Top users hesaplama fonksiyonu (Leaderboard'dan esinlenerek)
+  const calculateTopUsers = async (users) => {
+    try {
+      const userRankings = await Promise.all(
+        users.map(async (userData) => {
+          try {
+            const learnedWordsResponse = await getLearnedWordsByUserId(
+              userData.userId
+            );
+            const learnedWords =
+              learnedWordsResponse.data || learnedWordsResponse || [];
+
+            // Toplam puanı hesapla (her stage için 0.5 puan)
+            const totalScore = learnedWords.reduce((total, word) => {
+              return total + word.stageId * 0.5;
+            }, 0);
+
+            // Kelime sayısı
+            const wordCount = learnedWords.length;
+
+            return {
+              userId: userData.userId,
+              userFullName: userData.userFullName,
+              userEmail: userData.userEmail,
+              totalScore: totalScore,
+              wordCount: wordCount,
+              learnedWords: learnedWords,
+            };
+          } catch (error) {
+            console.error(
+              `Error fetching words for user ${userData.userFullName}:`,
+              error
+            );
+            return {
+              userId: userData.userId,
+              userFullName: userData.userFullName,
+              userEmail: userData.userEmail,
+              totalScore: 0,
+              wordCount: 0,
+              learnedWords: [],
+            };
+          }
+        })
+      );
+
+      // Puana göre sırala (yüksekten düşüğe)
+      const sortedRankings = userRankings.sort(
+        (a, b) => b.totalScore - a.totalScore
+      );
+
+      return sortedRankings;
+    } catch (error) {
+      console.error("Error calculating top users:", error);
+      return [];
+    }
+  };
+
+  // PDF Export fonksiyonu
+  const handleExportPDF = async () => {
+    if (!user || !stats) {
+      alert("Veri yüklenirken PDF oluşturulamaz. Lütfen bekleyin.");
+      return;
+    }
+
+    setExportingPDF(true);
+
+    try {
+      // Kullanıcının sıralama bilgisini bul (topUsers'dan)
+      const userRank = topUsers.findIndex((u) => u.userId === user.userId) + 1;
+      const finalRank = userRank > 0 ? userRank : null;
+
+      await exportProgressToPDF(user, stats, finalRank, learnedWords);
+
+      // Başarılı mesajı (opsiyonel)
+      // alert("PDF başarıyla oluşturuldu ve indirildi!");
+    } catch (error) {
+      console.error("PDF export error:", error);
+      alert("PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.");
+    } finally {
+      setExportingPDF(false);
     }
   };
 
@@ -104,6 +209,27 @@ export default function Dashboard() {
           <p className="welcome-subtitle">
             Bugün yeni kelimeler öğrenmeye hazır mısın?
           </p>
+        </div>
+
+        {/* PDF Export Button */}
+        <div className="export-section">
+          <button style={{borderStyle:"none", backgroundColor:"transparent"}}
+            className={`export-pdf-btn ${exportingPDF ? "loading" : ""}`}
+            onClick={handleExportPDF}
+            disabled={exportingPDF}
+          >
+            {exportingPDF ? (
+              <>
+                <span className="export-spinner"></span>
+                <span>PDF Hazırlanıyor...</span>
+              </>
+            ) : (
+              <>
+                <span className="export-icon">📄</span>
+                <span >İlerlemeni PDF Olarak Kaydet</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
 
@@ -255,5 +381,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-
 }
