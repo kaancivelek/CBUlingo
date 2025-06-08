@@ -8,8 +8,8 @@ import PropTypes from "prop-types";
 function VerticalNavbar({ user, logoutUser }) {
   const navigate = useNavigate();
 
-  const goToDashboard = () => {
-    navigate("/dashboard");
+  const goToLeaderboard = () => {
+    navigate("/leaderboard");
   };
 
   const goToQuiz = () => {
@@ -46,9 +46,9 @@ function VerticalNavbar({ user, logoutUser }) {
           <img src={logo} alt="logo" style={{ width: "100px" }} />
         </button>
         
-        <button className="vertical-navbar-text" onClick={goToDashboard}>
-          Dashboard
-        </button>
+       <button className="vertical-navbar-text" onClick={goToLeaderboard}>
+          Leaderboard
+        </button> 
         
         <button className="vertical-navbar-text" onClick={goToQuiz}>
           Quiz

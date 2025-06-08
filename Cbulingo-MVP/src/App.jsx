@@ -5,7 +5,8 @@ import { ToastContainer, Slide } from "react-toastify";
 
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
-import ServiceTest from "./pages/ServiceTest";
+import Leaderboard from "./pages/Leaderboard";
+
 import Quiz from "./pages/Quiz";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
@@ -76,11 +77,11 @@ function App() {
       <div className="Content">
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<Dashboard/>}/>
-            <Route path="/dashboard" element={<Dashboard/>}/>
-            <Route path="/ServiceTest" element={<ServiceTest/>}/>
+            <Route path="/" element={<Dashboard user={user}/>}/>
+            <Route path="/leaderboard" element={<Leaderboard user={user}/>}/>
+         
             <Route path="/quiz" element={<Quiz user={user}/>}/>
-            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/profile" element={<Profile user={user}/>}/>
             <Route path="/logon" element={<Logon updateUser={updateUser}/>}/>
             <Route path="/login" element={<Login updateUser={updateUser}/>}/>
             <Route path="/register" element={<Register updateUser={updateUser}/>}/>

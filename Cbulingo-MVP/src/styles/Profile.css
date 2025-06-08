@@ -4,13 +4,35 @@
   margin: 0 auto;
   padding: 20px;
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: transparent;
   min-height: 100vh;
+  
+  /* CSS Custom Properties for Stage Colors */
+  --stage-1-color: #ffeb3b;
+  --stage-2-color: #ff9800;
+  --stage-3-color: #f44336;
+  --stage-4-color: #9c27b0;
+  --stage-5-color: #3f51b5;
+  --stage-6-color: #4caf50;
+  --stage-7-color: #2e7d32;
+  
+  /* Progress Circle Configuration */
+  --progress-circle-size: 200px;
+  --progress-circle-radius: 80px;
+  --progress-stroke-width: 16px;
+  --progress-circumference: 502.4; /* 2 * π * radius */
+  
+  /* Main Brand Colors */
+  --primary-color: #3F37A5;
+  --secondary-color: #FFF6E9;
+  --text-color: #333;
+  --text-light: #666;
+  --error-color: #ff4757;
 }
 
 /* Profile Header */
 .profile-header {
-  background: white;
+  background: #fff6e9;
   border-radius: 20px;
   padding: 30px;
   margin-bottom: 30px;
@@ -37,7 +59,7 @@
   justify-content: center;
   font-size: 2rem;
   font-weight: bold;
-  color: white;
+  color: #fff6e9;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -56,7 +78,7 @@
 
 .logout-btn {
   background: #ff4757;
-  color: white;
+  color: #fff6e9;
   border: none;
   border-radius: 12px;
   padding: 12px 24px;
@@ -80,7 +102,7 @@
 }
 
 .stat-card {
-  background: white;
+  background: #fff6e9;
   border-radius: 16px;
   padding: 25px;
   display: flex;
@@ -123,7 +145,7 @@
 
 /* Chart Sections */
 .chart-section {
-  background: white;
+  background: #FFF6E9;
   border-radius: 20px;
   padding: 30px;
   margin-bottom: 30px;
@@ -199,7 +221,7 @@
 .progress-bar {
   width: 100%;
   height: 12px;
-  background: #e0e0e0;
+  background: #FFF6E9;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -246,7 +268,7 @@
 }
 
 .stage-count {
-  background: #f0f0f0;
+  background: #FFF6E9;
   color: #3F37A5;
   padding: 4px 12px;
   border-radius: 12px;
@@ -256,7 +278,7 @@
 
 .stage-bar {
   height: 12px;
-  background: #e0e0e0;
+  background:#FFF6E9;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -275,7 +297,7 @@
 
 /* Action Buttons */
 .actions-section {
-  background: white;
+  background: #FFF6E9;
   border-radius: 20px;
   padding: 30px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -293,7 +315,7 @@
   align-items: center;
   gap: 20px;
   padding: 25px;
-  background: linear-gradient(45deg, #FFF6E9, #f8f9fa);
+  background: linear-gradient(45deg, #FFF6E9, #fff6e9);
   border: 2px solid #e0e0e0;
   border-radius: 16px;
   cursor: pointer;
@@ -309,12 +331,12 @@
 
 .quiz-btn:hover {
   background: linear-gradient(45deg, #58cc02, #89e219);
-  color: white;
+  color: #fff6e9;
 }
 
 .dashboard-btn:hover {
   background: linear-gradient(45deg, #3F37A5, #667eea);
-  color: white;
+  color: #fff6e9;
 }
 
 .action-icon {
@@ -324,7 +346,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: #fff6e9;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -363,7 +385,7 @@
 
 .btn-primary {
   background: #3F37A5;
-  color: white;
+  color: #fff6e9;
   border: none;
   border-radius: 12px;
   padding: 14px 28px;
@@ -417,6 +439,22 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .profile-container {
@@ -443,6 +481,7 @@
     font-size: 2.5rem;
     width: 60px;
     height: 60px;
+ 
   }
   
   .progress-chart {
@@ -465,6 +504,24 @@
   }
   
   .action-btn {
+    padding: 20px;
+  }
+  
+  .word-management-actions {
+    
+    grid-template-columns: 1fr;
+  }
+  
+  .word-form-modal {
+    width: 95%;
+    margin: 10px;
+  }
+  
+  .word-form-header {
+    padding: 20px;
+  }
+  
+  .word-form {
     padding: 20px;
   }
 }
@@ -504,4 +561,319 @@
   .progress-percentage {
     font-size: 2rem;
   }
+}
+
+/* Stage Color Classes */
+.stage-color.stage-1,
+.stage-fill.stage-1 {
+  background-color: var(--stage-1-color) !important;
+}
+
+.stage-color.stage-2,
+.stage-fill.stage-2 {
+  background-color: var(--stage-2-color) !important;
+}
+
+.stage-color.stage-3,
+.stage-fill.stage-3 {
+  background-color: var(--stage-3-color) !important;
+}
+
+.stage-color.stage-4,
+.stage-fill.stage-4 {
+  background-color: var(--stage-4-color) !important;
+}
+
+.stage-color.stage-5,
+.stage-fill.stage-5 {
+  background-color: var(--stage-5-color) !important;
+}
+
+.stage-color.stage-6,
+.stage-fill.stage-6 {
+  background-color: var(--stage-6-color) !important;
+}
+
+.stage-color.stage-7,
+.stage-fill.stage-7 {
+  background-color: var(--stage-7-color) !important;
+}
+
+/* Word Management Section */
+.word-management-section {
+  background: var(--secondary-color);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1.2s ease-out;
+}
+
+.word-management-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.management-btn {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  background: linear-gradient(45deg, #fff6e9, #fff6e9);
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.management-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-color);
+}
+
+.add-word-btn:hover {
+  background: linear-gradient(45deg, #4caf50, #66bb6a);
+  color: white;
+}
+
+.management-icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.management-content h4 {
+  font-size: 1.3rem;
+  margin: 0 0 5px 0;
+  font-weight: bold;
+}
+
+.management-content p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Word Form Modal */
+.word-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.word-form-modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideInUp 0.3s ease-out;
+}
+
+.word-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.word-form-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.close-form-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-form-btn:hover {
+  background: #f0f0f0;
+  color: var(--error-color);
+}
+
+.word-form {
+  padding: 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  background: #fafafa;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(63, 55, 165, 0.1);
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: var(--error-color);
+  background: rgba(255, 71, 87, 0.05);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.error-message {
+  display: block;
+  color: var(--error-color);
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.feedback-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.feedback-message.success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #2e7d32;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.feedback-message.error {
+  background: rgba(255, 71, 87, 0.1);
+  color: #c62828;
+  border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.submit-btn {
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submit-btn:hover {
+  background: #2d2a7a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(63, 55, 165, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Progress Circle Styling */
+.progress-circle svg {
+  width: var(--progress-circle-size);
+  height: var(--progress-circle-size);
+}
+
+.progress-circle .progress-track {
+  fill: none;
+  stroke: #e0e0e0;
+  stroke-width: var(--progress-stroke-width);
+}
+
+.progress-circle .progress-fill {
+  fill: none;
+  stroke: var(--primary-color);
+  stroke-width: var(--progress-stroke-width);
+  stroke-linecap: round;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: stroke-dasharray 1.5s ease-out;
 } 

@@ -9,117 +9,201 @@
     },
     {
       "id": "b9ad",
-      "userEmail": "nciftkaldiran@gmail.com",
-      "userFullName": "Nebi Çiftkaldıran",
-      "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76"
+      "userEmail": "mahmuttuncer@gmail.com",
+      "userFullName": "Mahmut Tuncer",
+      "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76",
+      "userId": 2
     }
   ],
   "tblLearnedWords": [
     {
-      "userID": 1,
+      "userId": 2,
       "enId": 1,
-      "learningStage": 1,
+      "stageId": 1,
       "learningDate": "2025-05-16",
       "id": "0da7"
     },
     {
       "id": "0b8f",
       "enId": 37,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05",
+      "userId": 1
     },
     {
       "id": "0b52",
       "enId": 39,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06",
+      "userId": 2
     },
     {
       "id": "e836",
       "enId": 32,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05",
+      "userId": 2
     },
     {
       "id": "ca4e",
       "enId": 55,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06",
+      "userId": 1
     },
     {
       "id": "8757",
       "enId": 93,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05",
+      "userId": 1
     },
     {
       "id": "dd1f",
       "enId": 3,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06",
+      "userId": 1
     },
     {
       "id": "a5a6",
       "userId": 1,
       "enId": 33,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06"
     },
     {
       "id": "c3e5",
       "userId": 1,
       "enId": 80,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06"
     },
     {
       "id": "0438",
       "userId": 1,
       "enId": 20,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06"
     },
     {
       "id": "811d",
       "userId": 1,
       "enId": 77,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05"
     },
     {
       "id": "c91e",
       "userId": 1,
       "enId": 38,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05"
     },
     {
       "id": "5337",
       "userId": 1,
       "enId": 34,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05"
     },
     {
       "id": "24ba",
       "userId": 1,
       "enId": 35,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-06"
     },
     {
       "id": "821f",
       "userId": 1,
       "enId": 22,
-      "stageId": 1,
-      "learningDate": "2025-05-29"
+      "stageId": 2,
+      "learningDate": "2025-06-05"
     },
     {
       "id": "3cf0",
       "userId": 1,
       "enId": 71,
+      "stageId": 2,
+      "learningDate": "2025-06-05"
+    },
+    {
+      "id": "8e9e",
+      "userId": 1,
+      "enId": 10,
+      "stageId": 2,
+      "learningDate": "2025-06-07"
+    },
+    {
+      "id": "d051",
+      "userId": 1,
+      "enId": 14,
+      "stageId": 2,
+      "learningDate": "2025-06-07"
+    },
+    {
+      "id": "27f8",
+      "userId": 1,
+      "enId": 42,
+      "stageId": 2,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "89f1",
+      "userId": 1,
+      "enId": 52,
       "stageId": 1,
-      "learningDate": "2025-05-29"
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "2125",
+      "userId": 1,
+      "enId": 6,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "bc73",
+      "userId": 1,
+      "enId": 45,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "5230",
+      "userId": 1,
+      "enId": 95,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "3106",
+      "userId": 1,
+      "enId": 17,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "104b",
+      "userId": 1,
+      "enId": 84,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "9594",
+      "userId": 1,
+      "enId": 19,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
+    },
+    {
+      "id": "14f4",
+      "userId": 1,
+      "enId": 64,
+      "stageId": 1,
+      "learningDate": "2025-06-08"
     }
   ],
   "tblLearningStages": [
@@ -659,6 +743,11 @@
       "enId": 100,
       "enWord": "game",
       "id": "490b"
+    },
+    {
+      "id": "53da",
+      "enId": 101,
+      "enWord": "completed"
     }
   ],
   "tblTurkish": [
@@ -1161,6 +1250,11 @@
       "trId": 100,
       "trName": "oyun",
       "id": "ecaf"
+    },
+    {
+      "id": "017e",
+      "trId": 101,
+      "trName": "tamamlandı"
     }
   ],
   "tblTranslation": [
@@ -1863,6 +1957,13 @@
       "trId": 100,
       "picUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Game_icon.png",
       "enExample": "Let's play a game."
+    },
+    {
+      "id": "0c4c",
+      "trId": 101,
+      "enId": 101,
+      "picUrl": "https://www.shutterstock.com/image-vector/completed-stamp-grunge-round-sign-600nw-2436689977.jpg",
+      "enExample": "I completed the trial. Now I'm ready."
     }
   ]
 }

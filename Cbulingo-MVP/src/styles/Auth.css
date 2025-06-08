@@ -10,7 +10,7 @@
 }
 
 .auth-content {
-  background: white;
+  background: #fff6e9;
   border-radius: 20px;
   padding: 40px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -91,7 +91,7 @@
 
 .form-input:focus {
   border-color: #3F37A5;
-  background: white;
+  background: #fff6e9;
   box-shadow: 0 0 0 3px rgba(63, 55, 165, 0.1);
 }
 
@@ -123,7 +123,7 @@
 .auth-submit-button {
   width: 100%;
   background: #3F37A5;
-  color: white;
+  color: #fff6e9;
   border: none;
   border-radius: 12px;
   padding: 16px;
@@ -168,7 +168,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
+  border-top: 2px solid #fff6e9;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

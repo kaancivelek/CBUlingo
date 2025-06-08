@@ -55,12 +55,12 @@
 
 .logout-button {
   background: #ff4757 !important;
-  color: white !important;
+  color: #fff6e9 !important;
 }
 
 .logout-button:hover {
   background: #ff3838 !important;
-  color: white !important;
+  color: #fff6e9 !important;
   box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3) !important;
 }
 

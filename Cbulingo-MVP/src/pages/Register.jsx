@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../utils/LogonController';
 import '../styles/Auth.css';
+import { getAllUsers } from '../services/userService';
+
+// Constants
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
+const MIN_NAME_LENGTH = 2;
+const MIN_PASSWORD_LENGTH = 6;
 
 export default function Register({ updateUser }) {
   const navigate = useNavigate();
@@ -20,6 +26,7 @@ export default function Register({ updateUser }) {
       ...prev,
       [name]: value
     }));
+    
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -34,20 +41,20 @@ export default function Register({ updateUser }) {
 
     if (!formData.userEmail) {
       newErrors.userEmail = 'E-posta adresi gerekli';
-    } else if (!/\S+@\S+\.\S+/.test(formData.userEmail)) {
+    } else if (!EMAIL_REGEX.test(formData.userEmail)) {
       newErrors.userEmail = 'Geçerli bir e-posta adresi girin';
     }
 
     if (!formData.userFullName) {
       newErrors.userFullName = 'Ad soyad gerekli';
-    } else if (formData.userFullName.length < 2) {
-      newErrors.userFullName = 'Ad soyad en az 2 karakter olmalı';
+    } else if (formData.userFullName.length < MIN_NAME_LENGTH) {
+      newErrors.userFullName = `Ad soyad en az ${MIN_NAME_LENGTH} karakter olmalı`;
     }
 
     if (!formData.userPassword) {
       newErrors.userPassword = 'Şifre gerekli';
-    } else if (formData.userPassword.length < 6) {
-      newErrors.userPassword = 'Şifre en az 6 karakter olmalı';
+    } else if (formData.userPassword.length < MIN_PASSWORD_LENGTH) {
+      newErrors.userPassword = `Şifre en az ${MIN_PASSWORD_LENGTH} karakter olmalı`;
     }
 
     if (!formData.confirmPassword) {
@@ -72,7 +79,8 @@ export default function Register({ updateUser }) {
       await registerUser(formData.userEmail, {
         userEmail: formData.userEmail,
         userFullName: formData.userFullName,
-        userPassword: formData.userPassword
+        userPassword: formData.userPassword,
+        userId: getAllUsers().then(users => users.length + 1) // Basit bir ID oluşturma
       }, navigate, updateUser);
     } catch (error) {
       console.error('Registration error:', error);
