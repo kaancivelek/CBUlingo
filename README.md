@@ -56,5 +56,7 @@ docker compose up --build
 - ve cd Cbulingo-MVP seçildikten sonra;
  npm run build,
  npx cap sync, 
-CBUlingo\Cbulingo-MVP\android yoluna local.properties dosyası eksikse ekleyip içeriğine sdk.dir=C:/Users/KULLANICIADI/AppData/Local/Android/Sdk eklemesi yapıp
+CBUlingo\Cbulingo-MVP\android yoluna local.properties dosyası eksikse ekleyip içeriğine 
+gradle.poperties dosyasına org.gradle.java.home=C:\\Program Files\\Java\\jdk-21 ekleyin.
+sdk.dir=C:/Users/KULLANICIADI/AppData/Local/Android/Sdk eklemesi yapıp
  npx cap run android şeklinde projeyi mobil için güncelleyin.
