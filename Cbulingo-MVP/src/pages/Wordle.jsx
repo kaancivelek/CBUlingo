@@ -1,1 +1,0 @@
-//Mert İkier
