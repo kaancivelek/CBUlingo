@@ -51,6 +51,7 @@ docker compose up --build
 - API (`json-server-api`): 3000 (host) → 80 (container)
 
 ### Mobil Debug
+- java 21 sdk lazım
 - Android Studio indirip kurun.
 - ve cd Cbulingo-MVP seçildikten sonra;
  npm run build,
