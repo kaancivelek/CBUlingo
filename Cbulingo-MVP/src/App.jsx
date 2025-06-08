@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Navi from "./components/Navbar";
 import { ToastContainer, Slide } from "react-toastify";
+import WordleGame from "./components/WordleGame";
 
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
@@ -77,16 +78,14 @@ function App() {
       <div className="Content">
         <div className="main-content">
           <Routes>
-            <Route path="/" element={<Dashboard user={user} />} />
-            <Route path="/leaderboard" element={<Leaderboard user={user} />} />
-            <Route path="/quiz" element={<Quiz user={user} />} />
-            <Route path="/profile" element={<Profile user={user} />} />
-            <Route path="/logon" element={<Logon updateUser={updateUser} />} />
-            <Route path="/login" element={<Login updateUser={updateUser} />} />
-            <Route
-              path="/register"
-              element={<Register updateUser={updateUser} />}
-            />
+            <Route path="/" element={<Dashboard/>}/>
+            <Route path="/leaderboard" element={<Leaderboard/>}/>
+            <Route path="/quiz" element={<Quiz user={user}/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/logon" element={<Logon updateUser={updateUser}/>}/>
+            <Route path="/login" element={<Login updateUser={updateUser}/>}/>
+            <Route path="/register" element={<Register updateUser={updateUser}/>}/>
+            <Route path="/wordle" element={<WordleGame/>}/>
           </Routes>
         </div>
       </div>

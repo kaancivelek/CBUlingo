@@ -16,6 +16,10 @@ export default function VerticalNavbar({ user, logoutUser }) {
     navigate("/quiz");
   };
 
+  const goToWordle = () => {
+    navigate("/wordle");
+  };
+
   const goToProfileOrLogon = () => {
     if (user) {
       navigate("/profile");
@@ -52,6 +56,10 @@ export default function VerticalNavbar({ user, logoutUser }) {
         
         <button className="vertical-navbar-text" onClick={goToQuiz}>
           Quiz
+        </button>
+        
+        <button className="vertical-navbar-text" onClick={goToWordle}>
+          Wordle
         </button>
         
         <button className="vertical-navbar-text" onClick={goToProfileOrLogon}>
