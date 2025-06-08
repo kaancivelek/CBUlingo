@@ -80,7 +80,7 @@ export default function Register({ updateUser }) {
         userEmail: formData.userEmail,
         userFullName: formData.userFullName,
         userPassword: formData.userPassword,
-        userId: getAllUsers
+        userId: getAllUsers().length + 1
       }, navigate, updateUser);
     } catch (error) {
       console.error('Registration error:', error);
