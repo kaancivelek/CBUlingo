@@ -37,7 +37,7 @@ const STAGE_NAMES = {
   7: 'Tamamlandi'
 };
 
-// Türkçe karakter dönüştürme fonksiyonu
+// Gelişmiş Türkçe karakter dönüştürme fonksiyonu
 const convertTurkishChars = (text) => {
   if (typeof text !== 'string') return text;
   
@@ -48,13 +48,17 @@ const convertTurkishChars = (text) => {
     'İ': 'I', 'i': 'i',
     'ö': 'o', 'Ö': 'O',
     'ş': 's', 'Ş': 'S',
-    'ü': 'u', 'Ü': 'U'
+    'ü': 'u', 'Ü': 'U',
+    // Ek karakterler
+    'â': 'a', 'Â': 'A',
+    'î': 'i', 'Î': 'I',
+    'û': 'u', 'Û': 'U'
   };
   
-  return text.replace(/[çÇğĞıIİiöÖşŞüÜ]/g, char => turkishChars[char] || char);
+  return text.replace(/[çÇğĞıIİiöÖşŞüÜâÂîÎûÛ]/g, char => turkishChars[char] || char);
 };
 
-export const exportProgressToPDF = async (user, stats, userRank = null) => {
+export const exportProgressToPDF = async (user, stats, userRank = null, learnedWords = []) => {
   try {
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = 210;
@@ -64,16 +68,17 @@ export const exportProgressToPDF = async (user, stats, userRank = null) => {
     addHeader(pdf, user, pageWidth);
     
     // Ana içerik alanları
-    let currentY = 70; // Header'dan sonra daha fazla boşluk
+    let currentY = 75; // Header'dan sonra daha fazla boşluk
     
-    // Sol taraf - Öğrenilen kelimeler (seviye dağılımı)
-    currentY = addWordsSection(pdf, stats, 15, currentY);
+    // Sol taraf - Öğrenilen kelimeler listesi
+    currentY = addWordsListSection(pdf, learnedWords, 15, currentY);
     
     // Sağ taraf - İstatistikler ve grafikler
-    addStatsSection(pdf, stats, userRank, 115, 70); // Y pozisyonunu sabitledik
+    addStatsSection(pdf, stats, userRank, 115, 75);
     
-    // Alt kısım - İlerleme çubuğu
-    addProgressBar(pdf, stats, 15, currentY + 30, pageWidth - 30);
+    // Alt kısım - İlerleme çubuğu (Y pozisyonunu dinamik olarak ayarla)
+    const progressY = Math.max(currentY + 20, 200); // En az 200mm'de olsun
+    addProgressBar(pdf, stats, 15, progressY, pageWidth - 30);
     
     // Tarih bilgisi
     addFooter(pdf, pageWidth, pageHeight);
@@ -93,7 +98,7 @@ export const exportProgressToPDF = async (user, stats, userRank = null) => {
 const addHeader = (pdf, user, pageWidth) => {
   // Arka plan rengi
   pdf.setFillColor(...COLORS.primary);
-  pdf.rect(0, 0, pageWidth, 50, 'F'); // Header yüksekliğini artırdık
+  pdf.rect(0, 0, pageWidth, 55, 'F'); // Header yüksekliğini artırdık
   
   // Kullanıcı adı
   pdf.setTextColor(255, 255, 255);
@@ -104,26 +109,95 @@ const addHeader = (pdf, user, pageWidth) => {
   const userNameWidth = pdf.getTextWidth(userName);
   pdf.text(userName, (pageWidth - userNameWidth) / 2, 25);
   
-  // Email - daha belirgin hale getirdik
-  if (user.email) {
-    pdf.setFontSize(11);
+  // Email - daha belirgin ve doğru konumlandırma
+  if (user.email || user.userEmail) {
+    pdf.setFontSize(12);
     pdf.setFont(FONTS.regular, 'normal');
-    pdf.setTextColor(255, 255, 255); // Email için beyaz renk
-    const emailWidth = pdf.getTextWidth(user.email);
-    pdf.text(user.email, (pageWidth - emailWidth) / 2, 38);
+    pdf.setTextColor(220, 220, 220); // Daha açık gri ton
+    const email = user.email || user.userEmail;
+    const emailWidth = pdf.getTextWidth(email);
+    pdf.text(email, (pageWidth - emailWidth) / 2, 38);
   }
   
-  // Başlık - Y pozisyonunu artırdık
+  // Başlık
   pdf.setTextColor(...COLORS.text);
   pdf.setFontSize(18);
   pdf.setFont(FONTS.regular, 'bold');
   const title = convertTurkishChars('Ogrenme Ilerleme Raporu');
   const titleWidth = pdf.getTextWidth(title);
-  pdf.text(title, (pageWidth - titleWidth) / 2, 60);
+  pdf.text(title, (pageWidth - titleWidth) / 2, 65);
 };
 
-// Kelimeler bölümü (sol taraf)
-const addWordsSection = (pdf, stats, x, y) => {
+// Öğrenilen kelimeler listesi (sol taraf)
+const addWordsListSection = (pdf, learnedWords, x, y) => {
+  if (!Array.isArray(learnedWords) || learnedWords.length === 0) {
+    pdf.setTextColor(...COLORS.textLight);
+    pdf.setFontSize(10);
+    pdf.setFont(FONTS.regular, 'normal');
+    pdf.text(convertTurkishChars('Henuz ogrenilen kelime yok'), x + 3, y + 15);
+    return y + 25;
+  }
+
+  // Stage'e göre grupla
+  const groupedWords = learnedWords.reduce((acc, word) => {
+    const stageId = word.stageId || 1;
+    if (!acc[stageId]) acc[stageId] = [];
+    acc[stageId].push(word);
+    return acc;
+  }, {});
+
+  // Grid ayarları
+  const columnCount = 3;
+  const columnWidth = 27; // 3 sütun için 85mm alanı böldük
+  const rowHeight = 6;   // Her kelime satırı yüksekliği
+  const sectionWidth = columnCount * columnWidth;
+  const maxRowsPerStage = 30; // Her stage için maksimum satır (isteğe göre ayarlanabilir)
+
+  let currentY = y;
+
+  // Stage'leri sırayla işle (1-7 arası)
+  Object.keys(STAGE_NAMES).forEach((stageId) => {
+    const words = groupedWords[stageId];
+    if (!words || words.length === 0) return;
+
+    // Stage başlığı ve renkli kutu
+    pdf.setFillColor(...getStageColor(parseInt(stageId)));
+    pdf.rect(x, currentY, 4, 4, 'F');
+    pdf.setTextColor(...COLORS.text);
+    pdf.setFontSize(9);
+    pdf.setFont(FONTS.regular, 'bold');
+    pdf.text(convertTurkishChars(STAGE_NAMES[stageId]), x + 7, currentY + 3.2);
+    currentY += 7;
+
+    // Grid başlangıcı (satır satır, soldan sağa)
+    pdf.setFontSize(7);
+    pdf.setFont(FONTS.regular, 'normal');
+    pdf.setTextColor(...COLORS.text);
+    const rowCount = Math.ceil(words.length / columnCount);
+    for (let row = 0; row < rowCount; row++) {
+      for (let col = 0; col < columnCount; col++) {
+        const idx = row * columnCount + col;
+        if (idx >= words.length) break;
+        const word = words[idx];
+        const wordText = convertTurkishChars(word.enWord || word.word || 'Kelime');
+        let display = wordText;
+        if (word.trWord) {
+          const trText = convertTurkishChars(word.trWord);
+          display += ` (${trText})`;
+        }
+        const cellX = x + col * columnWidth;
+        const cellY = currentY + row * rowHeight;
+        pdf.text(display, cellX, cellY);
+      }
+    }
+    currentY += rowCount * rowHeight + 5;
+  });
+
+  return currentY;
+};
+
+// İstatistikler bölümü (sağ taraf)
+const addStatsSection = (pdf, stats, userRank, x, y) => {
   // Bölüm başlığı
   pdf.setFillColor(...COLORS.secondary);
   pdf.rect(x, y, 85, 8, 'F');
@@ -131,14 +205,16 @@ const addWordsSection = (pdf, stats, x, y) => {
   pdf.setTextColor(...COLORS.primary);
   pdf.setFontSize(14);
   pdf.setFont(FONTS.regular, 'bold');
-  pdf.text(convertTurkishChars('Seviye Dagilimi'), x + 3, y + 6);
+  pdf.text(convertTurkishChars('Genel Istatistikler'), x + 3, y + 6);
   
-  let currentY = y + 15;
+  let currentY = y + 20;
   
-  // Seviye istatistikleri
+  // Seviye dağılımı
   const stageStatsWithPercentages = calculateStagePercentages(stats.stageStats, stats.learnedCount);
   
   Object.entries(stageStatsWithPercentages).forEach(([stageId, stage]) => {
+    if (stage.count === 0) return; // Boş seviyeleri atla
+    
     const stageColor = getStageColor(parseInt(stageId));
     
     // Renk kutusu
@@ -147,7 +223,7 @@ const addWordsSection = (pdf, stats, x, y) => {
     
     // Seviye adı
     pdf.setTextColor(...COLORS.text);
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setFont(FONTS.regular, 'normal');
     pdf.text(convertTurkishChars(stage.name), x + 8, currentY);
     
@@ -173,130 +249,60 @@ const addWordsSection = (pdf, stats, x, y) => {
     currentY += 8;
   });
   
-  return currentY;
-};
-
-// İstatistikler bölümü (sağ taraf)
-const addStatsSection = (pdf, stats, userRank, x, y) => {
-  // Bölüm başlığı
-  pdf.setFillColor(...COLORS.secondary);
-  pdf.rect(x, y, 85, 8, 'F');
+  currentY += 10;
   
-  pdf.setTextColor(...COLORS.primary);
-  pdf.setFontSize(14);
-  pdf.setFont(FONTS.regular, 'bold');
-  pdf.text(convertTurkishChars('Genel Istatistikler'), x + 3, y + 6);
-  
-  let currentY = y + 20;
-  
-  // İstatistik kutuları
+  // Genel istatistikler
   const statItems = [
     {
-      icon: 'Kelime',
-      label: convertTurkishChars('Ogrenilen Kelime'),
+      label: convertTurkishChars('Toplam Ogrenilen'),
       value: stats.learnedCount,
       color: COLORS.primary
     },
     {
-      icon: 'Tamaml.',
       label: 'Tamamlanan',
       value: stats.stageStats[7]?.count || 0,
       color: COLORS.success
     },
     {
-      icon: 'Ilerleme',
       label: convertTurkishChars('Ilerleme Orani'),
       value: `${stats.progressPercentage}%`,
       color: COLORS.info
-    },
-    {
-      icon: 'Toplam',
-      label: 'Toplam Kelime',
-      value: stats.totalWords,
-      color: COLORS.warning
     }
   ];
   
   if (userRank) {
     statItems.push({
-      icon: 'Sira',
       label: convertTurkishChars('Siralama'),
       value: `${userRank}. sira`,
-      color: COLORS.primary
+      color: COLORS.warning
     });
   }
   
-  statItems.forEach((item, index) => {
+  statItems.forEach((item) => {
     // Kutu
     pdf.setFillColor(250, 250, 250);
-    pdf.rect(x, currentY, 80, 15, 'F');
+    pdf.rect(x, currentY, 80, 12, 'F');
     
     // Kenar rengi
     pdf.setFillColor(...item.color);
-    pdf.rect(x, currentY, 2, 15, 'F');
-    
-    // Değer
-    pdf.setTextColor(...COLORS.text);
-    pdf.setFontSize(16);
-    pdf.setFont(FONTS.regular, 'bold');
-    pdf.text(item.value.toString(), x + 45, currentY + 7);
+    pdf.rect(x, currentY, 2, 12, 'F');
     
     // Label
-    pdf.setFontSize(9);
-    pdf.setTextColor(...COLORS.textLight);
-    pdf.setFont(FONTS.regular, 'normal');
-    pdf.text(item.label, x + 45, currentY + 12);
-    
-    // Icon/Label metni
+    pdf.setTextColor(...COLORS.text);
     pdf.setFontSize(8);
-    pdf.setTextColor(...item.color);
+    pdf.setFont(FONTS.regular, 'normal');
+    pdf.text(item.label, x + 5, currentY + 5);
+    
+    // Değer
+    pdf.setFontSize(10);
     pdf.setFont(FONTS.regular, 'bold');
-    pdf.text(item.icon, x + 5, currentY + 8);
+    pdf.text(item.value.toString(), x + 5, currentY + 9);
     
-    currentY += 20;
+    currentY += 15;
   });
-  
-  // Dairesel ilerleme göstergesi
-  if (stats.progressPercentage > 0) {
-    addCircularProgress(pdf, stats.progressPercentage, x + 40, currentY + 15);
-  }
 };
 
-// Dairesel ilerleme göstergesi
-const addCircularProgress = (pdf, percentage, centerX, centerY) => {
-  const radius = 20;
-  
-  // Arka plan çemberi
-  pdf.setDrawColor(230, 230, 230);
-  pdf.setLineWidth(3);
-  pdf.circle(centerX, centerY, radius, 'S');
-  
-  // İlerleme çemberi (basitleştirilmiş)
-  pdf.setDrawColor(...COLORS.primary);
-  pdf.setLineWidth(3);
-  
-  // İlerleme yayı çizimi için basit bir yaklaşım
-  const steps = Math.ceil((percentage / 100) * 20); // 20 adımda çember
-  for (let i = 0; i < steps; i++) {
-    const angle = (i / 20) * 2 * Math.PI - Math.PI / 2; // -90 dereceden başla
-    const x1 = centerX + (radius - 1.5) * Math.cos(angle);
-    const y1 = centerY + (radius - 1.5) * Math.sin(angle);
-    const x2 = centerX + (radius + 1.5) * Math.cos(angle);
-    const y2 = centerY + (radius + 1.5) * Math.sin(angle);
-    
-    pdf.line(x1, y1, x2, y2);
-  }
-  
-  // Yüzde metni
-  pdf.setTextColor(...COLORS.primary);
-  pdf.setFontSize(12);
-  pdf.setFont(FONTS.regular, 'bold');
-  const percentText = `${percentage}%`;
-  const textWidth = pdf.getTextWidth(percentText);
-  pdf.text(percentText, centerX - textWidth/2, centerY + 2);
-};
-
-// İlerleme çubuğu - Y pozisyonlarını düzelttik
+// İlerleme çubuğu - Düzeltilmiş versiyon
 const addProgressBar = (pdf, stats, x, y, width) => {
   // Başlık
   pdf.setTextColor(...COLORS.text);
@@ -305,42 +311,42 @@ const addProgressBar = (pdf, stats, x, y, width) => {
   pdf.text(convertTurkishChars('Genel Ilerleme'), x, y);
   
   // Çubuk arka planı
-  const barHeight = 15;
+  const barHeight = 12;
+  const barY = y + 10;
   pdf.setFillColor(240, 240, 240);
-  pdf.rect(x, y + 8, width, barHeight, 'F'); // Y pozisyonunu ayarladık
+  pdf.rect(x, barY, width, barHeight, 'F');
   
-  // İlerleme çubuğu (gradient yerine tek renk)
+  // İlerleme çubuğu
   const progressWidth = (stats.progressPercentage / 100) * width;
   pdf.setFillColor(...COLORS.primary);
-  pdf.rect(x, y + 8, progressWidth, barHeight, 'F');
+  pdf.rect(x, barY, progressWidth, barHeight, 'F');
   
-  // Yüzde metni - Pozisyonu düzelttik
+  // Progress bar üstündeki metin - düzeltilmiş pozisyon
   pdf.setTextColor(255, 255, 255);
-  pdf.setFontSize(10);
+  pdf.setFontSize(9);
   pdf.setFont(FONTS.regular, 'bold');
-  const progressText = `${stats.learnedCount} / ${stats.totalWords} kelime (${stats.progressPercentage}%)`;
+  const progressText = `${stats.progressPercentage}%`;
   const progressTextWidth = pdf.getTextWidth(progressText);
   
-  // Metin konumunu ayarla
-  const textX = x + (width - progressTextWidth) / 2;
-  const textY = y + 17; // Y pozisyonunu ayarladık
-  
-  // Eğer progress width yeterince genişse beyaz, değilse koyu renk kullan
-  if (progressWidth > progressTextWidth + 10) {
+  // Metin konumunu çubuk içinde ortala
+  if (progressWidth > progressTextWidth + 5) {
+    // Çubuk içinde yeterli yer varsa beyaz renkte
     pdf.setTextColor(255, 255, 255);
+    pdf.text(progressText, x + (progressWidth - progressTextWidth) / 2, barY + 7.5);
   } else {
+    // Çubuk dışında koyu renkte
     pdf.setTextColor(...COLORS.text);
+    pdf.text(progressText, x + progressWidth + 5, barY + 7.5);
   }
   
-  pdf.text(progressText, textX, textY);
-  
-  // Alt açıklama metni - çakışmayı önlemek için
+  // Alt açıklama metni - çubuk altında, çakışmayacak şekilde
+  const detailY = barY + barHeight + 8;
   pdf.setTextColor(...COLORS.textLight);
-  pdf.setFontSize(8);
+  pdf.setFontSize(9);
   pdf.setFont(FONTS.regular, 'normal');
-  const detailText = convertTurkishChars(`Toplam ${stats.totalWords} kelimeden ${stats.learnedCount} tanesi ogrenildi`);
+  const detailText = convertTurkishChars(`${stats.learnedCount} / ${stats.totalWords} kelime ogrenildi`);
   const detailWidth = pdf.getTextWidth(detailText);
-  pdf.text(detailText, x + (width - detailWidth) / 2, y + 30);
+  pdf.text(detailText, x + (width - detailWidth) / 2, detailY);
 };
 
 // Alt bilgi
