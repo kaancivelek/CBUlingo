@@ -5,19 +5,32 @@ import "../styles/Navi.css";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-function VerticalNavbar({ user }) {
+function VerticalNavbar({ user, logoutUser }) {
   const navigate = useNavigate();
 
-  const goToDashboard = () => {
-    navigate("/dashboard");
+  const goToLeaderboard = () => {
+    navigate("/leaderboard");
+  };
+
+  const goToQuiz = () => {
+    navigate("/quiz");
+  };
+
+  const goToWordle = () => {
+    navigate("/wordle");
   };
 
   const goToProfileOrLogon = () => {
-    if (user && Object.keys(user).length > 0) {
-      navigate("/ServiceTest");
+    if (user) {
+      navigate("/profile");
     } else {
-      navigate("/");
+      navigate("/logon");
     }
+  };
+
+  const handleLogout = () => {
+    logoutUser(); // App.jsx'den gelen logout fonksiyonunu kullan
+    navigate("/");
   };
 
   return (
@@ -36,19 +49,36 @@ function VerticalNavbar({ user }) {
         >
           <img src={logo} alt="logo" style={{ width: "100px" }} />
         </button>
-        <button className="vertical-navbar-text" onClick={goToDashboard}>
-          Dashboard
+        
+       <button className="vertical-navbar-text" onClick={goToLeaderboard}>
+          Sıralama
+        </button> 
+        
+        <button className="vertical-navbar-text" onClick={goToQuiz}>
+          Quiz
         </button>
+        
+        <button className="vertical-navbar-text" onClick={goToWordle}>
+          Wordle
+        </button>
+        
         <button className="vertical-navbar-text" onClick={goToProfileOrLogon}>
-          {user && Object.keys(user).length > 0 ? "Profil" : "Giriş Yap"}
+          {user ? user.userFullName || "Profil" : "Giriş Yap"}
         </button>
+        
+        {user && (
+          <button className="vertical-navbar-text logout-button" onClick={handleLogout}>
+            Çıkış Yap
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
 VerticalNavbar.propTypes = {
-  user: PropTypes.object.isRequired, // If 'user' is optional, remove '.isRequired'
+  user: PropTypes.object,
+  logoutUser: PropTypes.func.isRequired,
 };
 
 export default VerticalNavbar;

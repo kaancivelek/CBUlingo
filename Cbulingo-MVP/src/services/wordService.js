@@ -24,6 +24,7 @@ export const updateLearningStage = async (id, data) => request(`/tblLearningStag
 export const createEnWord = async (data) => request('/tblEnglish', 'POST', data);
 export const createTrWord = async (data) => request('/tblTurkish', 'POST', data);
 export const createTranslation = async (data) => request('/tblTranslation', 'POST', data);
+export const createLearnedWord = async (data) => request('/tblLearnedWords', 'POST', data);
 
 
 // [
