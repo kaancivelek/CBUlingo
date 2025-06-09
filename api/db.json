@@ -365,6 +365,36 @@
       "enId": 18,
       "stageId": 1,
       "learningDate": "2025-06-09"
+    },
+    {
+      "id": "ff26",
+      "enId": 93,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "e7fd",
+      "enId": 74,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "47e7",
+      "enId": 42,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "dd26",
+      "enId": 59,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "2612",
+      "enId": 96,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
     }
   ],
   "tblLearningStages": [
@@ -914,7 +944,7 @@
   "tblTurkish": [
     {
       "trId": 1,
-      "trName": "elma",
+      "trName": "elma ",
       "id": "2a44"
     },
     {
@@ -1420,11 +1450,10 @@
   ],
   "tblTranslation": [
     {
-      "id": "1",
       "enId": 1,
       "trId": 1,
-      "picUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/1200px-Red_Apple.jpg",
-      "enExample": "I eat an apple every morning."
+      "enExample": "I eat an apple",
+      "id": "1"
     },
     {
       "id": "2",

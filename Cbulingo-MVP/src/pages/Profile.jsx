@@ -12,6 +12,7 @@ import {
   validateWordForm, 
   resetWordForm 
 } from '../utils/wordManagement';
+import { updateWord } from '../../utils/WordController';
 import '../styles/Profile.css';
 
 /**
@@ -47,6 +48,7 @@ export default function Profile() {
   const [wordFormErrors, setWordFormErrors] = useState({});
   const [wordFormLoading, setWordFormLoading] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState({ type: '', text: '' });
+  const [words, setWords] = useState([]); // Add this state for storing words
 
   /**
    * Initialize profile data on component mount
@@ -74,6 +76,9 @@ export default function Profile() {
         getLearnedWordsByUserId(parsedUser.userId),
         getAllEnWords()
       ]);
+
+      // Set words for display
+      setWords(allWordsData || []);
 
       // Calculate complete statistics
       const calculatedStats = calculateCompleteStats(
@@ -143,8 +148,23 @@ export default function Profile() {
   };
 
   /**
+   * Open word edit form
+   */
+  const openEditWordForm = (word) => {
+    setWordFormMode('edit');
+    setWordFormData({
+      originalWord: word.enWord,
+      enWord: word.enWord,
+      trWord: word.trWord,
+      enExample: word.enExample
+    });
+    setWordFormErrors({});
+    setShowWordForm(true);
+    setFeedbackMessage({ type: '', text: '' });
+  };
+
+  /**
    * Handle word form submission for both add and edit operations
-   * @param {Event} e - Form submission event
    */
   const handleWordFormSubmit = async (e) => {
     e.preventDefault();
@@ -156,11 +176,17 @@ export default function Profile() {
       if (wordFormMode === 'add') {
         result = await handleAddWord(wordFormData);
       } else {
-        result = await handleUpdateWord(wordFormData.originalWord, wordFormData);
+        result = await updateWord(
+          wordFormData.originalWord,
+          wordFormData.enWord,
+          wordFormData.trWord,
+          wordFormData.picUrl,
+          wordFormData.enExample
+        );
       }
 
       if (result.success) {
-        setFeedbackMessage({ type: 'success', text: result.message });
+        setFeedbackMessage({ type: 'success', text: result.success });
         // Refresh stats after successful operation
         setTimeout(() => {
           initializeProfile();
@@ -170,7 +196,7 @@ export default function Profile() {
         if (result.errors) {
           setWordFormErrors(result.errors);
         } else {
-          setFeedbackMessage({ type: 'error', text: result.message });
+          setFeedbackMessage({ type: 'error', text: result.error });
         }
       }
     } catch (error) {
@@ -317,6 +343,24 @@ export default function Profile() {
           </button>
         </div>
 
+        {/* Word list */}
+        <div className="word-list">
+          {words.map((word) => (
+            <div key={word.enId} className="word-item">
+              <div className="word-content">
+                <h3>{word.enWord}</h3>
+                <p>{word.trWord}</p>
+              </div>
+              <button 
+                className="edit-word-btn"
+                onClick={() => openEditWordForm(word)}
+              >
+                Düzenle
+              </button>
+            </div>
+          ))}
+        </div>
+
         {/* Word form modal */}
         {showWordForm && (
           <div className="word-form-modal">
@@ -361,19 +405,6 @@ export default function Profile() {
                   />
                   {wordFormErrors.enExample && (
                     <span className="error-message">{wordFormErrors.enExample}</span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="trExample">Örnek Cümle (Türkçe)</label>
-                  <textarea
-                    id="trExample"
-                    value={wordFormData.trExample}
-                    onChange={(e) => handleFormInputChange('trExample', e.target.value)}
-                    className={wordFormErrors.trExample ? 'error' : ''}
-                  />
-                  {wordFormErrors.trExample && (
-                    <span className="error-message">{wordFormErrors.trExample}</span>
                   )}
                 </div>
 
