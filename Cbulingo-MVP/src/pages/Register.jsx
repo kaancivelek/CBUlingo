@@ -4,13 +4,19 @@ import { registerUser } from '../../utils/LogonController';
 import '../styles/Auth.css';
 import { getAllUsers } from '../services/userService';
  
-// Constants
+// Validation constants
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const MIN_NAME_LENGTH = 2;
 const MIN_PASSWORD_LENGTH = 6;
  
+/**
+ * Registration page component that handles new user account creation
+ * @param {Function} updateUser - Callback to update user state in parent component
+ */
 export default function Register({ updateUser }) {
   const navigate = useNavigate();
+  
+  // Form state management
   const [formData, setFormData] = useState({
     userEmail: '',
     userFullName: '',
@@ -20,6 +26,7 @@ export default function Register({ updateUser }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
  
+  // Handle input changes and clear field-specific errors
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -36,27 +43,32 @@ export default function Register({ updateUser }) {
     }
   };
  
+  // Validate all form inputs
   const validateForm = () => {
     const newErrors = {};
  
+    // Email validation
     if (!formData.userEmail) {
       newErrors.userEmail = 'E-posta adresi gerekli';
     } else if (!EMAIL_REGEX.test(formData.userEmail)) {
       newErrors.userEmail = 'Geçerli bir e-posta adresi girin';
     }
  
+    // Full name validation
     if (!formData.userFullName) {
       newErrors.userFullName = 'Ad soyad gerekli';
     } else if (formData.userFullName.length < MIN_NAME_LENGTH) {
       newErrors.userFullName = `Ad soyad en az ${MIN_NAME_LENGTH} karakter olmalı`;
     }
  
+    // Password validation
     if (!formData.userPassword) {
       newErrors.userPassword = 'Şifre gerekli';
     } else if (formData.userPassword.length < MIN_PASSWORD_LENGTH) {
       newErrors.userPassword = `Şifre en az ${MIN_PASSWORD_LENGTH} karakter olmalı`;
     }
  
+    // Password confirmation validation
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Şifre tekrarı gerekli';
     } else if (formData.userPassword !== formData.confirmPassword) {
@@ -67,6 +79,7 @@ export default function Register({ updateUser }) {
     return Object.keys(newErrors).length === 0;
   };
  
+  // Handle form submission and user registration
   const handleSubmit = async (e) => {
     e.preventDefault();
    
@@ -76,11 +89,12 @@ export default function Register({ updateUser }) {
  
     setLoading(true);
     try {
-      // Benzersiz userId ata
+      // Generate new user ID
       const users = await getAllUsers();
       const maxUserId = users.reduce((max, user) => (user.userId > max ? user.userId : max), 0);
       const newUserId = maxUserId + 1;
  
+      // Register new user
       await registerUser(formData.userEmail, {
         userEmail: formData.userEmail,
         userFullName: formData.userFullName,
@@ -94,13 +108,13 @@ export default function Register({ updateUser }) {
     }
   };
  
-  const goBack = () => {
-    navigate('/logon');
-  };
+  // Navigation handlers
+  const goBack = () => navigate('/logon');
  
   return (
     <div className="auth-container">
       <div className="auth-content">
+        {/* Header section */}
         <div className="auth-header">
           <button className="back-button" onClick={goBack}>
             ← Geri
@@ -111,7 +125,9 @@ export default function Register({ updateUser }) {
           </p>
         </div>
  
+        {/* Registration form */}
         <form onSubmit={handleSubmit} className="auth-form">
+          {/* Email input */}
           <div className="form-group">
             <label htmlFor="userEmail" className="form-label">
               E-posta Adresi
@@ -131,6 +147,7 @@ export default function Register({ updateUser }) {
             )}
           </div>
  
+          {/* Full name input */}
           <div className="form-group">
             <label htmlFor="userFullName" className="form-label">
               Ad Soyad
@@ -150,6 +167,7 @@ export default function Register({ updateUser }) {
             )}
           </div>
  
+          {/* Password input */}
           <div className="form-group">
             <label htmlFor="userPassword" className="form-label">
               Şifre
@@ -169,6 +187,7 @@ export default function Register({ updateUser }) {
             )}
           </div>
  
+          {/* Password confirmation input */}
           <div className="form-group">
             <label htmlFor="confirmPassword" className="form-label">
               Şifre Tekrar
@@ -188,6 +207,7 @@ export default function Register({ updateUser }) {
             )}
           </div>
  
+          {/* Submit button */}
           <button
             type="submit"
             className="auth-submit-button register-submit"
@@ -204,6 +224,7 @@ export default function Register({ updateUser }) {
           </button>
         </form>
  
+        {/* Footer with login link */}
         <div className="auth-footer">
           <p>
             Zaten hesabın var mı?{' '}

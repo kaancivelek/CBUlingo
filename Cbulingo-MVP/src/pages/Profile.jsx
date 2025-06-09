@@ -14,15 +14,23 @@ import {
 } from '../utils/wordManagement';
 import '../styles/Profile.css';
 
-// Constants
+/**
+ * SVG configuration for circular progress chart
+ */
 const SVG_CONFIG = {
   CENTER: 100,
   RADIUS: 80,
   CIRCUMFERENCE: 502.4 // 2 * π * radius
 };
 
+/**
+ * Profile page component that displays user information and learning statistics
+ * Includes word management functionality and progress visualization
+ */
 export default function Profile() {
   const navigate = useNavigate();
+  
+  // User and statistics state
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({
     totalWords: 0,
@@ -32,7 +40,7 @@ export default function Profile() {
   });
   const [loading, setLoading] = useState(true);
   
-  // Word Management States
+  // Word management state
   const [showWordForm, setShowWordForm] = useState(false);
   const [wordFormMode, setWordFormMode] = useState('add'); // 'add' or 'edit'
   const [wordFormData, setWordFormData] = useState(resetWordForm());
@@ -40,10 +48,16 @@ export default function Profile() {
   const [wordFormLoading, setWordFormLoading] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState({ type: '', text: '' });
 
+  /**
+   * Initialize profile data on component mount
+   */
   useEffect(() => {
     initializeProfile();
   }, [navigate]);
 
+  /**
+   * Load user data and calculate learning statistics
+   */
   const initializeProfile = async () => {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) {
@@ -55,11 +69,13 @@ export default function Profile() {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
 
+      // Fetch both learned words and all available words
       const [learnedWordsData, allWordsData] = await Promise.all([
         getLearnedWordsByUserId(parsedUser.userId),
         getAllEnWords()
       ]);
 
+      // Calculate complete statistics
       const calculatedStats = calculateCompleteStats(
         learnedWordsData || [], 
         allWordsData || []
@@ -73,17 +89,28 @@ export default function Profile() {
     }
   };
 
+  /**
+   * Handle user logout
+   */
   const handleLogout = () => {
     localStorage.removeItem('user');
     navigate('/logon');
   };
 
+  /**
+   * Calculate SVG dash array for circular progress
+   * @param {number} percentage - Progress percentage
+   * @returns {string} SVG dash array value
+   */
   const getProgressDashArray = (percentage) => {
     const progressLength = (percentage / 100) * SVG_CONFIG.CIRCUMFERENCE;
     return `${progressLength} ${SVG_CONFIG.CIRCUMFERENCE}`;
   };
 
   // Word Management Functions
+  /**
+   * Open word addition form
+   */
   const openAddWordForm = () => {
     setWordFormMode('add');
     setWordFormData(resetWordForm());
@@ -92,6 +119,9 @@ export default function Profile() {
     setFeedbackMessage({ type: '', text: '' });
   };
 
+  /**
+   * Close word form and reset form state
+   */
   const closeWordForm = () => {
     setShowWordForm(false);
     setWordFormData(resetWordForm());
@@ -99,6 +129,11 @@ export default function Profile() {
     setFeedbackMessage({ type: '', text: '' });
   };
 
+  /**
+   * Handle form input changes and clear field-specific errors
+   * @param {string} field - Form field name
+   * @param {string} value - New field value
+   */
   const handleFormInputChange = (field, value) => {
     setWordFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
@@ -107,6 +142,10 @@ export default function Profile() {
     }
   };
 
+  /**
+   * Handle word form submission for both add and edit operations
+   * @param {Event} e - Form submission event
+   */
   const handleWordFormSubmit = async (e) => {
     e.preventDefault();
     setWordFormLoading(true);
@@ -141,7 +180,7 @@ export default function Profile() {
     }
   };
 
-  // Early return for loading state
+  // Loading state
   if (loading) {
     return (
       <div className="profile-container">
@@ -153,7 +192,7 @@ export default function Profile() {
     );
   }
 
-  // Early return for no user
+  // No user state
   if (!user) {
     return (
       <div className="profile-container">
@@ -167,11 +206,12 @@ export default function Profile() {
     );
   }
 
+  // Calculate stage percentages for progress visualization
   const stageStatsWithPercentages = calculateStagePercentages(stats.stageStats);
 
   return (
     <div className="profile-container">
-      {/* Header */}
+      {/* User information header */}
       <div className="profile-header">
         <div className="user-info">
           <div className="user-avatar">
@@ -187,7 +227,7 @@ export default function Profile() {
         </button>
       </div>
 
-      {/* Statistics Cards */}
+      {/* Learning statistics cards */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">📚</div>
@@ -222,7 +262,7 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Progress Chart */}
+      {/* Progress visualization section */}
       <div className="chart-section">
         <h2 className="section-title">📈 Öğrenme İlerlemesi</h2>
         <div className="progress-chart">
@@ -248,205 +288,131 @@ export default function Profile() {
             </div>
           </div>
           <div className="progress-info">
-            <h3>Kelime Dağarcığın</h3>
-            <p>
-              <strong>{stats.learnedCount}</strong> kelime öğrendin, 
-              <strong> {stats.totalWords - stats.learnedCount}</strong> kelime daha var!
-            </p>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${stats.progressPercentage}%` }}
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stage Distribution */}
-      <div className="chart-section">
-        <h2 className="section-title">🎓 Öğrenme Seviyesi Dağılımı</h2>
-        <div className="stage-chart">
-          {Object.entries(stageStatsWithPercentages).map(([stageId, stage]) => (
-            <div key={stageId} className="stage-item">
-              <div className="stage-info">
-                <div className={`stage-color ${stage.cssClass}`}></div>
-                <span className="stage-name">{stage.name}</span>
-                <span className="stage-count">{stage.count}</span>
-              </div>
-              <div className="stage-bar">
-                <div 
-                  className={`stage-fill ${stage.cssClass}`}
-                  style={{ width: `${stage.percentage}%` }}
-                ></div>
-              </div>
-              <span className="stage-percentage">{stage.percentage}%</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="actions-section">
-        <h2 className="section-title">🚀 Hızlı İşlemler</h2>
-        <div className="action-buttons">
-          <button 
-            className="action-btn quiz-btn" 
-            onClick={() => navigate('/quiz')}
-          >
-            <span className="action-icon">🎯</span>
-            <div className="action-content">
-              <h4>Quiz Çöz</h4>
-              <p>Kelime bilgini test et</p>
-            </div>
-          </button>
-          
-          <button 
-            className="action-btn dashboard-btn" 
-            onClick={() => navigate('/')}
-          >
-            <span className="action-icon">📊</span>
-            <div className="action-content">
-              <h4>Dashboard</h4>
-              <p>Genel durumu görüntüle</p>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Word Management Section */}
-      <div className="word-management-section">
-        <h2 className="section-title">📝 Kelime Yönetimi</h2>
-        <div className="word-management-actions">
-          <button 
-            className="management-btn add-word-btn"
-            onClick={openAddWordForm}
-          >
-            <span className="management-icon">➕</span>
-            <div className="management-content">
-              <h4>Yeni Kelime Ekle</h4>
-              <p>Sözlüğe yeni kelime ekle</p>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Word Form Modal */}
-      {showWordForm && (
-        <div className="word-form-overlay">
-          <div className="word-form-modal">
-            <div className="word-form-header">
-              <h3>
-                {wordFormMode === 'add' ? '➕ Yeni Kelime Ekle' : '✏️ Kelimeyi Düzenle'}
-              </h3>
-              <button 
-                className="close-form-btn"
-                onClick={closeWordForm}
-                disabled={wordFormLoading}
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleWordFormSubmit} className="word-form">
-              <div className="form-group">
-                <label htmlFor="enWord">İngilizce Kelime *</label>
-                <input
-                  type="text"
-                  id="enWord"
-                  value={wordFormData.enWord}
-                  onChange={(e) => handleFormInputChange('enWord', e.target.value)}
-                  className={wordFormErrors.enWord ? 'error' : ''}
-                  placeholder="Örn: beautiful"
-                  disabled={wordFormLoading}
-                />
-                {wordFormErrors.enWord && (
-                  <span className="error-message">{wordFormErrors.enWord}</span>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="trWord">Türkçe Anlamı *</label>
-                <input
-                  type="text"
-                  id="trWord"
-                  value={wordFormData.trWord}
-                  onChange={(e) => handleFormInputChange('trWord', e.target.value)}
-                  className={wordFormErrors.trWord ? 'error' : ''}
-                  placeholder="Örn: güzel"
-                  disabled={wordFormLoading}
-                />
-                {wordFormErrors.trWord && (
-                  <span className="error-message">{wordFormErrors.trWord}</span>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="picUrl">Resim URL'si</label>
-                <input
-                  type="url"
-                  id="picUrl"
-                  value={wordFormData.picUrl}
-                  onChange={(e) => handleFormInputChange('picUrl', e.target.value)}
-                  className={wordFormErrors.picUrl ? 'error' : ''}
-                  placeholder="https://example.com/image.jpg"
-                  disabled={wordFormLoading}
-                />
-                {wordFormErrors.picUrl && (
-                  <span className="error-message">{wordFormErrors.picUrl}</span>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="enExample">Örnek Cümle</label>
-                <textarea
-                  id="enExample"
-                  value={wordFormData.enExample}
-                  onChange={(e) => handleFormInputChange('enExample', e.target.value)}
-                  className={wordFormErrors.enExample ? 'error' : ''}
-                  placeholder="She is a beautiful woman."
-                  rows="3"
-                  disabled={wordFormLoading}
-                />
-                {wordFormErrors.enExample && (
-                  <span className="error-message">{wordFormErrors.enExample}</span>
-                )}
-              </div>
-
-              {feedbackMessage.text && (
-                <div className={`feedback-message ${feedbackMessage.type}`}>
-                  {feedbackMessage.text}
+            {/* Stage progress information */}
+            {Object.entries(stageStatsWithPercentages).map(([stage, data]) => (
+              <div key={stage} className="stage-info">
+                <div className="stage-label">
+                  <span className="stage-number">Seviye {stage}</span>
+                  <span className="stage-count">({data.count} kelime)</span>
                 </div>
-              )}
-
-              <div className="form-actions">
-                <button 
-                  type="button" 
-                  className="cancel-btn"
-                  onClick={closeWordForm}
-                  disabled={wordFormLoading}
-                >
-                  İptal
-                </button>
-                <button 
-                  type="submit" 
-                  className="submit-btn"
-                  disabled={wordFormLoading}
-                >
-                  {wordFormLoading ? (
-                    <>
-                      <span className="spinner"></span>
-                      {wordFormMode === 'add' ? 'Ekleniyor...' : 'Güncelleniyor...'}
-                    </>
-                  ) : (
-                    wordFormMode === 'add' ? 'Kelimeyi Ekle' : 'Güncelle'
-                  )}
-                </button>
+                <div className="stage-bar">
+                  <div 
+                    className="stage-progress" 
+                    style={{ width: `${data.percentage}%` }}
+                  />
+                </div>
+                <span className="stage-percentage">{data.percentage}%</span>
               </div>
-            </form>
+            ))}
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Word management section */}
+      <div className="word-management-section">
+        <div className="section-header">
+          <h2 className="section-title">📝 Kelime Yönetimi</h2>
+          <button className="add-word-btn" onClick={openAddWordForm}>
+            + Yeni Kelime Ekle
+          </button>
+        </div>
+
+        {/* Word form modal */}
+        {showWordForm && (
+          <div className="word-form-modal">
+            <div className="word-form-content">
+              <h3>{wordFormMode === 'add' ? 'Yeni Kelime Ekle' : 'Kelime Düzenle'}</h3>
+              <form onSubmit={handleWordFormSubmit}>
+                <div className="form-group">
+                  <label htmlFor="enWord">İngilizce Kelime</label>
+                  <input
+                    type="text"
+                    id="enWord"
+                    value={wordFormData.enWord}
+                    onChange={(e) => handleFormInputChange('enWord', e.target.value)}
+                    className={wordFormErrors.enWord ? 'error' : ''}
+                  />
+                  {wordFormErrors.enWord && (
+                    <span className="error-message">{wordFormErrors.enWord}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="trWord">Türkçe Karşılığı</label>
+                  <input
+                    type="text"
+                    id="trWord"
+                    value={wordFormData.trWord}
+                    onChange={(e) => handleFormInputChange('trWord', e.target.value)}
+                    className={wordFormErrors.trWord ? 'error' : ''}
+                  />
+                  {wordFormErrors.trWord && (
+                    <span className="error-message">{wordFormErrors.trWord}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="enExample">Örnek Cümle (İngilizce)</label>
+                  <textarea
+                    id="enExample"
+                    value={wordFormData.enExample}
+                    onChange={(e) => handleFormInputChange('enExample', e.target.value)}
+                    className={wordFormErrors.enExample ? 'error' : ''}
+                  />
+                  {wordFormErrors.enExample && (
+                    <span className="error-message">{wordFormErrors.enExample}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="trExample">Örnek Cümle (Türkçe)</label>
+                  <textarea
+                    id="trExample"
+                    value={wordFormData.trExample}
+                    onChange={(e) => handleFormInputChange('trExample', e.target.value)}
+                    className={wordFormErrors.trExample ? 'error' : ''}
+                  />
+                  {wordFormErrors.trExample && (
+                    <span className="error-message">{wordFormErrors.trExample}</span>
+                  )}
+                </div>
+
+                <div className="form-actions">
+                  <button 
+                    type="button" 
+                    className="cancel-btn" 
+                    onClick={closeWordForm}
+                    disabled={wordFormLoading}
+                  >
+                    İptal
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="submit-btn"
+                    disabled={wordFormLoading}
+                  >
+                    {wordFormLoading ? (
+                      <>
+                        <div className="spinner-small"></div>
+                        {wordFormMode === 'add' ? 'Ekleniyor...' : 'Güncelleniyor...'}
+                      </>
+                    ) : (
+                      wordFormMode === 'add' ? 'Ekle' : 'Güncelle'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Feedback message */}
+        {feedbackMessage.text && (
+          <div className={`feedback-message ${feedbackMessage.type}`}>
+            {feedbackMessage.text}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import {
   getLearnedWordsByUserId,
   getAllEnWords,
 } from "../services/wordService";
-import { getAllUsers } from "../services/userService"; // Bu import'u ekledik
+import { getAllUsers } from "../services/userService";
 import {
   calculateCompleteStats,
   calculateStagePercentages,
@@ -13,14 +13,21 @@ import { exportProgressToPDF } from "../utils/pdfGenerator";
 
 import "../styles/Dashboard.css";
 
-// Constants
+/**
+ * SVG configuration for circular progress chart
+ */
 const SVG_CONFIG = {
   CENTER: 100,
   RADIUS: 80,
   CIRCUMFERENCE: 502.4, // 2 * π * radius
 };
 
+/**
+ * Dashboard component that displays user's learning progress and statistics
+ * Includes leaderboard rankings and PDF export functionality
+ */
 export default function Dashboard() {
+  // State management
   const [learnedWords, setLearnedWords] = useState([]);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -34,10 +41,17 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [exportingPDF, setExportingPDF] = useState(false);
 
+  /**
+   * Initialize dashboard data on component mount
+   */
   useEffect(() => {
     initializeDashboard();
   }, [navigate]);
 
+  /**
+   * Load and initialize all dashboard data
+   * Fetches user data, learned words, and calculates statistics
+   */
   const initializeDashboard = async () => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
@@ -49,32 +63,32 @@ export default function Dashboard() {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
 
-      // Paralel olarak tüm verileri al
+      // Fetch all required data in parallel
       const [learnedWordsData, allWordsData, allUsersData] = await Promise.all([
         getLearnedWordsByUserId(parsedUser.userId),
         getAllEnWords(),
         getAllUsers()
       ]);
 
-      // learnedWordsData'daki her kelimeye enWord ve trWord ekle
+      // Enrich learned words with English and Turkish translations
       const enrichedLearnedWords = (learnedWordsData || []).map(lw => {
         const enWordObj = (allWordsData || []).find(w => w.enId === lw.enId);
         return {
           ...lw,
-          enWord: enWordObj?.enWord || '', // İngilizce kelime
-          trWord: enWordObj?.trWord || '', // Türkçesi varsa
+          enWord: enWordObj?.enWord || '',
+          trWord: enWordObj?.trWord || '',
         };
       });
 
       setLearnedWords(enrichedLearnedWords);
 
-      // Kullanıcının istatistiklerini hesapla
+      // Calculate user statistics
       const calculatedStats = calculateCompleteStats(
         learnedWordsData || [],
         allWordsData || []
       );
 
-      // Top users verilerini hesapla
+      // Calculate top users rankings
       const topUsersData = await calculateTopUsers(allUsersData.data || allUsersData || []);
 
       setStats(calculatedStats);
@@ -86,7 +100,11 @@ export default function Dashboard() {
     }
   };
 
-  // Top users hesaplama fonksiyonu (Leaderboard'dan esinlenerek)
+  /**
+   * Calculate rankings for all users based on their learning progress
+   * @param {Array} users - Array of user objects
+   * @returns {Array} Sorted array of users with their scores
+   */
   const calculateTopUsers = async (users) => {
     try {
       const userRankings = await Promise.all(
@@ -98,12 +116,12 @@ export default function Dashboard() {
             const learnedWords =
               learnedWordsResponse.data || learnedWordsResponse || [];
 
-            // Toplam puanı hesapla (her stage için 0.5 puan)
+            // Calculate total score (0.5 points per stage)
             const totalScore = learnedWords.reduce((total, word) => {
               return total + word.stageId * 0.5;
             }, 0);
 
-            // Kelime sayısı
+            // Word count
             const wordCount = learnedWords.length;
 
             return {
@@ -131,7 +149,7 @@ export default function Dashboard() {
         })
       );
 
-      // Puana göre sırala (yüksekten düşüğe)
+      // Sort by score (highest to lowest)
       const sortedRankings = userRankings.sort(
         (a, b) => b.totalScore - a.totalScore
       );
@@ -143,7 +161,9 @@ export default function Dashboard() {
     }
   };
 
-  // PDF Export fonksiyonu
+  /**
+   * Handle PDF export of user's progress
+   */
   const handleExportPDF = async () => {
     if (!user || !stats) {
       alert("Veri yüklenirken PDF oluşturulamaz. Lütfen bekleyin.");
@@ -153,14 +173,11 @@ export default function Dashboard() {
     setExportingPDF(true);
 
     try {
-      // Kullanıcının sıralama bilgisini bul (topUsers'dan)
+      // Find user's rank from topUsers
       const userRank = topUsers.findIndex((u) => u.userId === user.userId) + 1;
       const finalRank = userRank > 0 ? userRank : null;
 
       await exportProgressToPDF(user, stats, finalRank, learnedWords);
-
-      // Başarılı mesajı (opsiyonel)
-      // alert("PDF başarıyla oluşturuldu ve indirildi!");
     } catch (error) {
       console.error("PDF export error:", error);
       alert("PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.");
@@ -169,11 +186,17 @@ export default function Dashboard() {
     }
   };
 
+  /**
+   * Calculate SVG dash array for circular progress
+   * @param {number} percentage - Progress percentage
+   * @returns {string} SVG dash array value
+   */
   const getProgressDashArray = (percentage) => {
     const progressLength = (percentage / 100) * SVG_CONFIG.CIRCUMFERENCE;
     return `${progressLength} ${SVG_CONFIG.CIRCUMFERENCE}`;
   };
 
+  // Loading state
   if (loading) {
     return (
       <div className="dashboard-container">
@@ -185,6 +208,7 @@ export default function Dashboard() {
     );
   }
 
+  // No user state
   if (!user) {
     return (
       <div className="dashboard-container">
@@ -198,11 +222,12 @@ export default function Dashboard() {
     );
   }
 
+  // Calculate stage percentages for progress visualization
   const stageStatsWithPercentages = calculateStagePercentages(stats.stageStats);
 
   return (
     <div className="dashboard-container">
-      {/* Header */}
+      {/* Welcome header section */}
       <div className="dashboard-header">
         <div className="welcome-section">
           <h1 className="welcome-title">Hoş geldin, {user.userFullName}! 👋</h1>
@@ -211,7 +236,7 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* PDF Export Button */}
+        {/* PDF export section */}
         <div className="export-section">
           <button style={{borderStyle:"none", backgroundColor:"transparent"}}
             className={`export-pdf-btn ${exportingPDF ? "loading" : ""}`}
@@ -226,14 +251,14 @@ export default function Dashboard() {
             ) : (
               <>
                 <span className="export-icon">📄</span>
-                <span >İlerlemeni PDF Olarak Kaydet</span>
+                <span>İlerlemeni PDF Olarak Kaydet</span>
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Quick statistics overview */}
       <div className="stats-overview">
         <div className="stat-card primary">
           <div className="stat-icon">📚</div>
@@ -262,121 +287,76 @@ export default function Dashboard() {
         <div className="stat-card warning">
           <div className="stat-icon">🎯</div>
           <div className="stat-content">
-            <h3 className="stat-number">
-              {stats.totalWords - stats.learnedCount}
-            </h3>
-            <p className="stat-label">Kalan Kelime</p>
+            <h3 className="stat-number">{stats.totalWords}</h3>
+            <p className="stat-label">Toplam Kelime</p>
           </div>
         </div>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="dashboard-grid">
-        {/* Progress Section */}
-        <div className="dashboard-card progress-section">
-          <h2 className="card-title">📈 Öğrenme İlerlemen</h2>
-          <div className="progress-content">
-            <div className="progress-circle">
-              <svg width="200" height="200" viewBox="0 0 200 200">
-                <circle
-                  cx={SVG_CONFIG.CENTER}
-                  cy={SVG_CONFIG.CENTER}
-                  r={SVG_CONFIG.RADIUS}
-                  className="progress-track"
-                />
-                <circle
-                  cx={SVG_CONFIG.CENTER}
-                  cy={SVG_CONFIG.CENTER}
-                  r={SVG_CONFIG.RADIUS}
-                  className="progress-fill"
-                  strokeDasharray={getProgressDashArray(
-                    stats.progressPercentage
-                  )}
-                />
-              </svg>
-              <div className="progress-text">
-                <span className="progress-percentage">
-                  {stats.progressPercentage}%
-                </span>
-                <span className="progress-label">Tamamlandı</span>
-              </div>
-            </div>
-            <div className="progress-details">
-              <div className="progress-item">
-                <span className="label">Toplam Kelime:</span>
-                <span className="value">{stats.totalWords}</span>
-              </div>
-              <div className="progress-item">
-                <span className="label">Öğrenilen:</span>
-                <span className="value">{stats.learnedCount}</span>
-              </div>
-              <div className="progress-item">
-                <span className="label">Kalan:</span>
-                <span className="value">
-                  {stats.totalWords - stats.learnedCount}
-                </span>
-              </div>
-            </div>
+      {/* Progress visualization section */}
+      <div className="progress-section">
+        <div className="progress-chart">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle
+              cx={SVG_CONFIG.CENTER}
+              cy={SVG_CONFIG.CENTER}
+              r={SVG_CONFIG.RADIUS}
+              className="progress-track"
+            />
+            <circle
+              cx={SVG_CONFIG.CENTER}
+              cy={SVG_CONFIG.CENTER}
+              r={SVG_CONFIG.RADIUS}
+              className="progress-fill"
+              strokeDasharray={getProgressDashArray(stats.progressPercentage)}
+            />
+          </svg>
+          <div className="progress-text">
+            <span className="progress-percentage">{stats.progressPercentage}%</span>
+            <span className="progress-label">Tamamlandı</span>
           </div>
         </div>
 
-        {/* Stage Distribution */}
-        <div className="dashboard-card stages-section">
-          <h2 className="card-title">🎓 Seviye Dağılımı</h2>
-          <div className="stages-content">
-            {Object.entries(stageStatsWithPercentages).map(
-              ([stageId, stage]) => (
-                <div key={stageId} className="stage-row">
-                  <div className="stage-info">
-                    <div className={`stage-indicator ${stage.cssClass}`}></div>
-                    <span className="stage-name">{stage.name}</span>
-                  </div>
-                  <div className="stage-stats">
-                    <span className="stage-count">{stage.count}</span>
-                    <div className="stage-bar">
-                      <div
-                        className={`stage-fill ${stage.cssClass}`}
-                        style={{ width: `${stage.percentage}%` }}
-                      ></div>
-                    </div>
-                    <span className="stage-percentage">
-                      {stage.percentage}%
-                    </span>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
+        {/* Stage progress information */}
+        <div className="stage-progress">
+          <h3>Öğrenme Seviyeleri</h3>
+          {Object.entries(stageStatsWithPercentages).map(([stage, data]) => (
+            <div key={stage} className="stage-item">
+              <div className="stage-info">
+                <span className="stage-label">Seviye {stage}</span>
+                <span className="stage-count">({data.count} kelime)</span>
+              </div>
+              <div className="stage-bar">
+                <div 
+                  className="stage-progress-fill"
+                  style={{ width: `${data.percentage}%` }}
+                />
+              </div>
+              <span className="stage-percentage">{data.percentage}%</span>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Quick Actions */}
-        <div className="dashboard-card actions-section">
-          <h2 className="card-title">🚀 Hızlı İşlemler</h2>
-          <div className="action-grid">
-            <button
-              className="action-btn quiz"
-              onClick={() => navigate("/quiz")}
+      {/* Leaderboard section */}
+      <div className="leaderboard-section">
+        <h2>🏆 Liderlik Tablosu</h2>
+        <div className="leaderboard">
+          {topUsers.slice(0, 5).map((user, index) => (
+            <div 
+              key={user.userId} 
+              className={`leaderboard-item ${user.userId === user.userId ? 'current-user' : ''}`}
             >
-              <span className="action-icon">🎯</span>
-              <span className="action-text">Quiz Çöz</span>
-            </button>
-
-            <button
-              className="action-btn profile"
-              onClick={() => navigate("/profile")}
-            >
-              <span className="action-icon">👤</span>
-              <span className="action-text">Profil</span>
-            </button>
-
-            <button
-              className="action-btn leaderboard"
-              onClick={() => navigate("/")}
-            >
-              <span className="action-icon">🏆</span>
-              <span className="action-text">Sıralama</span>
-            </button>
-          </div>
+              <div className="rank">{index + 1}</div>
+              <div className="user-info">
+                <span className="user-name">{user.userFullName}</span>
+                <span className="user-score">{user.totalScore.toFixed(1)} puan</span>
+              </div>
+              <div className="user-stats">
+                <span className="word-count">{user.wordCount} kelime</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

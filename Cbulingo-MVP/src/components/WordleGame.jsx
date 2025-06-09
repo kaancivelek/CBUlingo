@@ -2,37 +2,50 @@ import React, { useState, useEffect, useRef } from "react";
 import { getLearnedWordsByUserId, getAllEnWords } from "../services/wordService";
 import "./WordleGame.css";
 
+// Game configuration constants
 const WORD_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
 
+/**
+ * Determines the status of each letter in the guess compared to the answer
+ * Implements NYT Wordle algorithm: check correct positions first, then present letters
+ * @param {string} guess - The user's guess
+ * @param {string} answer - The target word
+ * @returns {string[]} Array of letter statuses: 'correct', 'present', or 'absent'
+ */
 function getLetterStatuses(guess, answer) {
-  // NYT Wordle algoritması: önce yeşilleri, sonra sarıları, kalanlar gri
   const result = Array(WORD_LENGTH).fill("absent");
   const answerArr = answer.split("");
   const guessArr = guess.split("");
   const used = Array(WORD_LENGTH).fill(false);
 
-  // 1. Yeşil (doğru harf, doğru yer)
+  // 1. Check for correct letters in correct positions (green)
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (guessArr[i] === answerArr[i]) {
       result[i] = "correct";
       used[i] = true;
-      answerArr[i] = null; // Bu harfi bir daha kullanma
+      answerArr[i] = null; // Mark as used
     }
   }
-  // 2. Sarı (doğru harf, yanlış yer)
+
+  // 2. Check for correct letters in wrong positions (yellow)
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (result[i] === "correct") continue;
     const idx = answerArr.indexOf(guessArr[i]);
     if (idx !== -1 && !used[idx]) {
       result[i] = "present";
-      answerArr[idx] = null; // Bu harfi bir daha kullanma
+      answerArr[idx] = null; // Mark as used
     }
   }
   return result;
 }
 
+/**
+ * Wordle game component that uses learned words as target words
+ * Implements the classic Wordle game mechanics with a custom word pool
+ */
 export default function WordleGame() {
+  // Game state
   const [targetWord, setTargetWord] = useState("");
   const [guesses, setGuesses] = useState([]); // [{ guess: 'apple', status: ['correct', ...] }]
   const [currentGuess, setCurrentGuess] = useState("");
@@ -41,7 +54,7 @@ export default function WordleGame() {
   const [loading, setLoading] = useState(true);
   const inputRef = useRef(null);
 
-  // Öğrenilmiş kelimeleri Dashboard'daki gibi çek
+  // Load learned words and select a random target word
   useEffect(() => {
     async function fetchLearnedWords() {
       setLoading(true);
@@ -52,7 +65,8 @@ export default function WordleGame() {
           setLoading(false);
           return;
         }
-        // Dashboard'daki gibi kelime çek
+
+        // Fetch learned words and filter for 5-letter words
         const learnedWordsData = await getLearnedWordsByUserId(user.userId);
         const allWordsData = await getAllEnWords();
         const learnedWords = (learnedWordsData || []).map(lw => {
@@ -65,6 +79,8 @@ export default function WordleGame() {
           setLoading(false);
           return;
         }
+
+        // Select random word from learned words
         const randomWord = learnedWords[Math.floor(Math.random() * learnedWords.length)];
         setTargetWord(randomWord);
       } catch (err) {
@@ -75,11 +91,12 @@ export default function WordleGame() {
     fetchLearnedWords();
   }, []);
 
-  // Oyun bittiğinde veya başında input'a odaklan
+  // Focus input on game start/end
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, [gameOver, loading]);
 
+  // Input handlers
   const handleInput = (e) => {
     if (gameOver || loading) return;
     const val = e.target.value.replace(/[^a-zA-Z]/g, "").slice(0, WORD_LENGTH).toLowerCase();
@@ -93,13 +110,16 @@ export default function WordleGame() {
     }
   };
 
+  // Submit guess and check game state
   const submitGuess = () => {
     if (gameOver || loading) return;
     if (currentGuess.length !== WORD_LENGTH) return;
+
     const status = getLetterStatuses(currentGuess, targetWord);
     const newGuesses = [...guesses, { guess: currentGuess, status }];
     setGuesses(newGuesses);
 
+    // Check win/lose conditions
     if (currentGuess === targetWord) {
       setGameOver(true);
       setMessage("Tebrikler! Doğru kelimeyi buldunuz 🎉");
@@ -110,11 +130,12 @@ export default function WordleGame() {
     setCurrentGuess("");
   };
 
+  // Reset game state
   const resetGame = () => {
-    window.location.reload(); // Basitçe sayfayı yenile, yeni kelime gelsin
+    window.location.reload();
   };
 
-  // Modern Dashboard kartı ve renkleriyle arayüz
+  // Render game interface
   return (
     <div className="wordle-dashboard-card">
       <h2 className="wordle-title">Wordle - Öğrendiğin Kelimeler</h2>
@@ -122,6 +143,7 @@ export default function WordleGame() {
         <div className="wordle-message">Yükleniyor...</div>
       ) : (
         <>
+          {/* Game board */}
           <div className="wordle-board">
             {[...Array(MAX_ATTEMPTS)].map((_, rowIdx) => (
               <div className="wordle-guess-row" key={rowIdx}>
@@ -147,6 +169,8 @@ export default function WordleGame() {
               </div>
             ))}
           </div>
+
+          {/* Input area */}
           {!gameOver && (
             <div style={{ textAlign: "center", marginBottom: 16 }}>
               <input
@@ -184,6 +208,8 @@ export default function WordleGame() {
               </button>
             </div>
           )}
+
+          {/* Game messages and reset button */}
           {message && (
             <div className="wordle-message">
               {message}

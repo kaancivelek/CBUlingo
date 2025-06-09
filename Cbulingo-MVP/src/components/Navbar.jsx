@@ -5,21 +5,20 @@ import "../styles/Navi.css";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
+/**
+ * Vertical navigation bar component that provides access to main application features
+ * @param {Object} user - Current user object (null if not logged in)
+ * @param {Function} logoutUser - Function to handle user logout
+ */
 export default function VerticalNavbar({ user, logoutUser }) {
   const navigate = useNavigate();
 
-  const goToLeaderboard = () => {
-    navigate("/leaderboard");
-  };
+  // Navigation handlers for different sections
+  const goToLeaderboard = () => navigate("/leaderboard");
+  const goToQuiz = () => navigate("/quiz");
+  const goToWordle = () => navigate("/wordle");
 
-  const goToQuiz = () => {
-    navigate("/quiz");
-  };
-
-  const goToWordle = () => {
-    navigate("/wordle");
-  };
-
+  // Conditional navigation to profile or login page
   const goToProfileOrLogon = () => {
     if (user) {
       navigate("/profile");
@@ -28,14 +27,16 @@ export default function VerticalNavbar({ user, logoutUser }) {
     }
   };
 
+  // Handle user logout and redirect to home
   const handleLogout = () => {
-    logoutUser(); // App.jsx'den gelen logout fonksiyonunu kullan
+    logoutUser();
     navigate("/");
   };
 
   return (
     <div className="vertical-navbar">
       <div className="vertical-navbar-content">
+        {/* Logo button that navigates to home */}
         <button
           className="vertical-logo-img"
           onClick={() => navigate("/")}
@@ -50,7 +51,8 @@ export default function VerticalNavbar({ user, logoutUser }) {
           <img src={logo} alt="logo" style={{ width: "100px" }} />
         </button>
         
-       <button className="vertical-navbar-text" onClick={goToLeaderboard}>
+        {/* Main navigation buttons */}
+        <button className="vertical-navbar-text" onClick={goToLeaderboard}>
           Leaderboard
         </button> 
         
@@ -62,10 +64,12 @@ export default function VerticalNavbar({ user, logoutUser }) {
           Wordle
         </button>
         
+        {/* Conditional profile/login button */}
         <button className="vertical-navbar-text" onClick={goToProfileOrLogon}>
           {user ? user.userFullName || "Profil" : "Giriş Yap"}
         </button>
         
+        {/* Logout button (only shown when user is logged in) */}
         {user && (
           <button className="vertical-navbar-text logout-button" onClick={handleLogout}>
             Çıkış Yap
@@ -76,8 +80,8 @@ export default function VerticalNavbar({ user, logoutUser }) {
   );
 }
 
+// PropTypes for component validation
 VerticalNavbar.propTypes = {
   user: PropTypes.object,
   logoutUser: PropTypes.func.isRequired,
 };
- VerticalNavbar;

@@ -3,11 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../utils/LogonController';
 import '../styles/Auth.css';
 
-// Constants
+// Email validation regex pattern
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 
+/**
+ * Login page component that handles user authentication
+ * @param {Function} updateUser - Callback to update user state in parent component
+ */
 export default function Login({ updateUser }) {
   const navigate = useNavigate();
+  
+  // Form state management
   const [formData, setFormData] = useState({
     userEmail: '',
     userPassword: ''
@@ -15,6 +21,7 @@ export default function Login({ updateUser }) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // Handle input changes and clear field-specific errors
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -30,15 +37,18 @@ export default function Login({ updateUser }) {
     }
   };
 
+  // Validate form inputs
   const validateForm = () => {
     const newErrors = {};
 
+    // Email validation
     if (!formData.userEmail) {
       newErrors.userEmail = 'E-posta adresi gerekli';
     } else if (!EMAIL_REGEX.test(formData.userEmail)) {
       newErrors.userEmail = 'Geçerli bir e-posta adresi girin';
     }
 
+    // Password validation
     if (!formData.userPassword) {
       newErrors.userPassword = 'Şifre gerekli';
     }
@@ -47,6 +57,7 @@ export default function Login({ updateUser }) {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -64,13 +75,13 @@ export default function Login({ updateUser }) {
     }
   };
 
-  const goBack = () => {
-    navigate('/logon');
-  };
+  // Navigation handlers
+  const goBack = () => navigate('/logon');
 
   return (
     <div className="auth-container">
       <div className="auth-content">
+        {/* Header section */}
         <div className="auth-header">
           <button className="back-button" onClick={goBack}>
             ← Geri
@@ -81,7 +92,9 @@ export default function Login({ updateUser }) {
           </p>
         </div>
 
+        {/* Login form */}
         <form onSubmit={handleSubmit} className="auth-form">
+          {/* Email input */}
           <div className="form-group">
             <label htmlFor="userEmail" className="form-label">
               E-posta Adresi
@@ -102,6 +115,7 @@ export default function Login({ updateUser }) {
             )}
           </div>
 
+          {/* Password input */}
           <div className="form-group">
             <label htmlFor="userPassword" className="form-label">
               Şifre
@@ -122,6 +136,7 @@ export default function Login({ updateUser }) {
             )}
           </div>
 
+          {/* Submit button */}
           <button 
             type="submit" 
             className="auth-submit-button login-submit"
@@ -138,6 +153,7 @@ export default function Login({ updateUser }) {
           </button>
         </form>
 
+        {/* Additional links */}
         <div className="auth-links">
           <button 
             className="link-button forgot-password" 
@@ -148,6 +164,7 @@ export default function Login({ updateUser }) {
           </button>
         </div>
 
+        {/* Footer with registration link */}
         <div className="auth-footer">
           <p>
             Hesabın yok mu?{' '}

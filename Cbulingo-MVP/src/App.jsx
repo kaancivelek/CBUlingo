@@ -7,17 +7,17 @@ import WordleGame from "./components/WordleGame";
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import Leaderboard from "./pages/Leaderboard";
-
 import Quiz from "./pages/Quiz";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Logon from "../utils/Logon";
 
+// Main application component that handles routing and user state management
 function App() {
   const [user, setUser] = useState(null);
 
-  // localStorage'dan kullanıcı verilerini yükle
+  // Load and sync user data from localStorage
   useEffect(() => {
     const loadUserFromStorage = () => {
       const storedUser = localStorage.getItem("user");
@@ -27,7 +27,7 @@ function App() {
           setUser(parsedUser);
         } catch (error) {
           console.error("Error parsing user data from localStorage:", error);
-          localStorage.removeItem("user"); // Bozuk veriyi temizle
+          localStorage.removeItem("user"); // Clear corrupted data
           setUser(null);
         }
       } else {
@@ -35,10 +35,10 @@ function App() {
       }
     };
 
-    // İlk yüklemede çalıştır
+    // Initial load
     loadUserFromStorage();
 
-    // localStorage değişikliklerini dinle (diğer sekmeler için)
+    // Listen for localStorage changes (for other tabs)
     const handleStorageChange = (e) => {
       if (e.key === "user") {
         loadUserFromStorage();
@@ -47,13 +47,13 @@ function App() {
 
     window.addEventListener("storage", handleStorageChange);
 
-    // Component cleanup
+    // Cleanup event listener
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
-  // Kullanıcı giriş yaptığında çağırılacak fonksiyon
+  // Update user state and localStorage on login
   const updateUser = (userData) => {
     setUser(userData);
     if (userData) {
@@ -63,7 +63,7 @@ function App() {
     }
   };
 
-  // Kullanıcı çıkış yaptığında çağırılacak fonksiyon
+  // Clear user state and localStorage on logout
   const logoutUser = () => {
     setUser(null);
     localStorage.removeItem("user");
@@ -71,10 +71,12 @@ function App() {
 
   return (
     <div className="App">
+      {/* Navigation header */}
       <div className="Header">
         <Navi user={user} updateUser={updateUser} logoutUser={logoutUser} />
       </div>
 
+      {/* Main content area with routing */}
       <div className="Content">
         <div className="main-content">
           <Routes>
@@ -89,6 +91,8 @@ function App() {
           </Routes>
         </div>
       </div>
+
+      {/* Global toast notifications */}
       <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
     </div>
   );

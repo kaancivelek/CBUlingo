@@ -3,38 +3,49 @@ import { getAllUsers } from '../services/userService';
 import { getLearnedWordsByUserId } from '../services/wordService';
 import '../styles/Leaderboard.css';
 
+/**
+ * Leaderboard component that displays user rankings based on learning progress
+ * Shows current user's position and overall rankings with scores
+ * @param {Object} user - Current user object
+ */
 export default function Leaderboard({ user }) {
+  // State management
   const [rankings, setRankings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
+  /**
+   * Initialize leaderboard data on component mount
+   */
   useEffect(() => {
     initializeLeaderboard();
-    
   }, []);
 
+  /**
+   * Load and calculate rankings for all users
+   * Fetches user data and their learned words to calculate scores
+   */
   const initializeLeaderboard = async () => {
-    
     try {
       setLoading(true);
       
-      // Tüm kullanıcıları al
+      // Fetch all users
       const usersResponse = await getAllUsers();
       const users = usersResponse.data || usersResponse;
 
-      // Her kullanıcı için öğrenilen kelimeleri al ve puanları hesapla
+      // Calculate scores for each user
       const userRankings = await Promise.all(
         users.map(async (userData) => {
           try {
             const learnedWordsResponse = await getLearnedWordsByUserId(userData.userId);
             const learnedWords = learnedWordsResponse.data || learnedWordsResponse || [];
             
-            // Toplam puanı hesapla (her stage için 0.5 puan)
+            // Calculate total score (0.5 points per stage)
             const totalScore = learnedWords.reduce((total, word) => {
               return total + (word.stageId * 0.5);
             }, 0);
 
-            // Kelime sayısı
+            // Word count
             const wordCount = learnedWords.length;
 
             return {
@@ -59,12 +70,12 @@ export default function Leaderboard({ user }) {
         })
       );
 
-      // Puana göre sırala (yüksekten düşüğe)
+      // Sort by score (highest to lowest)
       const sortedRankings = userRankings.sort((a, b) => b.totalScore - a.totalScore);
       
       setRankings(sortedRankings);
       
-      // Mevcut kullanıcıyı bul
+      // Find current user's data
       if (user) {
         const currentUserData = sortedRankings.find(u => 
           u.id === user.userId || u.id === user.id || u.userEmail === user.userEmail
@@ -79,6 +90,11 @@ export default function Leaderboard({ user }) {
     }
   };
 
+  /**
+   * Get trophy emoji based on rank
+   * @param {number} rank - User's rank
+   * @returns {string} Trophy emoji
+   */
   const getTrophyIcon = (rank) => {
     switch (rank) {
       case 1: return '🥇';
@@ -88,12 +104,17 @@ export default function Leaderboard({ user }) {
     }
   };
 
+  /**
+   * Get current user's position in rankings
+   * @returns {number|null} User's rank or null if not found
+   */
   const getUserPosition = () => {
     if (!currentUser) return null;
     const userRank = rankings.findIndex(u => u.id === currentUser.id);
     return userRank !== -1 ? userRank + 1 : null;
   };
 
+  // Loading state
   if (loading) {
     return (
       <div className="leaderboard-container">
@@ -106,10 +127,8 @@ export default function Leaderboard({ user }) {
   }
 
   return (
-    
     <div className="leaderboard-container">
-    
-      {/* Header */}
+      {/* Header section */}
       <div className="leaderboard-header">
         <div className="header-content">
           <h1 className="leaderboard-title">
@@ -121,7 +140,7 @@ export default function Leaderboard({ user }) {
         </div>
       </div>
 
-      {/* Current User Position */}
+      {/* Current user's position card */}
       {currentUser && getUserPosition() && (
         <div className="current-user-card">
           <div className="current-user-info">
@@ -144,7 +163,7 @@ export default function Leaderboard({ user }) {
         </div>
       )}
 
-      {/* Rankings List */}
+      {/* Rankings list section */}
       <div className="rankings-section">
         <div className="rankings-list">
           {rankings.map((userData, index) => (
@@ -181,6 +200,7 @@ export default function Leaderboard({ user }) {
           ))}
         </div>
 
+        {/* Empty state */}
         {rankings.length === 0 && (
           <div className="empty-leaderboard">
             <div className="empty-icon">📈</div>

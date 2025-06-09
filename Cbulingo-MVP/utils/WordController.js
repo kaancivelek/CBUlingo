@@ -11,49 +11,43 @@ import {
   updateEnWord,
   updateTrWord,
   updateTranslation,
-
 } from "../src/services/wordService";
 
-// Pratik zamanı gelmiş mi kontrolü
+// Determines if a word is due for practice based on its learning stage
 function isPracticeTime(word, now) {
   const learningDate = new Date(word.learningDate);
+  // Different stages have different review intervals (in milliseconds)
   switch (word.stageId) {
-    case 1:
-      return now - learningDate >= 24 * 60 * 60 * 1000;
-    case 2:
-      return now - learningDate >= 7 * 24 * 60 * 60 * 1000;
-    case 3:
-      return now - learningDate >= 30 * 24 * 60 * 60 * 1000;
-    case 4:
-      return now - learningDate >= 90 * 24 * 60 * 60 * 1000;
-    case 5:
-      return now - learningDate >= 180 * 24 * 60 * 60 * 1000;
-    case 6:
-      return now - learningDate >= 365 * 24 * 60 * 60 * 1000;
-    default:
-      return false;
+    case 1: return now - learningDate >= 24 * 60 * 60 * 1000;      // 1 day
+    case 2: return now - learningDate >= 7 * 24 * 60 * 60 * 1000;  // 1 week
+    case 3: return now - learningDate >= 30 * 24 * 60 * 60 * 1000; // 1 month
+    case 4: return now - learningDate >= 90 * 24 * 60 * 60 * 1000; // 3 months
+    case 5: return now - learningDate >= 180 * 24 * 60 * 60 * 1000;// 6 months
+    case 6: return now - learningDate >= 365 * 24 * 60 * 60 * 1000;// 1 year
+    default: return false;
   }
 }
 
+// Creates a mixed pool of words for practice and learning
 export const createMixedWordPool = async (userId, count) => {
   try {
     const now = new Date();
     const learnedWords = await getLearnedWordsByUserId(userId);
     const allWords = await getAllEnWords();
 
-    // Pratik zamanı gelmiş kelimeler - bu tblLearnedWords'den geliyor
+    // Get words that are due for practice
     const practiceWords = learnedWords.filter((word) =>
       isPracticeTime(word, now)
     );
 
-    // Hiç öğrenilmemiş kelimeler (learnedWords'de olmayanlar) - bu tblEnglish'den geliyor
+    // Get words that haven't been learned yet
     const learnedEnIds = new Set(learnedWords.map((w) => w.enId));
     const newWords = allWords.filter((word) => !learnedEnIds.has(word.enId));
 
-    // Kelime havuzunu oluştur - hem pratik hem yeni kelimeler
+    // Build word pool with both practice and new words
     const wordPool = [];
 
-    // Pratik kelimelerden detayları getir
+    // Add practice words with their details
     for (const learnedWord of practiceWords) {
       try {
         const enWordArray = await getEnWordByEnId(learnedWord.enId);
@@ -72,17 +66,16 @@ export const createMixedWordPool = async (userId, count) => {
             enWord, 
             trWord, 
             translation,
-            source: 'practice', // hangi kaynaklardan geldiğini belirt
+            source: 'practice',
             stageId: learnedWord.stageId 
           });
         }
       } catch (error) {
         console.warn(`Practice word with enId ${learnedWord.enId} could not be loaded:`, error.message);
-        // Hatalı kaydı atla, devam et
       }
     }
 
-    // Yeni kelimelerden detayları getir
+    // Add new words with their details
     for (const newWord of newWords) {
       try {
         const translation = await getTranslationByEnId(newWord.enId);
@@ -98,51 +91,44 @@ export const createMixedWordPool = async (userId, count) => {
             enWord: newWord, 
             trWord, 
             translation,
-            source: 'new', // hangi kaynaklardan geldiğini belirt
+            source: 'new',
             stageId: null 
           });
         }
       } catch (error) {
         console.warn(`New word with enId ${newWord.enId} could not be loaded:`, error.message);
-        // Hatalı kaydı atla, devam et
       }
     }
 
-    // Rastgele shuffle
+    // Shuffle word pool using cryptographically secure random numbers
     for (let i = wordPool.length - 1; i > 0; i--) {
       const j = Math.floor(window.crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * (i + 1));
       [wordPool[i], wordPool[j]] = [wordPool[j], wordPool[i]];
     }
 
-    // İstenilen sayıda kelime seç
-    const selected = wordPool.slice(0, count);
-
-    return selected;
+    return wordPool.slice(0, count);
   } catch (error) {
     console.error("Error creating mixed word pool:", error);
     return { error: "Error creating mixed word pool" };
   }
 };
 
+// Adds a new word pair to the system
 export const addNewWord = async (enName, trName, picUrl, enExample) => {
   try {
-    // Tüm İngilizce kelimeleri çek
+    // Get next available ID
     const allWords = await getAllEnWords();
-    // En yüksek id'yi bul
-    const maxEnId =
-      allWords.length > 0
-        ? Math.max(...allWords.map((w) => w.enId || w.id))
-        : 0;
+    const maxEnId = allWords.length > 0 ? Math.max(...allWords.map((w) => w.enId || w.id)) : 0;
     const newId = maxEnId + 1;
 
-    // Aynı kelime var mı kontrolü
+    // Check for duplicate words
     const existingWords = await getAllEnWords();
     const isWordExists = existingWords.some(word => word.enWord.toLowerCase() === enName.toLowerCase());
     if (isWordExists) {
       return { error: "Bu İngilizce kelime zaten mevcut" };
     }
 
-    // Yeni kelimeyi ekle
+    // Create new word entries
     const newEnWord = await createEnWord({ enId: newId, enWord: enName });
     const newTrWord = await createTrWord({ trId: newId, trName });
     const newTranslation = await createTranslation({
@@ -151,20 +137,20 @@ export const addNewWord = async (enName, trName, picUrl, enExample) => {
       picUrl,
       enExample,
     });
-    if (newEnWord && newTrWord && newTranslation) {
-      return { success: "Kelime başarıyla eklendi" };
-    } else {
-      return { error: "Kelime eklenirken hata oluştu" };
-    }
+
+    return newEnWord && newTrWord && newTranslation
+      ? { success: "Kelime başarıyla eklendi" }
+      : { error: "Kelime eklenirken hata oluştu" };
   } catch (error) {
     console.error("Error adding new word:", error);
     return { error: "Error adding new word" };
   }
 };
 
+// Updates an existing word pair
 export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnExampleUsage) => {
   try {
-    // Mevcut kelimeyi bul
+    // Find existing word
     const existingWords = await getAllEnWords();
     const existingWord = existingWords.find(word => word.enWord.toLowerCase() === enName.toLowerCase());
     
@@ -174,7 +160,7 @@ export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnE
 
     const enId = existingWord.enId || existingWord.id;
 
-    // Eğer yeni İngilizce kelime farklıysa ve zaten mevcutsa hata ver
+    // Check for duplicate new English word
     if (newEnWord && newEnWord.toLowerCase() !== enName.toLowerCase()) {
       const duplicateCheck = existingWords.find(word => word.enWord.toLowerCase() === newEnWord.toLowerCase());
       if (duplicateCheck) {
@@ -182,7 +168,7 @@ export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnE
       }
     }
 
-    // İngilizce kelimeyi güncelle (json-server id'sini kullan)
+    // Update English word
     if (newEnWord) {
       const updateEnResult = await updateEnWord(existingWord.id, { 
         enId: existingWord.enId, 
@@ -193,7 +179,7 @@ export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnE
       }
     }
 
-    // Türkçe kelimeyi güncelle - önce translation'dan trId'yi bul
+    // Update Turkish word
     if (newTrWord) {
       const translation = await getTranslationByEnId(enId);
       if (translation && translation[0]) {
@@ -211,7 +197,7 @@ export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnE
       }
     }
 
-    // Translation tablosunu güncelle (resim URL'si ve örnek cümle)
+    // Update translation details
     if (newPicUrl || newEnExampleUsage) {
       const translation = await getTranslationByEnId(enId);
       if (translation && translation[0]) {
@@ -236,12 +222,13 @@ export const updateWord = async (enName, newEnWord, newTrWord, newPicUrl, newEnE
   }
 };
 
+// Gets a word for quiz based on learning progress
 export const getQuizWord = async (userId) => {
   try {
     const learnedWords = await getLearnedWordsByUserId(userId);
     const allWords = await getAllEnWords();
     
-    // Prioritize practice words (words that need review)
+    // Prioritize words that need review
     const now = new Date();
     const practiceWords = learnedWords.filter((word) => 
       word.stageId < 7 && isPracticeTime(word, now)
@@ -250,10 +237,10 @@ export const getQuizWord = async (userId) => {
     let selectedWord = null;
     
     if (practiceWords.length > 0) {
-      // Select a random practice word
+      // Select random practice word
       selectedWord = practiceWords[Math.floor(Math.random() * practiceWords.length)];
     } else {
-      // Select a random new word (not learned yet)
+      // Select random new word
       const learnedEnIds = new Set(learnedWords.map((w) => w.enId));
       const newWords = allWords.filter((word) => !learnedEnIds.has(word.enId));
       
@@ -299,28 +286,27 @@ export const getQuizWord = async (userId) => {
   }
 };
 
+// Updates word learning progress based on quiz results
 export const updateWordProgress = async (userId, enId, isCorrect) => {
   try {
     const learnedWords = await getLearnedWordsByUserId(userId);
     const existingWord = learnedWords.find(word => word.enId === enId);
     
     if (!existingWord) {
-      // New word - add to learned words with stage 1
+      // Handle new word
       if (isCorrect) {
         const newLearnedWord = {
           userId: userId,
           enId: enId,
           stageId: 1,
-          learningDate: new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+          learningDate: new Date().toISOString().split('T')[0]
         };
         
         try {
           const created = await createLearnedWord(newLearnedWord);
-          if (created) {
-            return { success: "Word added to learned words", newStage: 1 };
-          } else {
-            return { error: "Failed to add word to learned words" };
-          }
+          return created
+            ? { success: "Word added to learned words", newStage: 1 }
+            : { error: "Failed to add word to learned words" };
         } catch (error) {
           console.error("Error creating learned word:", error);
           return { error: "Failed to add word to learned words" };
@@ -329,17 +315,16 @@ export const updateWordProgress = async (userId, enId, isCorrect) => {
         return { message: "Incorrect answer - try again later", newStage: 0 };
       }
     } else {
-      // Existing word - update stage if correct
+      // Update existing word progress
       if (isCorrect && existingWord.stageId < 7) {
         const newStage = existingWord.stageId + 1;
         const updatedWord = {
           ...existingWord,
-          userId: userId, // Ensure userId is always present
+          userId: userId,
           stageId: newStage,
           learningDate: new Date().toISOString().split('T')[0]
         };
         
-        // Update existing word
         const response = await fetch(`http://localhost:3000/tblLearnedWords/${existingWord.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

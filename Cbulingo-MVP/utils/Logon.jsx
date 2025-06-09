@@ -2,20 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../src/styles/Logon.css';
 
+// Landing page component that provides options for login and registration
 export default function Logon() {
   const navigate = useNavigate();
 
-  const goToLogin = () => {
-    navigate('/login');
-  };
-
-  const goToRegister = () => {
-    navigate('/register');
-  };
+  // Navigation handlers
+  const goToLogin = () => navigate('/login');
+  const goToRegister = () => navigate('/register');
 
   return (
     <div className="logon-container">
       <div className="logon-content">
+        {/* Header section with welcome message */}
         <div className="logon-header">
           <h1 className="logon-title">🎓 CBUlingo'ya Hoş Geldin!</h1>
           <p className="logon-subtitle">
@@ -23,6 +21,7 @@ export default function Logon() {
           </p>
         </div>
 
+        {/* Main options section with login and register cards */}
         <div className="logon-options">
           <div className="option-card">
             <div className="option-icon">👋</div>
@@ -53,6 +52,7 @@ export default function Logon() {
           </div>
         </div>
 
+        {/* Feature highlights section */}
         <div className="logon-features">
           <div className="feature">
             <span className="feature-icon">📚</span>
