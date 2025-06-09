@@ -13,106 +13,113 @@
       "userFullName": "Mahmut Tuncer",
       "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76",
       "userId": 2
+    },
+    {
+      "id": "fa42",
+      "userEmail": "demo@gmail.com",
+      "userFullName": "Demo Demo",
+      "userId": 3,
+      "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76"
     }
   ],
   "tblLearnedWords": [
     {
       "userId": 2,
       "enId": 1,
-      "stageId": 1,
-      "learningDate": "2025-05-16",
+      "stageId": 7,
+      "learningDate": "2024-05-16",
       "id": "0da7"
     },
     {
       "id": "0b8f",
       "enId": 37,
-      "stageId": 2,
-      "learningDate": "2025-06-05",
+      "stageId": 7,
+      "learningDate": "2023-06-05",
       "userId": 1
     },
     {
       "id": "0b52",
       "enId": 39,
-      "stageId": 2,
-      "learningDate": "2025-06-06",
+      "stageId": 4,
+      "learningDate": "2023-06-06",
       "userId": 2
     },
     {
       "id": "e836",
       "enId": 32,
-      "stageId": 2,
-      "learningDate": "2025-06-05",
+      "stageId": 5,
+      "learningDate": "2023-06-05",
       "userId": 2
     },
     {
       "id": "ca4e",
       "enId": 55,
-      "stageId": 2,
-      "learningDate": "2025-06-06",
+      "stageId": 7,
+      "learningDate": "2025-06-09",
       "userId": 1
     },
     {
       "id": "8757",
       "enId": 93,
-      "stageId": 2,
-      "learningDate": "2025-06-05",
+      "stageId": 3,
+      "learningDate": "2025-06-09",
       "userId": 1
     },
     {
       "id": "dd1f",
       "enId": 3,
-      "stageId": 2,
-      "learningDate": "2025-06-06",
+      "stageId": 3,
+      "learningDate": "2025-06-09",
       "userId": 1
     },
     {
       "id": "a5a6",
       "userId": 1,
       "enId": 33,
-      "stageId": 2,
-      "learningDate": "2025-06-06"
+      "stageId": 3,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "c3e5",
       "userId": 1,
       "enId": 80,
-      "stageId": 2,
-      "learningDate": "2025-06-06"
+      "stageId": 3,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "0438",
       "userId": 1,
       "enId": 20,
-      "stageId": 2,
-      "learningDate": "2025-06-06"
+      "stageId": 4,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "811d",
       "userId": 1,
       "enId": 77,
-      "stageId": 2,
-      "learningDate": "2025-06-05"
+      "stageId": 7,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "c91e",
       "userId": 1,
       "enId": 38,
-      "stageId": 2,
-      "learningDate": "2025-06-05"
+      "stageId": 3,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "5337",
       "userId": 1,
       "enId": 34,
-      "stageId": 2,
-      "learningDate": "2025-06-05"
+      "stageId": 3,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "24ba",
       "userId": 1,
       "enId": 35,
-      "stageId": 2,
-      "learningDate": "2025-06-06"
+      "stageId": 3,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "821f",
@@ -125,8 +132,8 @@
       "id": "3cf0",
       "userId": 1,
       "enId": 71,
-      "stageId": 2,
-      "learningDate": "2025-06-05"
+      "stageId": 7,
+      "learningDate": "2023-06-05"
     },
     {
       "id": "8e9e",
@@ -153,29 +160,211 @@
       "id": "89f1",
       "userId": 1,
       "enId": 52,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
+      "stageId": 2,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "2125",
       "userId": 1,
       "enId": 6,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
+      "stageId": 2,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "bc73",
       "userId": 1,
       "enId": 45,
-      "stageId": 1,
-      "learningDate": "2025-06-08"
+      "stageId": 2,
+      "learningDate": "2025-06-09"
     },
     {
       "id": "3728",
       "userId": 1,
       "enId": 100,
+      "stageId": 2,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "96f6",
+      "userId": 1,
+      "enId": 15,
       "stageId": 1,
-      "learningDate": "2025-06-08"
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "7409",
+      "userId": 1,
+      "enId": 57,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "b1de",
+      "userId": 1,
+      "enId": 85,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "6fd6",
+      "userId": 1,
+      "enId": 75,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "80af",
+      "userId": 1,
+      "enId": 94,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "596e",
+      "userId": 1,
+      "enId": 56,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "1b31",
+      "userId": 1,
+      "enId": 98,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "6db3",
+      "userId": 1,
+      "enId": 28,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "d7df",
+      "userId": 1,
+      "enId": 73,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "6881",
+      "userId": 1,
+      "enId": 89,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "a90d",
+      "userId": 1,
+      "enId": 79,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "c17a",
+      "userId": 1,
+      "enId": 13,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "fb52",
+      "userId": 1,
+      "enId": 1,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "bc40",
+      "userId": 1,
+      "enId": 86,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "c7d6",
+      "userId": 1,
+      "enId": 101,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "b864",
+      "userId": 3,
+      "enId": 73,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "e582",
+      "userId": 3,
+      "enId": 30,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "38f6",
+      "userId": 3,
+      "enId": 24,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "0225",
+      "userId": 3,
+      "enId": 84,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "c11b",
+      "userId": 3,
+      "enId": 72,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "ff6f",
+      "userId": 3,
+      "enId": 15,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "bdbb",
+      "userId": 3,
+      "enId": 9,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "9e3c",
+      "userId": 3,
+      "enId": 61,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "30ba",
+      "userId": 3,
+      "enId": 38,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "541a",
+      "userId": 1,
+      "enId": 49,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
+    },
+    {
+      "id": "814b",
+      "userId": 1,
+      "enId": 18,
+      "stageId": 1,
+      "learningDate": "2025-06-09"
     }
   ],
   "tblLearningStages": [

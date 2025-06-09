@@ -13,31 +13,17 @@ import {
 } from '../utils/quizHelpers';
 import '../styles/Quiz.css';
 
-/**
- * Quiz component that handles word learning through interactive quizzes
- * @param {Object} user - Current user object containing user information
- */
 export default function Quiz({ user }) {
-  // Game state management
   const [gameState, setGameState] = useState(createInitialGameState());
   const [loading, setLoading] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [message, setMessage] = useState('');
 
-  /**
-   * Display temporary messages to the user
-   * @param {string} text - Message content
-   * @param {string} type - Message type (info, error, success, warning)
-   */
   const showMessage = (text, type = 'info') => {
     setMessage({ text, type });
     setTimeout(() => setMessage(''), 3000);
   };
 
-  /**
-   * Text-to-speech functionality for word pronunciation
-   * @param {string} text - Text to be spoken
-   */
   const speak = (text) => {
     if (!('speechSynthesis' in window)) {
       showMessage('Tarayıcınız ses özelliğini desteklemiyor', 'error');
@@ -57,17 +43,11 @@ export default function Quiz({ user }) {
     speechSynthesis.speak(utterance);
   };
 
-  /**
-   * Initialize and start the quiz game
-   */
   const startGame = () => {
     setGameState(prev => ({ ...prev, phase: QUIZ_PHASES.PLAYING }));
     loadNewWord();
   };
 
-  /**
-   * Load a new word for the quiz
-   */
   const loadNewWord = async () => {
     setLoading(true);
     try {
@@ -87,9 +67,6 @@ export default function Quiz({ user }) {
     }
   };
 
-  /**
-   * Handle answer submission and update game progress
-   */
   const submitAnswer = async () => {
     if (!gameState.userAnswer.trim()) {
       showMessage('Lütfen bir cevap girin', 'warning');
@@ -103,7 +80,10 @@ export default function Quiz({ user }) {
       await updateWordProgress(user.userId, gameState.currentWord.enWord.enId, isCorrect);
       
       const updatedState = updateGameStats(gameState, isCorrect);
-      setGameState(updatedState);
+      setGameState({
+        ...updatedState,
+        showResult: true
+      });
 
       if (isGameFinished(updatedState.currentQuestion, updatedState.maxQuestions)) {
         setTimeout(() => {
@@ -119,14 +99,8 @@ export default function Quiz({ user }) {
     }
   };
 
-  /**
-   * Move to the next question
-   */
   const nextQuestion = () => loadNewWord();
 
-  /**
-   * Reset the quiz to initial state
-   */
   const resetQuiz = () => {
     setGameState(createInitialGameState(gameState.maxQuestions));
     speechSynthesis.cancel();
@@ -134,7 +108,6 @@ export default function Quiz({ user }) {
     setMessage('');
   };
 
-  // UI Components
   const MessageBar = () => {
     if (!message) return null;
     
@@ -145,9 +118,6 @@ export default function Quiz({ user }) {
     );
   };
 
-  /**
-   * Initial setup screen for quiz configuration
-   */
   const SetupScreen = () => (
     <div className="quiz-welcome">
       <div className="welcome-content">
@@ -181,9 +151,6 @@ export default function Quiz({ user }) {
     </div>
   );
 
-  /**
-   * Loading indicator component
-   */
   const LoadingSpinner = () => (
     <div className="loading-spinner">
       <div className="spinner"></div>
@@ -191,9 +158,6 @@ export default function Quiz({ user }) {
     </div>
   );
 
-  /**
-   * Error display component
-   */
   const ErrorMessage = () => (
     <div className="error-message">
       <h2>Kelime bulunamadı</h2>
@@ -203,9 +167,6 @@ export default function Quiz({ user }) {
     </div>
   );
 
-  /**
-   * Quiz header with game statistics
-   */
   const QuizHeader = () => (
     <div className="quiz-header">
       <div className="stats">
@@ -228,9 +189,6 @@ export default function Quiz({ user }) {
     </div>
   );
 
-  /**
-   * Word display component with pronunciation feature
-   */
   const WordDisplay = ({ word }) => (
     <div className="word-display">
       <div className="english-word-container">
@@ -264,9 +222,6 @@ export default function Quiz({ user }) {
     </div>
   );
 
-  /**
-   * Answer input form component
-   */
   const AnswerForm = () => (
     <div className="answer-form">
       <input
@@ -292,66 +247,93 @@ export default function Quiz({ user }) {
     </div>
   );
 
-  /**
-   * Result display component
-   */
   const ResultSection = () => {
     const isCorrect = validateAnswer(gameState.userAnswer, gameState.currentWord.trWord.trName);
     
     return (
       <div className={`result-section ${isCorrect ? 'correct' : 'incorrect'}`}>
-        <h3>{isCorrect ? 'Doğru!' : 'Yanlış!'}</h3>
-        <p>Doğru cevap: {gameState.currentWord.trWord.trName}</p>
-        <button onClick={nextQuestion} className="next-button">
-          Sonraki Soru
+        <div className="result-content">
+          <div className="result-icon">
+            {isCorrect ? '🎉' : '❌'}
+          </div>
+          <div className="result-text">
+            <h3>{isCorrect ? 'Tebrikler!' : 'Yanlış'}</h3>
+            <p>Doğru cevap: "{gameState.currentWord.trWord.trName}"</p>
+          </div>
+          
+          {/* Görsel burada gösteriliyor */}
+          {gameState.currentWord.translation.picUrl && (
+            <div className="word-image-result">
+              <img 
+                src={gameState.currentWord.translation.picUrl} 
+                alt={gameState.currentWord.enWord.enWord}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+        </div>
+        <button className="next-button" onClick={nextQuestion}>
+          Sonraki Soru →
         </button>
       </div>
     );
   };
 
-  /**
-   * Main game screen component
-   */
   const GameScreen = () => {
-    if (loading) return <LoadingSpinner />;
+  
+  console.log("currentWord:", gameState.currentWord);
+  console.log("stageId:", gameState.currentWord?.stageId);
+  console.log("stageClass:", getStageClass(gameState.currentWord?.stageId || 0));
+
+  if (loading && !gameState.currentWord) return <LoadingSpinner />;
+  if (!gameState.currentWord) return <ErrorMessage />;
+
+    if (loading && !gameState.currentWord) return <LoadingSpinner />;
     if (!gameState.currentWord) return <ErrorMessage />;
 
     return (
-      <div className="game-screen">
+      
+      <>
         <QuizHeader />
-        <WordDisplay word={gameState.currentWord} />
-        {gameState.showResult ? (
-          <ResultSection />
-        ) : (
-          <AnswerForm />
-        )}
-      </div>
+        <div className="quiz-card">
+          <div className="stage-indicator">
+            
+            <div className={`stage-badge ${getStageClass(gameState.currentWord.currentStage || 0)}`}>
+              Seviye {gameState.currentWord.currentStage || 0}
+            </div>
+          </div>
+
+          <div className="question-section">
+            <h2 className="question-title">Bu kelimenin Türkçe karşılığı nedir?</h2>
+            <WordDisplay word={gameState.currentWord} />
+          </div>
+
+          {gameState.showResult ? <ResultSection /> : <AnswerForm />}
+        </div>
+      </>
     );
   };
 
-  /**
-   * Quiz completion screen component
-   */
   const FinishedScreen = () => (
-    <div className="finished-screen">
-      <h2>Quiz Tamamlandı! 🎉</h2>
-      <div className="final-stats">
-        <div className="stat">
-          <span className="stat-value">{gameState.stats.correct}</span>
-          <span className="stat-label">Doğru</span>
+    <div className="quiz-welcome">
+      <div className="welcome-content">
+        <h1 className="welcome-title">🎉 Quiz Tamamlandı!</h1>
+        <div className="final-stats">
+          <div className="final-stat">
+            <span className="final-stat-value">{gameState.stats.correct}/{gameState.stats.total}</span>
+            <span className="final-stat-label">Doğru Cevap</span>
+          </div>
+          <div className="final-stat">
+            <span className="final-stat-value">{gameState.stats.accuracy}%</span>
+            <span className="final-stat-label">Başarı Oranı</span>
+          </div>
         </div>
-        <div className="stat">
-          <span className="stat-value">{gameState.stats.accuracy}%</span>
-          <span className="stat-label">Başarı</span>
-        </div>
-        <div className="stat">
-          <span className="stat-value">{gameState.stats.streak}</span>
-          <span className="stat-label">En Uzun Streak</span>
-        </div>
+        <button className="start-button" onClick={resetQuiz}>
+          Yeni Quiz Başlat
+        </button>
       </div>
-      <button onClick={resetQuiz} className="restart-button">
-        Yeniden Başla
-      </button>
     </div>
   );
 

@@ -1,10 +1,10 @@
-#(bir kerelerik npm install -D vite) npm run dev dendikten sonra o+enter ile websitesi açılabilir
+#(bir kerelerik npm install -D vite ) npm run dev dendikten sonra o+enter ile websitesi açılabilir
 #api klasörünü yol gösterdikten sonra npx json-server --watch db.json ile json dosyası işlenebilir hale gelir.
 
 #Docker ile Çalıştırma
 
 - Proje, Docker yüklemeyi unutmayın! Node.js 22.13.1 sürümünü kullanır (Dockerfile'da belirtilmiştir).
-- Uygulama ve API için iki ayrı servis vardır: `js-app` (frontend) ve `json-server` (API).
+- Uygulama ve API için iki ayrı servis vardır: `js-app` (frontend) ve `json-servenpm install -D viter` (API).
 - Ortam değişkeni gerekmemektedir (Dockerfile ve compose dosyasında özel bir değişken yoktur).
 
 ## Docker Compose ile Başlatma
