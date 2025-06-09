@@ -238,7 +238,7 @@ export default function Dashboard() {
 
         {/* PDF export section */}
         <div className="export-section">
-          <button style={{borderStyle:"none", backgroundColor:"transparent"}}
+          <button
             className={`export-pdf-btn ${exportingPDF ? "loading" : ""}`}
             onClick={handleExportPDF}
             disabled={exportingPDF}

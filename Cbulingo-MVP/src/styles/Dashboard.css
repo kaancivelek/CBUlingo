@@ -63,25 +63,31 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 20px;
-  background: var(--primary-color);
+  padding: 12px 24px;
+  background-color: #6c5ce7;
   color: white;
   border: none;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-decoration: none;
 }
 
-.export-pdf-btn:hover:not(.loading) {
-  background: #2d2a7a;
+.export-pdf-btn:hover {
+  background-color: #5b4bc4;
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.export-pdf-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .export-pdf-btn.loading {
-  opacity: 0.7;
-  cursor: not-allowed;
+  background-color: #6c5ce7;
+  cursor: wait;
 }
 
 .export-spinner {
@@ -364,17 +370,37 @@
   border: 2px solid var(--primary-color);
 }
 
-.rank {
+.leaderboard-item .rank {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  background-color: #6c5ce7;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--primary-color);
-  color: white;
   border-radius: 50%;
-  font-weight: bold;
+  margin-right: 15px;
+}
+
+.leaderboard-item .score {
   font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #6c5ce7;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-left: auto;
+}
+
+.leaderboard-item .word-count {
+  font-size: 0.9rem;
+  color: white;
+  background-color: #6c5ce7;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 10px;
 }
 
 .user-info {

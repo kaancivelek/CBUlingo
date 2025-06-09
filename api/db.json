@@ -20,6 +20,13 @@
       "userFullName": "Demo Demo",
       "userId": 3,
       "userHashedPassword": "a320480f534776bddb5cdb54b1e93d210a3c7d199e80a23c1b2178497b184c76"
+    },
+    {
+      "id": "48ff",
+      "userEmail": "nciftkaldiran@gmail.com",
+      "userFullName": "nciftkaldiran@gmail.com",
+      "userId": 4,
+      "userHashedPassword": "8fa90f3c6bc8f8fbf05c42ee749368aa98803f99924a08f589f8a8c6b5bc6dc8"
     }
   ],
   "tblLearnedWords": [
@@ -1456,11 +1463,10 @@
       "id": "1"
     },
     {
-      "id": "2",
       "enId": 2,
       "trId": 2,
-      "picUrl": "https://images.gonulluyuzbiz.gov.tr/public/182072.jpg",
-      "enExample": "She is reading a book."
+      "enExample": "I buy a book ",
+      "id": "2"
     },
     {
       "id": "3",
